@@ -194,14 +194,15 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     },
   ]
   const handleSubmit = (event) => {
+    event.preventDefault()
     const form = event.currentTarget
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
+      console.log(params)
     }
     setValidated(true)
   }
-  console.log(params)
   return (
     <CModal size="xl" visible={visible} onClose={onClose}>
       <CModalHeader>
