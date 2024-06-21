@@ -1,6 +1,8 @@
 import React, { Suspense, useEffect } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
@@ -41,6 +43,7 @@ const App = () => {
           </div>
         }
       >
+        <ToastContainer />
         <Routes>
           <Route exact path="/login" name="Login Page" element={<Login />} />
           <Route exact path="/register" name="Register Page" element={<Register />} />

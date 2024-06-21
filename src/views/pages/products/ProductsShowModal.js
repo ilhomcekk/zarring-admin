@@ -11,22 +11,72 @@ import {
 } from '@coreui/react'
 import React from 'react'
 
-const ProductsShowModal = ({ visible, onClose }) => {
+const ProductsShowModal = ({ visible, onClose, item }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose}>
       <CModalHeader>
-        <CModalTitle>Товар ( 52 )</CModalTitle>
+        <CModalTitle>Товар ( {item?.id} )</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CRow>
-          <CCol>
+        <CRow xs={{ gutter: 2 }}>
+          <CCol xs={{ span: 6 }}>
             <CCallout className="p-2 m-0" color="primary">
               Имя
             </CCallout>
           </CCol>
-          <CCol>
+          <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">Товар</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.title_ru}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Категория
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.category_id}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Цена
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.price}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Статус
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.status}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Картинка
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.img}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Время
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.createdAt}</CListGroupItem>
             </CListGroup>
           </CCol>
         </CRow>

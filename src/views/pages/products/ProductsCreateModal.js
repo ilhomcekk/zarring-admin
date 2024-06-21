@@ -16,8 +16,13 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import React, { useState } from 'react'
+import productStore from '../../../store/products'
+import categoryStore from '../../../store/category'
+import { toast } from 'react-toastify'
 
 const ProductsCreateModal = ({ visible, onClose }) => {
+  const { create, createLoading } = productStore()
+  const { list: categories } = categoryStore()
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -25,8 +30,9 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     price: '',
     amount: '',
     img: null,
-    description: '',
-    attributes: [
+    description_ru: '',
+    description_uz: '',
+    characteristic: [
       { label: 'Rang', value: '' },
       { label: 'Proba', value: '' },
       { label: 'Narxi', value: '' },
@@ -34,7 +40,29 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     ],
     gallery: [''],
   })
+  const [category, setCategory] = useState({})
+  console.log('asdsa', category)
   const [validated, setValidated] = useState(false)
+
+  const clearParams = () => {
+    setParams({
+      title_ru: '',
+      title_uz: '',
+      category_id: '',
+      price: '',
+      amount: '',
+      img: null,
+      description_ru: '',
+      description_uz: '',
+      characteristic: [
+        { label: 'Rang', value: '' },
+        { label: 'Proba', value: '' },
+        { label: 'Narxi', value: '' },
+        { label: 'Razmer', value: '' },
+      ],
+      gallery: [''],
+    })
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -47,24 +75,24 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   }
 
   const handleAttributeChange = (index, newValue) => {
-    const newAttributes = [...params.attributes]
+    const newAttributes = [...params.characteristic]
     newAttributes[index].value = newValue
-    setParams({ ...params, attributes: newAttributes })
+    setParams({ ...params, characteristic: newAttributes })
   }
 
   const addAttribute = () => {
-    setParams({ ...params, attributes: [...params.attributes, { label: '', value: '' }] })
+    setParams({ ...params, characteristic: [...params.characteristic, { label: '', value: '' }] })
   }
 
   const removeAttribute = (index) => {
-    const newAttributes = params.attributes.filter((_, idx) => idx !== index)
-    setParams({ ...params, attributes: newAttributes })
+    const newAttributes = params.characteristic.filter((_, idx) => idx !== index)
+    setParams({ ...params, characteristic: newAttributes })
   }
 
   const handleLabelChange = (index, newLabel) => {
-    const newAttributes = [...params.attributes]
+    const newAttributes = [...params.characteristic]
     newAttributes[index].label = newLabel
-    setParams({ ...params, attributes: newAttributes })
+    setParams({ ...params, characteristic: newAttributes })
   }
   const handleGalleryChange = (index, newImage) => {
     const newGallery = [...params.gallery]
@@ -80,7 +108,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     const newGallery = params.gallery.filter((_, idx) => idx !== index)
     setParams({ ...params, gallery: newGallery })
   }
-
   const forms = [
     {
       label: 'Имя ( RU )',
@@ -96,15 +123,40 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       label: 'Категория',
       children: (
         <CFormSelect
-          name="category_id"
-          value={params.category_id}
-          onChange={handleInputChange}
+          value={category?.id}
+          onChange={(e) => {
+            if (e.target.value) {
+              setCategory(categories?.find((item) => item?.id == e.target.value))
+            } else {
+              setCategory({})
+              setParams({ ...params, category_id: '' })
+            }
+          }}
           required
           options={[
             '',
-            { label: 'Категория 1', value: '1' },
-            { label: 'Категория 2', value: '2' },
-            { label: 'Категория 3', value: '3' },
+            ...categories?.map((item) => ({
+              label: item?.title_ru,
+              value: item?.id,
+            })),
+          ]}
+        />
+      ),
+    },
+    {
+      label: 'Под категория',
+      children: (
+        <CFormSelect
+          name="category_id"
+          onChange={handleInputChange}
+          value={params?.category_id}
+          required
+          options={[
+            '',
+            ...(category?.subcategories || [])?.map((item) => ({
+              label: item?.title_ru,
+              value: item?.id,
+            })),
           ]}
         />
       ),
@@ -155,17 +207,17 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       label: 'Характеристики',
       children: (
         <>
-          {params.attributes?.map((attribute, idx) => (
+          {params.characteristic?.map((attribute, idx) => (
             <div key={idx} className="mt-2 w-100">
               <CInputGroup>
                 <CFormInput
-                  placeholder="Label"
+                  placeholder="Ключевое слово"
                   value={attribute.label}
                   onChange={(e) => handleLabelChange(idx, e.target.value)}
                   className="me-2"
                 />
                 <CFormInput
-                  placeholder="Value"
+                  placeholder="Значение"
                   value={attribute.value}
                   onChange={(e) => handleAttributeChange(idx, e.target.value)}
                 />
@@ -187,9 +239,23 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       ),
     },
     {
-      label: 'Описание',
+      label: 'Описание ( RU )',
       children: (
-        <CFormTextarea name="description" value={params.description} onChange={handleInputChange} />
+        <CFormTextarea
+          name="description_ru"
+          value={params.description_ru}
+          onChange={handleInputChange}
+        />
+      ),
+    },
+    {
+      label: 'Описание ( UZ )',
+      children: (
+        <CFormTextarea
+          name="description_uz"
+          value={params.description_uz}
+          onChange={handleInputChange}
+        />
       ),
     },
   ]
@@ -199,7 +265,16 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
-      console.log(params)
+    } else {
+      create(params)
+        .then((res) => {
+          if (res?.id) {
+            toast.success('Успешно создано')
+            clearParams()
+            onClose()
+          }
+        })
+        .catch((err) => console.log('err', err))
     }
     setValidated(true)
   }
