@@ -17,13 +17,12 @@ const categoryStore = create((set) => ({
     set({ listLoading: true })
     try {
       const { data } = await requests.fetchCategory(params)
-      set({ list: data })
+      set({ list: data?.data })
       return data
     } catch (err) {
       return err
     } finally {
       set({ listLoading: false })
-       
     }
   },
   create: async (params) => {

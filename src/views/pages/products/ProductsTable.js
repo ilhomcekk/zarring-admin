@@ -10,7 +10,6 @@ import {
   CTableRow,
   CPagination,
   CPaginationItem,
-  CTableFoot,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
@@ -73,7 +72,7 @@ const ProductsTable = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.products?.map((product, index) => (
+            {list?.data?.map((product, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
                 <CTableDataCell>{product?.title_ru}</CTableDataCell>

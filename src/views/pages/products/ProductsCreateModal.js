@@ -41,7 +41,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     gallery: [''],
   })
   const [category, setCategory] = useState({})
-  console.log('asdsa', category)
   const [validated, setValidated] = useState(false)
 
   const clearParams = () => {
