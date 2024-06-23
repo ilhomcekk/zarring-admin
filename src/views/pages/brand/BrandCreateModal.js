@@ -15,20 +15,27 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
-import categorystore from '../../../store/category'
-import { BASE_URL } from '../../../config'
+import React, { useState } from 'react'
+import BrandStore from '../../../store/brand'
 import { toast } from 'react-toastify'
 
-const CategoryEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, edit, editLoading } = categorystore()
+const BrandCreateModal = ({ visible, onClose }) => {
+  const { create, createLoading, getList, list } = BrandStore()
   const [params, setParams] = useState({
-    title_ru: '',
-    title_uz: '',
+    name_ru: '',
+    name_uz: '',
     img: null,
-    description: '',
   })
   const [validated, setValidated] = useState(false)
+
+  const clearParams = () => {
+    setParams({
+      name_ru: '',
+      name_uz: '',
+      img: null,
+    })
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setParams({ ...params, [name]: value })
@@ -39,56 +46,20 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
     setParams({ ...params, [name]: file })
   }
 
-  useEffect(() => {
-    if (visible) {
-      getDetail(id)
-    }
-  }, [visible])
-  useEffect(() => {
-    setParams(() => ({
-      title_ru: detail?.title_ru,
-      title_uz: detail?.title_uz,
-      img: detail?.img,
-      description: detail?.description,
-    }))
-  }, [detail])
-
   const forms = [
     {
       label: 'Имя ( RU )',
       children: (
-        <CFormInput
-          name="title_ru"
-          onChange={handleInputChange}
-          value={params?.title_ru}
-          required
-        />
+        <CFormInput name="name_ru" value={params.name_ru} onChange={handleInputChange} required />
       ),
     },
     {
       label: 'Имя ( UZ )',
-      children: (
-        <CFormInput name="title_uz" onChange={handleInputChange} value={params?.title_uz} />
-      ),
+      children: <CFormInput name="name_uz" value={params.name_uz} onChange={handleInputChange} />,
     },
     {
       label: 'Основное изображение',
-      children: (
-        <div>
-          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
-          <img src={BASE_URL + detail?.img} alt="" />
-        </div>
-      ),
-    },
-    {
-      label: 'Описание',
-      children: (
-        <CFormTextarea
-          name="description"
-          onChange={handleInputChange}
-          value={params?.description}
-        />
-      ),
+      children: <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />,
     },
   ]
   const handleSubmit = (event) => {
@@ -98,15 +69,17 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
       event.preventDefault()
       event.stopPropagation()
     } else {
-      edit(id, params)
+      create(params)
         .then((res) => {
-          console.log(res)
-          toast.success('Успешно создано')
-          getList({
-            page: 1,
-            pageSize: 20,
-          })
-          onClose()
+          if (res?.data?.id) {
+            toast.success('Успешно создано')
+            getList({
+              page: 1,
+              pageSize: 20,
+            })
+            clearParams()
+            onClose()
+          }
         })
         .catch((err) => console.log('err', err))
     }
@@ -115,7 +88,7 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose}>
       <CModalHeader>
-        <CModalTitle>Создать товар</CModalTitle>
+        <CModalTitle>Создать категории</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>
@@ -126,10 +99,8 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
             </div>
           ))}
           <CModalFooter>
-            <CButton color="secondary" onClick={onClose}>
-              Закрыть
-            </CButton>
-            <CButton color="primary" type="submit" disabled={editLoading}>
+            <CButton color="secondary">Закрыть</CButton>
+            <CButton color="primary" type="submit" disabled={createLoading}>
               Сохранить
             </CButton>
           </CModalFooter>
@@ -139,4 +110,4 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
   )
 }
 
-export default CategoryEditModal
+export default BrandCreateModal

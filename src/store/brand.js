@@ -11,12 +11,12 @@ const initialState = {
   deleteLoading: false,
 }
 
-const categoryStore = create((set) => ({
+const brandStore = create((set) => ({
   ...initialState,
   getList: async (params) => {
     set({ listLoading: true })
     try {
-      const { data } = await requests.fetchCategory(params)
+      const { data } = await requests.fetchBrand(params)
       set({ list: data?.data })
       return data
     } catch (err) {
@@ -28,7 +28,7 @@ const categoryStore = create((set) => ({
   getDetail: async (id) => {
     set({ detailLoading: true })
     try {
-      const { data } = await requests.fetchCategoryDetail(id)
+      const { data } = await requests.fetchBrandDetail(id)
       set({ detail: data?.data })
       return data
     } catch (err) {
@@ -40,7 +40,7 @@ const categoryStore = create((set) => ({
   create: async (params) => {
     set({ createLoading: true })
     try {
-      const { data } = await requests.createCategory(params)
+      const { data } = await requests.createBrand(params)
       return data
     } catch (err) {
       return err
@@ -51,7 +51,7 @@ const categoryStore = create((set) => ({
   edit: async (id, params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editCategory(id, params)
+      const { data } = await requests.editBrand(id, params)
       return data
     } catch (err) {
       return err
@@ -62,7 +62,7 @@ const categoryStore = create((set) => ({
   remove: async (id) => {
     set({ deleteLoading: true })
     try {
-      const { data } = await requests.deleteCategory(id)
+      const { data } = await requests.deleteBrand(id)
       if (data?.data) {
         set((state) => ({
           ...state,
@@ -78,4 +78,4 @@ const categoryStore = create((set) => ({
   },
 }))
 
-export default categoryStore
+export default brandStore

@@ -16,15 +16,15 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
-import categorystore from '../../../store/category'
+import Brandstore from '../../../store/brand'
 import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
 
-const CategoryEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, edit, editLoading } = categorystore()
+const BrandEditModal = ({ visible, onClose, id }) => {
+  const { detail, getDetail, getList, edit, editLoading } = Brandstore()
   const [params, setParams] = useState({
-    title_ru: '',
-    title_uz: '',
+    name_ru: '',
+    name_uz: '',
     img: null,
     description: '',
   })
@@ -46,8 +46,8 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
   }, [visible])
   useEffect(() => {
     setParams(() => ({
-      title_ru: detail?.title_ru,
-      title_uz: detail?.title_uz,
+      name_ru: detail?.name_ru,
+      name_uz: detail?.name_uz,
       img: detail?.img,
       description: detail?.description,
     }))
@@ -57,19 +57,12 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
     {
       label: 'Имя ( RU )',
       children: (
-        <CFormInput
-          name="title_ru"
-          onChange={handleInputChange}
-          value={params?.title_ru}
-          required
-        />
+        <CFormInput name="name_ru" onChange={handleInputChange} value={params?.name_ru} required />
       ),
     },
     {
       label: 'Имя ( UZ )',
-      children: (
-        <CFormInput name="title_uz" onChange={handleInputChange} value={params?.title_uz} />
-      ),
+      children: <CFormInput name="name_uz" onChange={handleInputChange} value={params?.name_uz} />,
     },
     {
       label: 'Основное изображение',
@@ -100,7 +93,6 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
     } else {
       edit(id, params)
         .then((res) => {
-          console.log(res)
           toast.success('Успешно создано')
           getList({
             page: 1,
@@ -139,4 +131,4 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
   )
 }
 
-export default CategoryEditModal
+export default BrandEditModal

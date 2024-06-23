@@ -135,7 +135,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           options={[
             '',
             ...categories?.map((item) => ({
-              label: item?.title_ru,
+              label: item?.title,
               value: item?.id,
             })),
           ]}
@@ -153,7 +153,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           options={[
             '',
             ...(category?.subcategories || [])?.map((item) => ({
-              label: item?.title_ru,
+              label: item?.title,
               value: item?.id,
             })),
           ]}

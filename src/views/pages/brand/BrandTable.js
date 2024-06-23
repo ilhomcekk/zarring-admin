@@ -10,19 +10,19 @@ import {
   CTableRow,
   CPagination,
   CPaginationItem,
+  CPopover,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import ProductsShowModal from './ProductsShowModal'
-import ProductsEditModal from './ProductsEditModal'
-import productStore from '../../../store/products'
-import categoryStore from '../../../store/category'
+import BrandShowModal from './BrandShowModal'
+import BrandEditModal from './BrandEditModal'
+import BrandStore from '../../../store/brand'
 import { BASE_URL } from '../../../config'
+import { toast } from 'react-toastify'
 
-const ProductsTable = () => {
-  const { getList, list } = productStore()
-  const { getList: getCategory } = categoryStore()
+const BrandTable = () => {
+  const { getList: getBrand, list, remove, deleteLoading } = BrandStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -32,8 +32,7 @@ const ProductsTable = () => {
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
   useEffect(() => {
-    getList(params)
-    getCategory(params)
+    getBrand(params)
   }, [])
   return (
     <>
@@ -43,8 +42,6 @@ const ProductsTable = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Категория</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Цена</CTableHeaderCell>
               <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
@@ -60,48 +57,60 @@ const ProductsTable = () => {
               <CTableHeaderCell scope="col">
                 <CFormInput type="text" name="username" />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.data?.map((product, index) => (
+            {list?.map((item, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
-                <CTableDataCell>{product?.title}</CTableDataCell>
-                <CTableDataCell>{product?.category_name}</CTableDataCell>
-                <CTableDataCell>{product?.price}</CTableDataCell>
+                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                <CTableDataCell>{item?.name}</CTableDataCell>
                 <CTableDataCell>
-                  <img src={BASE_URL + product?.img} width={50} height={50} alt="" />
+                  <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
-                <CTableDataCell>{product?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton
                       color="primary"
                       onClick={() => {
-                        setItem(product)
+                        setItem(item)
                         setShowModal(true)
                       }}
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    <CButton
-                      className="mx-2"
-                      color="danger"
-                      onClick={() => handleDelete(product.id)}
+                    <CPopover
+                      title={item?.id}
+                      trigger={'focus'}
+                      content={
+                        <div>
+                          <div>Вы точно хотите удалить?</div>
+                          <CButton
+                            disabled={deleteLoading}
+                            onClick={() =>
+                              remove(item?.id).then((res) => {
+                                if (res?.data) {
+                                  toast.success('Успешно удалено')
+                                }
+                              })
+                            }
+                            color="danger"
+                            className="mt-2"
+                          >
+                            Удалить
+                          </CButton>
+                        </div>
+                      }
                     >
-                      <CIcon icon={cilTrash} />
-                    </CButton>
+                      <CButton className="mx-2" color="danger">
+                        <CIcon icon={cilTrash} />
+                      </CButton>
+                    </CPopover>
                     <CButton
                       color="warning"
                       onClick={() => {
-                        setIdItem(product?.id)
+                        setIdItem(item?.id)
                         setEditModal(true)
                       }}
                     >
@@ -152,10 +161,10 @@ const ProductsTable = () => {
           </CTableBody>
         </CTable>
       </div>
-      <ProductsShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
-      <ProductsEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <BrandShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
+      <BrandEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
     </>
   )
 }
 
-export default ProductsTable
+export default BrandTable

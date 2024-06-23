@@ -74,7 +74,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
           options={[
             '',
             ...list?.map((item) => ({
-              label: item?.title_ru,
+              label: item?.title,
               value: item?.id,
             })),
           ]}

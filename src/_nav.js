@@ -47,6 +47,16 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: 'Баннеры',
+        to: '/banner',
+      },
+      {
+        component: CNavItem,
+        name: 'Бренды',
+        to: '/brand',
+      },
+      {
+        component: CNavItem,
         name: 'Login',
         to: '/login',
       },

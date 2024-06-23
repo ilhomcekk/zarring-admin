@@ -64,7 +64,7 @@ const CategoryTable = () => {
             {list?.map((item, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.title_ru}</CTableDataCell>
+                <CTableDataCell>{item?.title}</CTableDataCell>
                 <CTableDataCell>
                   <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
