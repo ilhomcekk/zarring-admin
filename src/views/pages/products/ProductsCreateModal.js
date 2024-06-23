@@ -258,6 +258,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       ),
     },
   ]
+  console.log(params)
   const handleSubmit = (event) => {
     event.preventDefault()
     const form = event.currentTarget

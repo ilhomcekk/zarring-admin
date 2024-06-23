@@ -10,19 +10,19 @@ import {
   CTableRow,
   CPagination,
   CPaginationItem,
+  CPopover,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import ProductsShowModal from './ProductsShowModal'
-import ProductsEditModal from './ProductsEditModal'
-import productStore from '../../../store/products'
+import CategoryShowModal from './CategoryShowModal'
+import CategoryEditModal from './CategoryEditModal'
 import categoryStore from '../../../store/category'
 import { BASE_URL } from '../../../config'
+import { toast } from 'react-toastify'
 
-const ProductsTable = () => {
-  const { getList, list } = productStore()
-  const { getList: getCategory } = categoryStore()
+const CategoryTable = () => {
+  const { getList: getCategory, list, remove, deleteLoading } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -32,7 +32,6 @@ const ProductsTable = () => {
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
   useEffect(() => {
-    getList(params)
     getCategory(params)
   }, [])
   return (
@@ -43,9 +42,6 @@ const ProductsTable = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Категория</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Цена</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Статус</CTableHeaderCell>
               <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
@@ -54,15 +50,6 @@ const ProductsTable = () => {
               <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <CFormInput type="text" name="firstName" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="lastName" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <CFormInput type="text" name="username" />
@@ -74,40 +61,56 @@ const ProductsTable = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.data?.map((product, index) => (
+            {list?.map((item, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
-                <CTableDataCell>{product?.title_ru}</CTableDataCell>
-                <CTableDataCell>{product?.category_id}</CTableDataCell>
-                <CTableDataCell>{product?.price}</CTableDataCell>
-                <CTableDataCell>{product?.status}</CTableDataCell>
+                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                <CTableDataCell>{item?.title_ru}</CTableDataCell>
                 <CTableDataCell>
-                  <img src={BASE_URL + product?.img} width={50} height={50} alt="" />
+                  <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
-                <CTableDataCell>{product?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton
                       color="primary"
                       onClick={() => {
-                        setItem(product)
+                        setItem(item)
                         setShowModal(true)
                       }}
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    <CButton
-                      className="mx-2"
-                      color="danger"
-                      onClick={() => handleDelete(product.id)}
+                    <CPopover
+                      title={item?.id}
+                      trigger={'focus'}
+                      content={
+                        <div>
+                          <div>Вы точно хотите удалить?</div>
+                          <CButton
+                            disabled={deleteLoading}
+                            onClick={() =>
+                              remove(item?.id).then((res) => {
+                                if (res?.data) {
+                                  toast.success('Успешно удалено')
+                                }
+                              })
+                            }
+                            color="danger"
+                            className="mt-2"
+                          >
+                            Удалить
+                          </CButton>
+                        </div>
+                      }
                     >
-                      <CIcon icon={cilTrash} />
-                    </CButton>
+                      <CButton className="mx-2" color="danger">
+                        <CIcon icon={cilTrash} />
+                      </CButton>
+                    </CPopover>
                     <CButton
                       color="warning"
                       onClick={() => {
-                        // setIdItem(product?.id)
-                        console.log(product)
+                        setIdItem(item?.id)
                         setEditModal(true)
                       }}
                     >
@@ -158,10 +161,10 @@ const ProductsTable = () => {
           </CTableBody>
         </CTable>
       </div>
-      <ProductsShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
-      <ProductsEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <CategoryShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
+      <CategoryEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
     </>
   )
 }
 
-export default ProductsTable
+export default CategoryTable

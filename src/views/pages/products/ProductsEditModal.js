@@ -15,9 +15,11 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import productStore from '../../../store/products'
 
-const ProductsEditModal = ({ visible, onClose }) => {
+const ProductsEditModal = ({ visible, onClose, id }) => {
+  const { detail, getDetail } = productStore()
   const [validated, setValidated] = useState(false)
 
   const defaultAttributes = [
@@ -64,6 +66,13 @@ const ProductsEditModal = ({ visible, onClose }) => {
     const newGallery = gallery.filter((_, idx) => idx !== index)
     setGallery(newGallery)
   }
+
+  useEffect(() => {
+    if (visible) {
+      getDetail(id)
+    }
+  }, [visible])
+
   const forms = [
     {
       label: 'Имя ( RU )',

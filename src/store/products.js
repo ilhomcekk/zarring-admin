@@ -2,10 +2,10 @@ import { create } from 'zustand'
 import { requests } from '../helpers/requests'
 
 const initialState = {
-  getList: async () => {},
   list: {},
   listLoading: false,
-  create: async () => {},
+  detail: {},
+  detailLoading: false,
   createLoading: false,
   editLoading: false,
   deleteLoading: false,
@@ -23,6 +23,18 @@ const productStore = create((set) => ({
       return err
     } finally {
       set({ listLoading: false })
+    }
+  },
+  getDetail: async (id) => {
+    set({ detaiLoading: true })
+    try {
+      const { data } = await requests.fetchProductDetail(id)
+      set({ detail: data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ detaiLoading: false })
     }
   },
   create: async (params) => {
