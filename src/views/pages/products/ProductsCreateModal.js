@@ -21,7 +21,7 @@ import categoryStore from '../../../store/category'
 import { toast } from 'react-toastify'
 
 const ProductsCreateModal = ({ visible, onClose }) => {
-  const { create, createLoading } = productStore()
+  const { create, createLoading, getList } = productStore()
   const { list: categories } = categoryStore()
   const [params, setParams] = useState({
     title_ru: '',
@@ -267,8 +267,12 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     } else {
       create(params)
         .then((res) => {
-          if (res?.id) {
+          if (res?.data?.id) {
             toast.success('Успешно создано')
+            getList({
+              page: 1,
+              pageSize: 20,
+            })
             clearParams()
             onClose()
           }
@@ -292,7 +296,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           ))}
           <CModalFooter>
             <CButton color="secondary">Закрыть</CButton>
-            <CButton color="primary" type="submit">
+            <CButton color="primary" type="submit" disabled={createLoading}>
               Сохранить
             </CButton>
           </CModalFooter>

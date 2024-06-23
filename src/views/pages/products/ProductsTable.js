@@ -39,7 +39,7 @@ const ProductsTable = () => {
         <CTable striped>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell scope="col">#</CTableHeaderCell>
+              <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
               <CTableHeaderCell scope="col">Категория</CTableHeaderCell>
               <CTableHeaderCell scope="col">Цена</CTableHeaderCell>
@@ -119,7 +119,18 @@ const ProductsTable = () => {
                 <CIcon icon={cilArrowLeft} />
               </CPaginationItem>
               {[...Array(list?.totalPages)]?.map((_, idx) => (
-                <CPaginationItem key={idx}>{idx + 1}</CPaginationItem>
+                <CPaginationItem
+                  onClick={() => {
+                    const newParams = { ...params }
+                    newParams['page'] = idx + 1
+                    setParams(newParams)
+                    getList(newParams)
+                  }}
+                  active={params.page === idx + 1}
+                  key={idx}
+                >
+                  {idx + 1}
+                </CPaginationItem>
               ))}
               <CPaginationItem
                 onClick={() => {
