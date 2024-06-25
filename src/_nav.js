@@ -57,6 +57,11 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: 'Заказы',
+        to: '/order',
+      },
+      {
+        component: CNavItem,
         name: 'Login',
         to: '/login',
       },
