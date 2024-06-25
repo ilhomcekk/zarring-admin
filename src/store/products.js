@@ -29,7 +29,7 @@ const productStore = create((set) => ({
     set({ detaiLoading: true })
     try {
       const { data } = await requests.fetchProductDetail(id)
-      set({ detail: data })
+      set({ detail: data?.data })
       return data
     } catch (err) {
       return err

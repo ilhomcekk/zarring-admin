@@ -17,7 +17,7 @@ const orderStore = create((set) => ({
     set({ listLoading: true })
     try {
       const { data } = await requests.fetchOrder(params)
-      set({ list: data?.data })
+      set({ list: data })
       return data
     } catch (err) {
       return err
@@ -48,10 +48,10 @@ const orderStore = create((set) => ({
       set({ createLoading: false })
     }
   },
-  edit: async (id,params) => {
+  edit: async (id, params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editBanner(id,params)
+      const { data } = await requests.editBanner(id, params)
       return data
     } catch (err) {
       return err

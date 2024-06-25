@@ -10,6 +10,7 @@ import {
   CRow,
 } from '@coreui/react'
 import React from 'react'
+import { BASE_URL } from '../../../config'
 
 const ProductsShowModal = ({ visible, onClose, item }) => {
   return (
@@ -51,22 +52,14 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CCallout className="p-2 m-0" color="primary">
-              Статус
-            </CCallout>
-          </CCol>
-          <CCol xs={{ span: 6 }}>
-            <CListGroup>
-              <CListGroupItem className="p-2">{item?.status}</CListGroupItem>
-            </CListGroup>
-          </CCol>
-          <CCol xs={{ span: 6 }}>
-            <CCallout className="p-2 m-0" color="primary">
               Картинка
             </CCallout>
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.img}</CListGroupItem>
+              <CListGroupItem className="p-2">
+                <img src={BASE_URL + item?.img} alt="" />
+              </CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>

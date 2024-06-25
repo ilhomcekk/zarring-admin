@@ -20,6 +20,9 @@ import productStore from '../../../store/products'
 
 const ProductsEditModal = ({ visible, onClose, id }) => {
   const { detail, getDetail } = productStore()
+  const [params, setParams] = useState({
+    
+  })
   const [validated, setValidated] = useState(false)
 
   const defaultAttributes = [

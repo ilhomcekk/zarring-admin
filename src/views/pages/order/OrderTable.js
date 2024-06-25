@@ -28,6 +28,7 @@ const OrderTable = () => {
     page: 1,
     pageSize: 20,
   })
+  console.log(list)
   const [showModal, setShowModal] = useState(false)
   useEffect(() => {
     getOrder(params)
@@ -39,8 +40,9 @@ const OrderTable = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -52,20 +54,17 @@ const OrderTable = () => {
               <CTableHeaderCell scope="col">
                 <CFormInput type="text" name="username" />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.map((item, index) => (
+            {list?.orders?.map((item, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.name}</CTableDataCell>
-                <CTableDataCell>
-                  <img src={BASE_URL + item?.dataValues?.img} width={50} height={50} alt="" />
-                </CTableDataCell>
+                <CTableDataCell>{item?.user_name}</CTableDataCell>
+                <CTableDataCell>{item?.user_phone}</CTableDataCell>
+                <CTableDataCell>{item?.status}</CTableDataCell>
                 <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
