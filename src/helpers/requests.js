@@ -3,10 +3,13 @@ import { $api } from './api'
 import { formData } from './form'
 
 export const requests = {
+  // AUTH
+  login: (params) => $api.post(`${API_URL}/auth/login`, params),
+  fetchMe: () => $api.get(`${API_URL}/user/profile`),
   // PRODUCTS
   fetchProduct: (params) => $api.get(`${API_URL}/product/`, { params }),
   fetchProductDetail: (id) => $api.get(`${API_URL}/product/by/${id}`),
-  createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
+  createProduct: (params) => $api.post(`${API_URL}/product/add`, params),
   // CATEGORY
   fetchCategory: (params) => $api.get(`${API_URL}/category`, { params }),
   fetchCategoryDetail: (id) => $api.get(`${API_URL}/category/byId/${id}`),

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
+import { initApp } from './helpers/api'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -17,6 +18,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
+  initApp()
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const storedTheme = useSelector((state) => state.theme)
 

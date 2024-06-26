@@ -1,28 +1,29 @@
-export const formData = (obj, form, namespace) => {
-  const fd = form || new FormData()
-  let formKey
-
+export const formData = (obj, form = new FormData(), namespace = '') => {
   for (const property in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, property)) {
-      if (namespace) {
-        formKey = namespace + '[' + property + ']'
-      } else {
-        formKey = property
-      }
+      const formKey = namespace ? `${namespace}[${property}]` : property;
 
-      if (
+      if (Array.isArray(obj[property])) {
+        obj[property].forEach((item, index) => {
+          if (typeof item === 'object' && !(item instanceof File) && !(item instanceof Blob)) {
+            formData(item, form, `${formKey}[${index}]`);
+          } else {
+            form.append(`${formKey}[${index}]`, item);
+          }
+        });
+      } else if (
         typeof obj[property] === 'object' &&
         !(obj[property] instanceof File) &&
         !(obj[property] instanceof Blob)
       ) {
-        formData(obj[property], fd, property)
+        formData(obj[property], form, formKey);
       } else {
-        fd.append(formKey, obj[property])
+        form.append(formKey, obj[property]);
       }
     }
   }
-  return fd
-}
+  return form;
+};
 
 export const formatPhone = (value) => {
   const cleaned = value?.replace(/\D/g, '')

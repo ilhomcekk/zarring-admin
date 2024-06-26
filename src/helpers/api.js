@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { API_URL } from '../config'
 
 export const $api = axios.create({
   baseURL: 'https://hasandev.uz/api',
@@ -17,6 +16,11 @@ export const initApp = () => {
 export const setToken = (token) => {
   localStorage.setItem(tokenName, token)
   $api.defaults.headers.common.Authorization = `Bearer ${token}`
+}
+
+export const getToken = () => {
+  const token = localStorage.getItem(tokenName)
+  return token
 }
 
 export const removeToken = () => {

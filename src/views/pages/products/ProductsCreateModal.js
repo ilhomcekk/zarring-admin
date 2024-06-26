@@ -42,6 +42,8 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   })
   const [category, setCategory] = useState({})
   const [validated, setValidated] = useState(false)
+  console.log(params)
+  console.log(category)
 
   const clearParams = () => {
     setParams({
@@ -59,7 +61,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
         { label: 'Narxi', value: '' },
         { label: 'Razmer', value: '' },
       ],
-      gallery: [''],
+      gallery: [null],
     })
   }
 
@@ -100,7 +102,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   }
 
   const addGalleryImage = () => {
-    setParams({ ...params, gallery: [...params.gallery, ''] })
+    setParams({ ...params, gallery: [...params.gallery, null] })
   }
 
   const removeGalleryImage = (index) => {
@@ -149,7 +151,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           name="category_id"
           onChange={handleInputChange}
           value={params?.category_id}
-          required
           options={[
             '',
             ...(category?.subcategories || [])?.map((item) => ({
@@ -167,12 +168,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           <CFormInput required name="price" value={params.price} onChange={handleInputChange} />
           <CInputGroupText>$</CInputGroupText>
         </>
-      ),
-    },
-    {
-      label: 'Количество',
-      children: (
-        <CFormInput name="amount" value={params.amount} onChange={handleInputChange} required />
       ),
     },
     {
@@ -258,7 +253,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       ),
     },
   ]
-  console.log(params)
   const handleSubmit = (event) => {
     event.preventDefault()
     const form = event.currentTarget
@@ -266,7 +260,25 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       event.preventDefault()
       event.stopPropagation()
     } else {
-      create(params)
+      const formData = new FormData()
+      formData.append('img', params.img)
+      const galleryArray = Array.isArray(params.gallery) ? params.gallery : [params.gallery]
+      galleryArray.forEach((file, index) => {
+        formData.append('gallery', file)
+      })
+      formData.append('title_ru', params.title_ru)
+      formData.append('title_uz', params.title_uz)
+      formData.append('price', params.price)
+      formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
+      params.characteristic.forEach((item, index) => {
+        if (item?.value) {
+          formData.append(`characteristic[${index}][label]`, item.label)
+          formData.append(`characteristic[${index}][value]`, item.value)
+        }
+      })
+      formData.append('description_ru', params.description_ru)
+      formData.append('description_uz', params.description_uz)
+      create(formData)
         .then((res) => {
           if (res?.data?.id) {
             toast.success('Успешно создано')
