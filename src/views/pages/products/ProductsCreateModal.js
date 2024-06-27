@@ -33,7 +33,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     title_uz: '',
     category_id: '',
     price: '',
-    money_type: '',
+    money_type: 'usd',
     img: null,
     description_ru: '',
     description_uz: '',
@@ -54,6 +54,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       title_uz: '',
       category_id: '',
       price: '',
+      money_type: 'usd',
       img: null,
       description_ru: '',
       description_uz: '',
@@ -63,7 +64,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
         { label: 'Narxi', value: '' },
         { label: 'Razmer', value: '' },
       ],
-      gallery: [null],
+      gallery: [''],
     })
   }
 

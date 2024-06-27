@@ -21,6 +21,7 @@ import productStore from '../../../store/products'
 import categoryStore from '../../../store/category'
 import { BASE_URL } from '../../../config'
 import Zoom from 'react-medium-image-zoom'
+import { toast } from 'react-toastify'
 
 const ProductsTable = () => {
   const { getList, list, deleteLoading, remove } = productStore()
@@ -107,6 +108,10 @@ const ProductsTable = () => {
                               remove(product?.id).then((res) => {
                                 if (res?.data) {
                                   toast.success('Успешно удалено')
+                                  getList({
+                                    page: 1,
+                                    pageSize: 20,
+                                  })
                                 }
                               })
                             }
