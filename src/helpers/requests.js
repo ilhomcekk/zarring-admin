@@ -11,6 +11,7 @@ export const requests = {
   fetchProductDetail: (id) => $api.get(`${API_URL}/product/byId/${id}`),
   createProduct: (params) => $api.post(`${API_URL}/product/add`, params),
   editProduct: (id, params) => $api.post(`${API_URL}/product/update/${id}`, params),
+  deleteProduct: (id) => $api.delete(`${API_URL}/product/delete/${id}`),
   // CATEGORY
   fetchCategory: (params) => $api.get(`${API_URL}/category`, { params }),
   fetchCategoryDetail: (id) => $api.get(`${API_URL}/category/byId/${id}`),

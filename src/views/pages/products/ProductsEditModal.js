@@ -215,20 +215,21 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       label: 'Фотогалерея',
       children: (
         <div>
-          {params?.gallery.map((item, idx) => (
-            <div key={idx} className="mt-2">
-              <CInputGroup>
-                <CFormInput
-                  type="file"
-                  onChange={(e) => handleGalleryChange(idx, e.target.files[0])}
-                />
-                <CButton color="danger" className="ms-2" onClick={() => removeGalleryImage(idx)}>
-                  <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
-                </CButton>
-              </CInputGroup>
-              <img src={BASE_URL + item} width={200} className="mt-2" alt="" />
-            </div>
-          ))}
+          {Array.isArray(params?.gallery) &&
+            params?.gallery.map((item, idx) => (
+              <div key={idx} className="mt-2">
+                <CInputGroup>
+                  <CFormInput
+                    type="file"
+                    onChange={(e) => handleGalleryChange(idx, e.target.files[0])}
+                  />
+                  <CButton color="danger" className="ms-2" onClick={() => removeGalleryImage(idx)}>
+                    <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
+                  </CButton>
+                </CInputGroup>
+                <img src={BASE_URL + item} width={200} className="mt-2" alt="" />
+              </div>
+            ))}
           <CButton color="success" className="mt-2 text-white" onClick={addGalleryImage}>
             Добавить фото
           </CButton>

@@ -59,7 +59,7 @@ const productStore = create((set) => ({
       set({ editLoading: false })
     }
   },
-  delete: async (id) => {
+  remove: async (id) => {
     set({ deleteLoading: true })
     try {
       const { data } = await requests.deleteProduct(id)

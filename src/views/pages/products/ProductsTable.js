@@ -10,6 +10,7 @@ import {
   CTableRow,
   CPagination,
   CPaginationItem,
+  CPopover,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
@@ -22,7 +23,7 @@ import { BASE_URL } from '../../../config'
 import Zoom from 'react-medium-image-zoom'
 
 const ProductsTable = () => {
-  const { getList, list } = productStore()
+  const { getList, list, deleteLoading, remove } = productStore()
   const { getList: getCategory } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
@@ -94,13 +95,33 @@ const ProductsTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    <CButton
-                      className="mx-2"
-                      color="danger"
-                      onClick={() => handleDelete(product.id)}
+                    <CPopover
+                      title={product?.id}
+                      trigger={'focus'}
+                      content={
+                        <div>
+                          <div>Вы точно хотите удалить?</div>
+                          <CButton
+                            disabled={deleteLoading}
+                            onClick={() =>
+                              remove(product?.id).then((res) => {
+                                if (res?.data) {
+                                  toast.success('Успешно удалено')
+                                }
+                              })
+                            }
+                            color="danger"
+                            className="mt-2"
+                          >
+                            Удалить
+                          </CButton>
+                        </div>
+                      }
                     >
-                      <CIcon icon={cilTrash} />
-                    </CButton>
+                      <CButton className="mx-2" color="danger">
+                        <CIcon icon={cilTrash} />
+                      </CButton>
+                    </CPopover>
                     <CButton
                       color="warning"
                       onClick={() => {
