@@ -19,6 +19,7 @@ import ProductsEditModal from './ProductsEditModal'
 import productStore from '../../../store/products'
 import categoryStore from '../../../store/category'
 import { BASE_URL } from '../../../config'
+import Zoom from 'react-medium-image-zoom'
 
 const ProductsTable = () => {
   const { getList, list } = productStore()
@@ -77,7 +78,9 @@ const ProductsTable = () => {
                 <CTableDataCell>{product?.category_name}</CTableDataCell>
                 <CTableDataCell>{product?.price}</CTableDataCell>
                 <CTableDataCell>
-                  <img src={BASE_URL + product?.img} width={50} height={50} alt="" />
+                  <Zoom>
+                    <img src={BASE_URL + product?.img} width={50} height={50} alt="" />
+                  </Zoom>
                 </CTableDataCell>
                 <CTableDataCell>{product?.createdAt}</CTableDataCell>
                 <CTableDataCell>

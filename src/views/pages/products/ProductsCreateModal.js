@@ -2,6 +2,11 @@ import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CButton,
+  CDropdown,
+  CDropdownDivider,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
   CForm,
   CFormInput,
   CFormLabel,
@@ -28,7 +33,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     title_uz: '',
     category_id: '',
     price: '',
-    amount: '',
+    money_type: '',
     img: null,
     description_ru: '',
     description_uz: '',
@@ -42,8 +47,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   })
   const [category, setCategory] = useState({})
   const [validated, setValidated] = useState(false)
-  console.log(params)
-  console.log(category)
 
   const clearParams = () => {
     setParams({
@@ -51,7 +54,6 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       title_uz: '',
       category_id: '',
       price: '',
-      amount: '',
       img: null,
       description_ru: '',
       description_uz: '',
@@ -165,8 +167,13 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       label: 'Цена',
       children: (
         <>
-          <CFormInput required name="price" value={params.price} onChange={handleInputChange} />
-          <CInputGroupText>$</CInputGroupText>
+          <CFormInput name="price" value={params.price} onChange={handleInputChange} />
+          <CInputGroupText>
+            <CFormSelect size="sm" name="money_type" onChange={handleInputChange}>
+              <option value="usd">USD</option>
+              <option value="uzs">UZS</option>
+            </CFormSelect>
+          </CInputGroupText>
         </>
       ),
     },
@@ -269,6 +276,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
       formData.append('price', params.price)
+      formData.append('money_type', params.money_type)
       formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
       params.characteristic.forEach((item, index) => {
         if (item?.value) {
@@ -295,7 +303,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     setValidated(true)
   }
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Создать товар</CModalTitle>
       </CModalHeader>

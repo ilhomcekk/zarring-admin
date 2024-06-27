@@ -8,8 +8,9 @@ export const requests = {
   fetchMe: () => $api.get(`${API_URL}/user/profile`),
   // PRODUCTS
   fetchProduct: (params) => $api.get(`${API_URL}/product/`, { params }),
-  fetchProductDetail: (id) => $api.get(`${API_URL}/product/by/${id}`),
+  fetchProductDetail: (id) => $api.get(`${API_URL}/product/byId/${id}`),
   createProduct: (params) => $api.post(`${API_URL}/product/add`, params),
+  editProduct: (id, params) => $api.post(`${API_URL}/product/update/${id}`, params),
   // CATEGORY
   fetchCategory: (params) => $api.get(`${API_URL}/category`, { params }),
   fetchCategoryDetail: (id) => $api.get(`${API_URL}/category/byId/${id}`),
@@ -30,6 +31,8 @@ export const requests = {
   deleteBrand: (id) => $api.delete(`${API_URL}/brand/delete/${id}`),
   // ORDER
   fetchOrder: (params) => $api.get(`${API_URL}/order`, { params }),
+  // STATS
+  fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
   // REPORTS
   // fetchProducts: (params) => $api.get(`${API_URL}/product`, { params }),

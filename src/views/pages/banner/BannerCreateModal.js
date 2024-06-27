@@ -59,7 +59,31 @@ const BannerCreateModal = ({ visible, onClose }) => {
     },
     {
       label: 'Основное изображение',
-      children: <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />,
+      children: (
+        <>
+          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
+          <CButton
+            color="danger"
+            onClick={() =>
+              setParams((prev) => ({
+                ...prev,
+                img: null,
+              }))
+            }
+          >
+            Удалить
+          </CButton>
+          {params.img && (
+            <div className="w-100">
+              <img
+                src={URL.createObjectURL(params.img)}
+                alt="Uploaded"
+                style={{ maxWidth: '300px' }}
+              />
+            </div>
+          )}
+        </>
+      ),
     },
   ]
   const handleSubmit = (event) => {
@@ -86,7 +110,7 @@ const BannerCreateModal = ({ visible, onClose }) => {
     setValidated(true)
   }
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Создать категории</CModalTitle>
       </CModalHeader>

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import authStore from '../store/auth'
-import { getToken } from '../helpers/api'
+import { getToken, removeToken } from '../helpers/api'
 import { useNavigate } from 'react-router-dom'
 
 const DefaultLayout = () => {
   const navigate = useNavigate()
-  const { getMe, me, meLoading } = authStore()
+  const { getMe } = authStore()
 
   useEffect(() => {
     const token = getToken()
@@ -14,11 +14,16 @@ const DefaultLayout = () => {
       navigate('/login')
     } else {
       getMe()
-        .then((res) => {})
+        .then((res) => {
+          if (res?.response?.status === 401) {
+            navigate('/login')
+            removeToken()
+          }
+        })
         .catch((err) => {
-          console.log(err)
           if (err?.response?.status === 401) {
             navigate('/login')
+            removeToken()
           }
         })
     }

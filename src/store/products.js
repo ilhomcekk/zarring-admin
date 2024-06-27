@@ -48,10 +48,10 @@ const productStore = create((set) => ({
       set({ createLoading: false })
     }
   },
-  edit: async (params) => {
+  edit: async (id, params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editProduct(params)
+      const { data } = await requests.editProduct(id, params)
       return data
     } catch (err) {
       return err

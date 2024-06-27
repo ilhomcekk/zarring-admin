@@ -23,6 +23,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
+import { Link } from 'react-router-dom'
 
 const AppHeaderDropdown = () => {
   return (
@@ -32,7 +33,7 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           Updates
           <CBadge color="info" className="ms-2">
@@ -83,10 +84,12 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem>
-        <CDropdownDivider />
-        <CDropdownItem href="#">
-          <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+        <CDropdownDivider /> */}
+        <CDropdownItem>
+          <Link to={'/login'}>
+            <CIcon icon={cilLockLocked} className="me-2" />
+            Выйти
+          </Link>
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

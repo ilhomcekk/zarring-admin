@@ -29,7 +29,6 @@ const CategoryCreateModal = ({ visible, onClose }) => {
     description_ru: '',
     description_uz: '',
   })
-  const [category, setCategory] = useState({})
   const [validated, setValidated] = useState(false)
 
   const clearParams = () => {
@@ -83,28 +82,52 @@ const CategoryCreateModal = ({ visible, onClose }) => {
     },
     {
       label: 'Основное изображение',
-      children: <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />,
-    },
-    {
-      label: 'Описание ( RU )',
       children: (
-        <CFormTextarea
-          name="description_ru"
-          value={params.description_ru}
-          onChange={handleInputChange}
-        />
+        <>
+          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
+          <CButton
+            color="danger"
+            onClick={() =>
+              setParams((prev) => ({
+                ...prev,
+                img: null,
+              }))
+            }
+          >
+            Удалить
+          </CButton>
+          {params.img && (
+            <div className="w-100">
+              <img
+                src={URL.createObjectURL(params.img)}
+                alt="Uploaded"
+                style={{ maxWidth: '300px' }}
+              />
+            </div>
+          )}
+        </>
       ),
     },
-    {
-      label: 'Описание ( UZ )',
-      children: (
-        <CFormTextarea
-          name="description_uz"
-          value={params.description_uz}
-          onChange={handleInputChange}
-        />
-      ),
-    },
+    // {
+    //   label: 'Описание ( RU )',
+    //   children: (
+    //     <CFormTextarea
+    //       name="description_ru"
+    //       value={params.description_ru}
+    //       onChange={handleInputChange}
+    //     />
+    //   ),
+    // },
+    // {
+    //   label: 'Описание ( UZ )',
+    //   children: (
+    //     <CFormTextarea
+    //       name="description_uz"
+    //       value={params.description_uz}
+    //       onChange={handleInputChange}
+    //     />
+    //   ),
+    // },
   ]
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -130,7 +153,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
     setValidated(true)
   }
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Создать категории</CModalTitle>
       </CModalHeader>

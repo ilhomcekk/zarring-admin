@@ -17,57 +17,99 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import productStore from '../../../store/products'
+import categoryStore from '../../../store/category'
+import { toast } from 'react-toastify'
+import { BASE_URL } from '../../../config'
 
 const ProductsEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail } = productStore()
+  const { edit, editLoading, detail, getDetail } = productStore()
+  const { list: categories } = categoryStore()
   const [params, setParams] = useState({
-    
+    title_ru: '',
+    title_uz: '',
+    category_id: '',
+    price: '',
+    money_type: '',
+    img: null,
+    description_ru: '',
+    description_uz: '',
+    characteristic: [
+      { label: 'Rang', value: '' },
+      { label: 'Proba', value: '' },
+      { label: 'Narxi', value: '' },
+      { label: 'Razmer', value: '' },
+    ],
+    gallery: [''],
   })
+  const [category, setCategory] = useState({})
   const [validated, setValidated] = useState(false)
 
-  const defaultAttributes = [
-    { label: 'Rang', value: '' },
-    { label: 'Proba', value: '' },
-    { label: 'Narxi', value: '' },
-    { label: 'Razmer', value: '' },
-  ]
+  const clearParams = () => {
+    setParams({
+      title_ru: '',
+      title_uz: '',
+      category_id: '',
+      price: '',
+      img: null,
+      money_type: '',
+      description_ru: '',
+      description_uz: '',
+      characteristic: [
+        { label: 'Rang', value: '' },
+        { label: 'Proba', value: '' },
+        { label: 'Narxi', value: '' },
+        { label: 'Razmer', value: '' },
+      ],
+      gallery: [null],
+    })
+  }
+  console.log(params)
 
-  const [attributes, setAttributes] = useState(defaultAttributes)
-  const [gallery, setGallery] = useState([''])
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setParams({ ...params, [name]: value })
+  }
+
+  const handleFileChange = (e, name) => {
+    const file = e.target.files[0]
+    setParams({ ...params, [name]: file })
+  }
 
   const handleAttributeChange = (index, newValue) => {
-    const newAttributes = [...attributes]
+    const newAttributes = [...params.characteristic]
     newAttributes[index].value = newValue
-    setAttributes(newAttributes)
+    setParams({ ...params, characteristic: newAttributes })
   }
 
   const addAttribute = () => {
-    setAttributes([...attributes, { label: '', value: '' }])
+    setParams({ ...params, characteristic: [...params.characteristic, { label: '', value: '' }] })
   }
 
   const removeAttribute = (index) => {
-    const newAttributes = attributes.filter((_, idx) => idx !== index)
-    setAttributes(newAttributes)
+    const newAttributes = params.characteristic.filter((_, idx) => idx !== index)
+    setParams({ ...params, characteristic: newAttributes })
   }
 
   const handleLabelChange = (index, newLabel) => {
-    const newAttributes = [...attributes]
+    const newAttributes = [...params.characteristic]
     newAttributes[index].label = newLabel
-    setAttributes(newAttributes)
+    setParams({ ...params, characteristic: newAttributes })
   }
+
   const handleGalleryChange = (index, newImage) => {
-    const newGallery = [...gallery]
+    const newGallery = [...params.gallery]
     newGallery[index] = newImage
-    setGallery(newGallery)
+    setParams({ ...params, gallery: newGallery })
   }
 
   const addGalleryImage = () => {
-    setGallery([...gallery, ''])
+    setParams({ ...params, gallery: [...params.gallery, null] })
   }
 
   const removeGalleryImage = (index) => {
-    const newGallery = gallery.filter((_, idx) => idx !== index)
-    setGallery(newGallery)
+    // const newGallery = params.gallery.filter((_, idx) => idx !== index)
+    const newGallery = params.gallery.map((item, idx) => (idx === index ? '' : item))
+    setParams({ ...params, gallery: newGallery })
   }
 
   useEffect(() => {
@@ -76,51 +118,104 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     }
   }, [visible])
 
+  useEffect(() => {
+    setParams({
+      title_ru: detail?.title_ru,
+      title_uz: detail?.title_uz,
+      category_id: detail?.category_id,
+      price: detail?.price,
+      img: detail?.img,
+      money_type: detail?.money_type,
+      description_ru: detail?.description_ru,
+      description_uz: detail?.description_uz,
+      characteristic: detail?.characteristic || [],
+      gallery: detail?.gallery || [],
+    })
+    setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
+  }, [detail])
+
   const forms = [
     {
       label: 'Имя ( RU )',
-      children: <CFormInput required />,
+      children: (
+        <CFormInput name="title_ru" value={params.title_ru} onChange={handleInputChange} required />
+      ),
     },
     {
       label: 'Имя ( UZ )',
-      children: <CFormInput />,
+      children: <CFormInput name="title_uz" value={params.title_uz} onChange={handleInputChange} />,
     },
     {
       label: 'Категория',
       children: (
         <CFormSelect
+          value={category?.id}
+          onChange={(e) => {
+            const selectedCategory = categories?.find((item) => item?.id === e.target.value)
+            setCategory(selectedCategory || {})
+            setParams({ ...params, category_id: '' })
+          }}
           required
           options={[
             '',
-            { label: 'Категория 1', value: '1' },
-            { label: 'Категория 2', value: '2' },
-            { label: 'Категория 3', value: '3' },
+            ...categories?.map((item) => ({
+              label: item?.title,
+              value: item?.id,
+            })),
           ]}
         />
       ),
     },
     {
-      label: 'Стоимость',
+      label: 'Под категория',
+      children: (
+        <CFormSelect
+          name="category_id"
+          onChange={handleInputChange}
+          value={params?.category_id}
+          options={[
+            '',
+            ...(category?.subcategories || [])?.map((item) => ({
+              label: item?.title,
+              value: item?.id,
+            })),
+          ]}
+        />
+      ),
+    },
+    {
+      label: 'Цена',
       children: (
         <>
-          <CFormInput required />
-          <CInputGroupText>$</CInputGroupText>
+          <CFormInput name="price" value={params.price} onChange={handleInputChange} />
+          <CInputGroupText>
+            <CFormSelect
+              size="sm"
+              name="money_type"
+              value={params.money_type}
+              onChange={handleInputChange}
+            >
+              <option value="usd">USD</option>
+              <option value="uzs">UZS</option>
+            </CFormSelect>
+          </CInputGroupText>
         </>
       ),
     },
     {
-      label: 'Количество',
-      children: <CFormInput required />,
-    },
-    {
       label: 'Основное изображение',
-      children: <CFormInput type="file" />,
+      children: (
+        <div>
+          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
+          <img src={BASE_URL + detail?.img} width={200} alt="" />
+        </div>
+      ),
     },
     {
       label: 'Фотогалерея',
       children: (
         <div>
-          {gallery.map((_, idx) => (
+          {params?.gallery.map((item, idx) => (
             <div key={idx} className="mt-2">
               <CInputGroup>
                 <CFormInput
@@ -131,6 +226,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
                   <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
                 </CButton>
               </CInputGroup>
+              <img src={BASE_URL + item} width={200} className="mt-2" alt="" />
             </div>
           ))}
           <CButton color="success" className="mt-2 text-white" onClick={addGalleryImage}>
@@ -143,17 +239,17 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       label: 'Характеристики',
       children: (
         <>
-          {attributes?.map((attribute, idx) => (
+          {params.characteristic?.map((attribute, idx) => (
             <div key={idx} className="mt-2 w-100">
               <CInputGroup>
                 <CFormInput
-                  placeholder="Label"
+                  placeholder="Ключевое слово"
                   value={attribute.label}
                   onChange={(e) => handleLabelChange(idx, e.target.value)}
                   className="me-2"
                 />
                 <CFormInput
-                  placeholder="Value"
+                  placeholder="Значение"
                   value={attribute.value}
                   onChange={(e) => handleAttributeChange(idx, e.target.value)}
                 />
@@ -175,22 +271,70 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       ),
     },
     {
-      label: 'Описание',
-      children: <CFormTextarea />,
+      label: 'Описание ( RU )',
+      children: (
+        <CFormTextarea
+          name="description_ru"
+          value={params.description_ru}
+          onChange={handleInputChange}
+        />
+      ),
+    },
+    {
+      label: 'Описание ( UZ )',
+      children: (
+        <CFormTextarea
+          name="description_uz"
+          value={params.description_uz}
+          onChange={handleInputChange}
+        />
+      ),
     },
   ]
+
   const handleSubmit = (event) => {
+    event.preventDefault()
     const form = event.currentTarget
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
+    } else {
+      const formData = new FormData()
+      formData.append('img', params.img)
+      const galleryArray = Array.isArray(params.gallery) ? params.gallery : [params.gallery]
+      galleryArray.forEach((file, index) => {
+        formData.append('gallery', file)
+      })
+      formData.append('title_ru', params.title_ru)
+      formData.append('title_uz', params.title_uz)
+      formData.append('price', params.price)
+      formData.append('money_type', params.money_type)
+      formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
+      params.characteristic.forEach((item, index) => {
+        if (item?.value) {
+          formData.append(`characteristic[${index}][label]`, item.label)
+          formData.append(`characteristic[${index}][value]`, item.value)
+        }
+      })
+      formData.append('description_ru', params.description_ru)
+      formData.append('description_uz', params.description_uz)
+      edit(id, formData)
+        .then((res) => {
+          if (res?.data?.id) {
+            toast.success('Успешно отредактировано')
+            clearParams()
+            onClose()
+          }
+        })
+        .catch((err) => console.log('err', err))
     }
     setValidated(true)
   }
+
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Создать товар</CModalTitle>
+        <CModalTitle>Редактировать товар</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>
@@ -201,8 +345,10 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
             </div>
           ))}
           <CModalFooter>
-            <CButton color="secondary">Закрыть</CButton>
-            <CButton color="primary" type="submit">
+            <CButton color="secondary" onClick={onClose}>
+              Закрыть
+            </CButton>
+            <CButton color="primary" type="submit" disabled={editLoading}>
               Сохранить
             </CButton>
           </CModalFooter>

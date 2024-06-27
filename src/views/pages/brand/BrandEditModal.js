@@ -67,22 +67,50 @@ const BrandEditModal = ({ visible, onClose, id }) => {
     {
       label: 'Основное изображение',
       children: (
-        <div>
-          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
-          <img src={BASE_URL + detail?.img} alt="" />
-        </div>
+        <>
+          <CFormInput
+            type="file"
+            onChange={(e) => handleFileChange(e, 'img')}
+            disabled={params?.img}
+          />
+          <CButton
+            color="danger"
+            onClick={() =>
+              setParams((prev) => ({
+                ...prev,
+                img: '',
+              }))
+            }
+          >
+            Удалить изображение
+          </CButton>
+          {typeof params.img === 'string' && (
+            <div className="w-100">
+              <img src={BASE_URL + params?.img} alt="Uploaded" style={{ maxWidth: '300px' }} />
+            </div>
+          )}
+          {params.img?.name && (
+            <div className="w-100">
+              <img
+                src={URL.createObjectURL(params.img)}
+                alt="Uploaded"
+                style={{ maxWidth: '300px' }}
+              />
+            </div>
+          )}
+        </>
       ),
     },
-    {
-      label: 'Описание',
-      children: (
-        <CFormTextarea
-          name="description"
-          onChange={handleInputChange}
-          value={params?.description}
-        />
-      ),
-    },
+    // {
+    //   label: 'Описание',
+    //   children: (
+    //     <CFormTextarea
+    //       name="description"
+    //       onChange={handleInputChange}
+    //       value={params?.description}
+    //     />
+    //   ),
+    // },
   ]
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -105,7 +133,7 @@ const BrandEditModal = ({ visible, onClose, id }) => {
     setValidated(true)
   }
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Создать товар</CModalTitle>
       </CModalHeader>

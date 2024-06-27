@@ -14,7 +14,7 @@ import { BASE_URL } from '../../../config'
 
 const BannerShowModal = ({ visible, onClose, item }) => {
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Баннер ( {item?.id} )</CModalTitle>
       </CModalHeader>

@@ -14,7 +14,7 @@ import { BASE_URL } from '../../../config'
 
 const ProductsShowModal = ({ visible, onClose, item }) => {
   return (
-    <CModal size="xl" visible={visible} onClose={onClose}>
+    <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Товар ( {item?.id} )</CModalTitle>
       </CModalHeader>
