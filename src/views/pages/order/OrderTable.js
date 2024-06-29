@@ -63,7 +63,7 @@ const OrderTable = () => {
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.user_name}</CTableDataCell>
-                <CTableDataCell>{item?.user_phone}</CTableDataCell>
+                <CTableDataCell>{item?.user_number}</CTableDataCell>
                 <CTableDataCell>{item?.status}</CTableDataCell>
                 <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
