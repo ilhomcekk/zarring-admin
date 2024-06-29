@@ -108,7 +108,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
 
   const removeGalleryImage = (index) => {
     // const newGallery = params.gallery.filter((_, idx) => idx !== index)
-    const newGallery = params.gallery.map((item, idx) => (idx === index ? '' : item))
+    const newGallery = params.gallery.map((item, idx) => (idx === index ? null : item))
     setParams({ ...params, gallery: newGallery })
   }
 
@@ -133,7 +133,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     })
     setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
   }, [detail])
-
+  console.log(params)
   const forms = [
     {
       label: 'Имя ( RU )',
@@ -303,8 +303,9 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       const formData = new FormData()
       formData.append('img', params.img)
       const galleryArray = Array.isArray(params.gallery) ? params.gallery : [params.gallery]
+      console.log(galleryArray, 'galleryArray')
       galleryArray.forEach((file, index) => {
-        formData.append('gallery', file)
+        file && typeof file !== 'string' && formData.append('gallery', file)
       })
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
