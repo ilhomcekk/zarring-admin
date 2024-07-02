@@ -33,6 +33,7 @@ export const requests = {
   // ORDER
   fetchOrder: (params) => $api.get(`${API_URL}/order`, { params }),
   fetchOrderDetail: (id) => $api.get(`${API_URL}/order/by/${id}`),
+  editOrder: (id, params) => $api.put(`${API_URL}/order/update/${id}`, params),
   // STATS
   fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),

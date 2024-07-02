@@ -71,7 +71,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Заказы',
-        to: '/order?page=1&pageSize=20&status=1',
+        to: '/order?page=1&pageSize=20',
       },
       {
         component: CNavItem,

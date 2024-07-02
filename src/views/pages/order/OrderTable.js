@@ -89,7 +89,7 @@ const OrderTable = () => {
                 <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
-                    <CButton
+                    {/* <CButton
                       color="primary"
                       onClick={() => {
                         setItem(item)
@@ -97,7 +97,7 @@ const OrderTable = () => {
                       }}
                     >
                       <CIcon icon={cilZoom} />
-                    </CButton>
+                    </CButton> */}
                     <CPopover
                       title={item?.id}
                       trigger={'focus'}

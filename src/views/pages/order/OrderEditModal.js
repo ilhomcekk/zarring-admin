@@ -1,7 +1,10 @@
 import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
+  CBadge,
   CButton,
+  CCallout,
+  CCol,
   CForm,
   CFormInput,
   CFormLabel,
@@ -9,22 +12,39 @@ import {
   CFormTextarea,
   CInputGroup,
   CInputGroupText,
+  CListGroup,
+  CListGroupItem,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import OrderEditstore from '../../../store/order'
+import { toast } from 'react-toastify'
+import { BASE_URL } from '../../../config'
+import {
+  setColorFromStatus,
+  setStaticColorFromStatus,
+  setTextFromStatus,
+  statusList,
+} from '../../../helpers/form'
 
 const OrderEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, edit, editLoading } = OrderEditstore()
+  const { detail: item, getDetail, getList, edit, editLoading } = OrderEditstore()
   const [params, setParams] = useState({
-    name_ru: '',
-    name_uz: '',
+    user_name: '',
+    user_number: '',
+    status: 0,
   })
-  const [validated, setValidated] = useState(false)
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setParams({ ...params, [name]: value })
@@ -36,70 +56,140 @@ const OrderEditModal = ({ visible, onClose, id }) => {
     }
   }, [visible])
   useEffect(() => {
-    setParams(() => ({
-      name_ru: detail?.dataValues?.name_ru,
-      name_uz: detail?.dataValues?.name_uz,
-    }))
-  }, [detail])
+    setParams({
+      user_name: item?.user_name,
+      user_number: item?.user_number,
+      status: item?.status,
+    })
+  }, [item])
 
-  const forms = [
-    {
-      label: 'Имя ( RU )',
-      children: (
-        <CFormInput name="name_ru" onChange={handleInputChange} value={params?.name_ru} required />
-      ),
-    },
-    {
-      label: 'Имя ( UZ )',
-      children: <CFormInput name="name_uz" onChange={handleInputChange} value={params?.name_uz} />,
-    },
-  ]
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    if (form.checkValidity() === false) {
-      event.preventDefault()
-      event.stopPropagation()
-    } else {
-      edit(id, params)
-        .then((res) => {
-          console.log(res, 'asdasdas')
-          if (res?.data?.id) {
-            toast.success('Успешно создано')
-            getList({
-              page: 1,
-              pageSize: 20,
-            })
-            onClose()
-          }
-        })
-        .catch((err) => console.log('err', err))
-    }
-    setValidated(true)
+  const handleSubmit = () => {
+    edit(id, params)
+      .then((res) => {
+        console.log(res, 'asdasdas')
+        if (res?.data) {
+          toast.success('Успешно')
+          getList({
+            page: 1,
+            pageSize: 20,
+          })
+          onClose()
+        }
+      })
+      .catch((err) => console.log('err', err))
   }
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Изменить заказа</CModalTitle>
+        <CModalTitle>Заказ № ( {item?.id} )</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CForm noValidate validated={validated} onSubmit={handleSubmit}>
-          {forms?.map((item, idx) => (
-            <div key={idx} className="mt-2">
-              <CFormLabel>{item.label}</CFormLabel>
-              <CInputGroup>{item.children}</CInputGroup>
+        <CRow xs={{ gutter: 2 }}>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Имя заказчика
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CFormInput name="user_name" onChange={handleInputChange} value={params?.user_name} />
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Номер заказчика
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CFormInput
+                name="user_number"
+                onChange={handleInputChange}
+                value={params?.user_number}
+              />
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Статус заказа
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CFormSelect
+                name="status"
+                className="w-50"
+                value={params?.status}
+                onChange={handleInputChange}
+                options={statusList?.map((item) => ({
+                  label: item?.name,
+                  value: item?.value,
+                }))}
+                style={{
+                  background: setStaticColorFromStatus(params?.status),
+                }}
+              />
+              {/* <CListGroupItem className="p-2">
+                {
+                  <CBadge className="p-2" color={setColorFromStatus(item?.status)}>
+                    {setTextFromStatus(item?.status)}
+                  </CBadge>
+                }
+              </CListGroupItem> */}
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Время
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.createdAt}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 12 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Товары
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 12 }}>
+            <div className="overflow-x-auto">
+              <CTable striped>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Количество</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Код</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Сумма</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {item?.products?.map((item, index) => (
+                    <CTableRow key={index}>
+                      <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                      <CTableDataCell>{item?.title}</CTableDataCell>
+                      <CTableDataCell>
+                        <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                      </CTableDataCell>
+                      <CTableDataCell>{item?.count}</CTableDataCell>
+                      <CTableDataCell>{item?.code}</CTableDataCell>
+                      <CTableDataCell>{item?.price}</CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
             </div>
-          ))}
-          <CModalFooter>
-            <CButton color="secondary" onClick={onClose}>
-              Закрыть
-            </CButton>
-            <CButton color="primary" type="submit" disabled={editLoading}>
-              Сохранить
-            </CButton>
-          </CModalFooter>
-        </CForm>
+          </CCol>
+        </CRow>
       </CModalBody>
+      <CModalFooter>
+        <CButton color="primary" onClick={handleSubmit}>
+          Сохранить
+        </CButton>
+      </CModalFooter>
     </CModal>
   )
 }

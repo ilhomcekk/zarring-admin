@@ -284,7 +284,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       })
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
-      formData.append('price', params.price)
+      formData.append('price', params.price || 0)
       formData.append('money_type', params.money_type)
       formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
       params.characteristic.forEach((item, index) => {

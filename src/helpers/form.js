@@ -34,6 +34,25 @@ export const formatPhone = (value) => {
   return value || ''
 }
 
+export const statusList = [
+  {
+    name: 'Новый',
+    value: 1,
+  },
+  {
+    name: 'Обратывается',
+    value: 2,
+  },
+  {
+    name: 'Завершен',
+    value: 3,
+  },
+  {
+    name: 'Отменен',
+    value: -1,
+  },
+]
+
 export const setTextFromStatus = (status) => {
   let value = 'Новый'
   switch (status) {
@@ -67,6 +86,25 @@ export const setColorFromStatus = (status) => {
       break
     case -1:
       value = 'danger'
+      break
+  }
+  return value
+}
+
+export const setStaticColorFromStatus = (status) => {
+  let value = '#3399FF'
+  switch (status) {
+    case 1:
+      value = '#3399FF'
+      break
+    case 2:
+      value = '#f9b115'
+      break
+    case 3:
+      value = '#1b9e3e'
+      break
+    case -1:
+      value = '#e55353'
       break
   }
   return value
