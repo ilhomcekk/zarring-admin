@@ -127,7 +127,9 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     },
     {
       label: 'Код товара',
-      children: <CFormInput name="code" value={params.code} onChange={handleInputChange} />,
+      children: (
+        <CFormInput name="code" maxLength={6} value={params.code} onChange={handleInputChange} />
+      ),
     },
     {
       label: 'Категория',
