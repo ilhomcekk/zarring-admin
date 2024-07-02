@@ -27,6 +27,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
+    code: '',
     category_id: '',
     price: '',
     money_type: '',
@@ -48,6 +49,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     setParams({
       title_ru: '',
       title_uz: '',
+      code: '',
       category_id: '',
       price: '',
       img: null,
@@ -122,6 +124,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     setParams({
       title_ru: detail?.title_ru,
       title_uz: detail?.title_uz,
+      code: detail?.code,
       category_id: detail?.category_id,
       price: detail?.price,
       img: detail?.img,
@@ -133,7 +136,6 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     })
     setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
   }, [detail])
-  console.log(params)
   const forms = [
     {
       label: 'Имя ( RU )',
@@ -144,6 +146,10 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     {
       label: 'Имя ( UZ )',
       children: <CFormInput name="title_uz" value={params.title_uz} onChange={handleInputChange} />,
+    },
+    {
+      label: 'Код товара',
+      children: <CFormInput name="code" value={params.code} onChange={handleInputChange} />,
     },
     {
       label: 'Категория',

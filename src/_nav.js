@@ -41,6 +41,12 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: 'Код товара',
+    to: '/code-product',
+    icon: <CIcon icon={cilList} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: 'Категории',
     to: '/category',
     icon: <CIcon icon={cilListNumbered} customClassName="nav-icon" />,
@@ -58,10 +64,36 @@ const _nav = [
     icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: 'Заказы',
-    to: '/order',
-    icon: <CIcon icon={cilLibrary} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Заказы',
+        to: '/order?page=1&pageSize=20&status=1',
+      },
+      {
+        component: CNavItem,
+        name: 'Новые заказы',
+        to: '/order?page=1&pageSize=20&status=1',
+      },
+      {
+        component: CNavItem,
+        name: 'Обрабатываемые заказы',
+        to: '/order?page=1&pageSize=20&status=2',
+      },
+      {
+        component: CNavItem,
+        name: 'Завершенные заказы',
+        to: '/order?page=1&pageSize=20&status=3',
+      },
+      {
+        component: CNavItem,
+        name: 'Отмененные заказы',
+        to: '/order?page=1&pageSize=20&status=-1',
+      },
+    ],
   },
   // {
   //   component: CNavItem,

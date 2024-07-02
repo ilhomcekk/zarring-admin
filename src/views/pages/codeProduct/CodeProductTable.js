@@ -11,45 +11,29 @@ import {
   CPagination,
   CPaginationItem,
   CPopover,
-  CBadge,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import OrderShowModal from './OrderShowModal'
-import OrderEditModal from './OrderEditModal'
-import OrderStore from '../../../store/order'
+import CodeProductShowModal from './CodeProductShowModal'
+import CodeProductEditModal from './CodeProductEditModal'
+import CodeProductStore from '../../../store/codeProduct'
 import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
-import { useLocation } from 'react-router-dom'
-import { setColorFromStatus, setTextFromStatus } from '../../../helpers/form'
 
-const OrderTable = () => {
-  const { search } = useLocation()
-  const searchParams = new URLSearchParams(search)
-  const status = searchParams.get('status')
-  const page = searchParams.get('page')
-  const pageSize = searchParams.get('pageSize')
-  const { getList: getOrder, list, remove, deleteLoading } = OrderStore()
+const CodeProductTable = () => {
+  const { getList: getCodeProduct, list, remove, deleteLoading } = CodeProductStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
-    page: page,
-    pageSize: pageSize,
-    status: status,
+    page: 1,
+    pageSize: 20,
   })
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
-
   useEffect(() => {
-    const newParams = {
-      page: page,
-      pageSize: pageSize,
-      status: status,
-    }
-    setParams(newParams)
-    getOrder(newParams)
-  }, [search])
+    getCodeProduct(params)
+  }, [])
   return (
     <>
       <div className="overflow-x-auto">
@@ -57,9 +41,7 @@ const OrderTable = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -72,20 +54,13 @@ const OrderTable = () => {
                 <CFormInput type="text" name="username" />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.orders?.map((item, index) => (
+            {list?.map((item, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.user_name}</CTableDataCell>
-                <CTableDataCell>{item?.user_number}</CTableDataCell>
-                <CTableDataCell>
-                  <CBadge size="lg" className="p-2" color={setColorFromStatus(item?.status)}>
-                    {setTextFromStatus(item?.status)}
-                  </CBadge>
-                </CTableDataCell>
+                <CTableDataCell>{item?.name}</CTableDataCell>
                 <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
@@ -99,7 +74,7 @@ const OrderTable = () => {
                       <CIcon icon={cilZoom} />
                     </CButton>
                     <CPopover
-                      title={item?.id}
+                      title={item?.dataValues?.id}
                       trigger={'focus'}
                       content={
                         <div>
@@ -107,7 +82,7 @@ const OrderTable = () => {
                           <CButton
                             disabled={deleteLoading}
                             onClick={() =>
-                              remove(item?.id).then((res) => {
+                              remove(item?.dataValues?.id).then((res) => {
                                 if (res?.data) {
                                   toast.success('Успешно удалено')
                                 }
@@ -128,7 +103,7 @@ const OrderTable = () => {
                     <CButton
                       color="warning"
                       onClick={() => {
-                        setIdItem(item?.id)
+                        setIdItem(item?.dataValues?.id)
                         setEditModal(true)
                       }}
                     >
@@ -179,10 +154,10 @@ const OrderTable = () => {
           </CTableBody>
         </CTable>
       </div>
-      <OrderShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
-      <OrderEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <CodeProductShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
+      <CodeProductEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
     </>
   )
 }
 
-export default OrderTable
+export default CodeProductTable

@@ -11,13 +11,13 @@ const initialState = {
   deleteLoading: false,
 }
 
-const orderStore = create((set) => ({
+const codeProductStore = create((set) => ({
   ...initialState,
   getList: async (params) => {
     set({ listLoading: true })
     try {
-      const { data } = await requests.fetchOrder(params)
-      set({ list: data })
+      const { data } = await requests.fetchBanner(params)
+      set({ list: data?.data })
       return data
     } catch (err) {
       return err
@@ -28,7 +28,7 @@ const orderStore = create((set) => ({
   getDetail: async (id) => {
     set({ detailLoading: true })
     try {
-      const { data } = await requests.fetchOrderDetail(id)
+      const { data } = await requests.fetchBannerDetail(id)
       set({ detail: data?.data })
       return data
     } catch (err) {
@@ -48,10 +48,10 @@ const orderStore = create((set) => ({
       set({ createLoading: false })
     }
   },
-  edit: async (id, params) => {
+  edit: async (id,params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editBanner(id, params)
+      const { data } = await requests.editBanner(id,params)
       return data
     } catch (err) {
       return err
@@ -78,4 +78,4 @@ const orderStore = create((set) => ({
   },
 }))
 
-export default orderStore
+export default codeProductStore

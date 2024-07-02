@@ -31,6 +31,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
+    code: '',
     category_id: '',
     price: '',
     money_type: 'usd',
@@ -52,6 +53,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     setParams({
       title_ru: '',
       title_uz: '',
+      code: '',
       category_id: '',
       price: '',
       money_type: 'usd',
@@ -122,6 +124,10 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     {
       label: 'Имя ( UZ )',
       children: <CFormInput name="title_uz" value={params.title_uz} onChange={handleInputChange} />,
+    },
+    {
+      label: 'Код товара',
+      children: <CFormInput name="code" value={params.code} onChange={handleInputChange} />,
     },
     {
       label: 'Категория',

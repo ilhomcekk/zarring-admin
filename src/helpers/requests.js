@@ -32,6 +32,7 @@ export const requests = {
   deleteBrand: (id) => $api.delete(`${API_URL}/brand/delete/${id}`),
   // ORDER
   fetchOrder: (params) => $api.get(`${API_URL}/order`, { params }),
+  fetchOrderDetail: (id) => $api.get(`${API_URL}/order/by/${id}`),
   // STATS
   fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
