@@ -328,7 +328,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       formData.append('description_uz', params.description_uz)
       edit(id, formData)
         .then((res) => {
-          if (res?.data?.id) {
+          if (res?.message === 'Updated successfully') {
             toast.success('Успешно отредактировано')
             clearParams()
             onClose()
