@@ -73,10 +73,10 @@ export const setTextFromStatus = (status) => {
 }
 
 export const setColorFromStatus = (status) => {
-  let value = 'info'
+  let value = 'primary'
   switch (status) {
     case 1:
-      value = 'info'
+      value = 'primary'
       break
     case 2:
       value = 'warning'
@@ -92,10 +92,10 @@ export const setColorFromStatus = (status) => {
 }
 
 export const setStaticColorFromStatus = (status) => {
-  let value = '#3399FF'
+  let value = '#6261cc'
   switch (status) {
     case 1:
-      value = '#3399FF'
+      value = '#6261cc'
       break
     case 2:
       value = '#f9b115'

@@ -308,10 +308,9 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     } else {
       const formData = new FormData()
       formData.append('img', params.img)
-      const galleryArray = Array.isArray(params.gallery) ? params.gallery : [params.gallery]
-      console.log(galleryArray, 'galleryArray')
+      const galleryArray = params.gallery?.filter((file) => file && typeof file !== 'string')
       galleryArray.forEach((file, index) => {
-        file && typeof file !== 'string' && formData.append('gallery', file)
+        formData.append('gallery', file)
       })
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)

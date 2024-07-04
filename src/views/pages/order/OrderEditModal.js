@@ -126,7 +126,7 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                   value: item?.value,
                 }))}
                 style={{
-                  background: setStaticColorFromStatus(params?.status),
+                  background: setStaticColorFromStatus(Number(params?.status)),
                 }}
               />
               {/* <CListGroupItem className="p-2">
