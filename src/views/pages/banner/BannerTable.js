@@ -20,19 +20,36 @@ import BannerEditModal from './BannerEditModal'
 import BannerStore from '../../../store/banner'
 import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
+import RangePicker from 'react-range-picker'
+import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const BannerTable = () => {
-  const { getList: getBanner, list, remove, deleteLoading } = BannerStore()
+  const { getList, list, remove, deleteLoading, listLoading } = BannerStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
     page: 1,
     pageSize: 20,
+    id: null,
+    name: null,
+    from_to: null,
   })
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const handleChangeInput = (name, value) => {
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      [name]: value || null,
+    }))
+  }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      getList(params)
+    }
+  }
   useEffect(() => {
-    getBanner(params)
+    getList(params)
   }, [])
   return (
     <>
@@ -47,15 +64,34 @@ const BannerTable = () => {
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.id}
+                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.name}
+                  onChange={(e) => handleChangeInput('name', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="firstName" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
+                <RangePicker
+                  onDateSelected={(f, l) => {
+                    const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
+                    const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
+                    handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
+                  }}
+                  onClose={() => {
+                    getList({ ...params, page: 1 })
+                  }}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -63,12 +99,12 @@ const BannerTable = () => {
           <CTableBody>
             {list?.map((item, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                <CTableHeaderCell scope="row">{item?.dataValues?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.name}</CTableDataCell>
                 <CTableDataCell>
                   <img src={BASE_URL + item?.dataValues?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton
@@ -163,6 +199,7 @@ const BannerTable = () => {
       </div>
       <BannerShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
       <BannerEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <PageLoading loading={listLoading} />
     </>
   )
 }

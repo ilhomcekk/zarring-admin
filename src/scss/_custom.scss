@@ -15,3 +15,24 @@ select {
     color: #000 !important;
   }
 }
+
+.day-container {
+  color: #000;
+}
+
+.default-placeholder {
+  height: 38px;
+}
+
+html[data-coreui-theme='dark'] {
+  .default-placeholder {
+    background-color: #212631;
+    border: solid 1px #323a49;
+  }
+}
+
+.calendar {
+  top: 280px !important;
+  left: unset !important;
+  right: 355px !important;
+}

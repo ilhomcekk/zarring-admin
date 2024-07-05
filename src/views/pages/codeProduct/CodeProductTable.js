@@ -61,7 +61,7 @@ const CodeProductTable = () => {
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.name}</CTableDataCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton

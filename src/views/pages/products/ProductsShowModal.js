@@ -27,7 +27,7 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.title_ru}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.title}</CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>
@@ -37,7 +37,7 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.category_id}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.category_name}</CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>
@@ -48,6 +48,16 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           <CCol xs={{ span: 6 }}>
             <CListGroup>
               <CListGroupItem className="p-2">{item?.price}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
+              Код товара
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.code}</CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>
@@ -69,7 +79,7 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.createdAt}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.created_at}</CListGroupItem>
             </CListGroup>
           </CCol>
         </CRow>

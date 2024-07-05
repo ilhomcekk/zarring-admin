@@ -53,6 +53,9 @@ dependencies:
   react-medium-image-zoom:
     specifier: ^5.2.5
     version: 5.2.5(react-dom@18.3.1)(react@18.3.1)
+  react-range-picker:
+    specifier: ^1.0.1
+    version: 1.0.1(react-dom@18.3.1)(react@18.3.1)
   react-redux:
     specifier: ^9.1.2
     version: 9.1.2(react@18.3.1)(redux@5.0.1)
@@ -2477,6 +2480,16 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-range-picker@1.0.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-FIC5GXJszO1NT9rhmT0vxp+ectyBlt6JkgZGJzs3oylQvJXydUpeI7Br9lD/2eGXPWx0Eli6dxxX+IE4UluOAA==}
+    peerDependencies:
+      react: ^16.4.2
+      react-dom: ^16.4.2
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)

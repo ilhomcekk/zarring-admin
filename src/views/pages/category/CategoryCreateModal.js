@@ -140,10 +140,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
         .then((res) => {
           if (res?.data?.id) {
             toast.success('Успешно создано')
-            getList({
-              page: 1,
-              pageSize: 20,
-            })
+            getList({})
             clearParams()
             onClose()
           }

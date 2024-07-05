@@ -23,32 +23,65 @@ import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
 import { useLocation } from 'react-router-dom'
 import { setColorFromStatus, setTextFromStatus } from '../../../helpers/form'
+import { useNavigate } from 'react-router-dom'
+import RangePicker from 'react-range-picker'
+import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const OrderTable = () => {
+  const navigate = useNavigate()
   const { search } = useLocation()
   const searchParams = new URLSearchParams(search)
   const status = searchParams.get('status')
+  const id = searchParams.get('id')
+  const user_name = searchParams.get('user_name')
+  const user_number = searchParams.get('user_number')
+  const from_to = searchParams.get('from_to')
   const page = searchParams.get('page')
   const pageSize = searchParams.get('pageSize')
-  const { getList: getOrder, list, remove, deleteLoading } = OrderStore()
+  const { getList, list, remove, deleteLoading, listLoading } = OrderStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
     page: page,
     pageSize: pageSize,
     status: status,
+    id: id,
+    user_name: user_name,
+    user_number: user_number,
+    from_to: from_to,
   })
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const handleChangeInput = (name, value) => {
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      [name]: value || null,
+    }))
+  }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(([key, value]) => value != null),
+      )
+
+      const queryString = new URLSearchParams(filteredParams).toString()
+      navigate(`?${queryString}`)
+    }
+  }
 
   useEffect(() => {
     const newParams = {
       page: page,
       pageSize: pageSize,
       status: status,
+      id: id,
+      user_name: user_name,
+      user_number: user_number,
+      from_to: from_to,
     }
     setParams(newParams)
-    getOrder(newParams)
+    getList(newParams)
   }, [search])
   return (
     <>
@@ -64,15 +97,43 @@ const OrderTable = () => {
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="firstName" />
+                <CFormInput
+                  type="text"
+                  value={params?.id}
+                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
+                <CFormInput
+                  type="text"
+                  value={params?.user_name}
+                  onChange={(e) => handleChangeInput('user_name', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.user_number}
+                  onChange={(e) => handleChangeInput('user_number', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <RangePicker
+                  onDateSelected={(f, l) => {
+                    const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
+                    const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
+                    handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
+                  }}
+                  onClose={() => {
+                    navigate(`?${{ ...params }}`)
+                  }}
+                />
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -86,7 +147,7 @@ const OrderTable = () => {
                     {setTextFromStatus(item?.status)}
                   </CBadge>
                 </CTableDataCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     {/* <CButton
@@ -181,6 +242,7 @@ const OrderTable = () => {
       </div>
       <OrderShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
       <OrderEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <PageLoading loading={listLoading} />
     </>
   )
 }

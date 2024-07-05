@@ -21,7 +21,7 @@ import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
 
 const CategoryEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, edit, editLoading } = categorystore()
+  const { detail, getDetail, getList, list, edit, editLoading } = categorystore()
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -70,6 +70,23 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
       label: 'Имя ( UZ )',
       children: (
         <CFormInput name="title_uz" onChange={handleInputChange} value={params?.title_uz} />
+      ),
+    },
+    {
+      label: 'Категория',
+      children: (
+        <CFormSelect
+          value={params?.parentId}
+          name="parentId"
+          onChange={handleInputChange}
+          options={[
+            '',
+            ...list?.map((item) => ({
+              label: item?.title,
+              value: item?.id,
+            })),
+          ]}
+        />
       ),
     },
     {

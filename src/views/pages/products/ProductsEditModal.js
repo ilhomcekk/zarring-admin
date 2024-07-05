@@ -65,7 +65,6 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       gallery: [null],
     })
   }
-  console.log(params)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target

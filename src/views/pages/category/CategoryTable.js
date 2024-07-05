@@ -20,19 +20,33 @@ import CategoryEditModal from './CategoryEditModal'
 import categoryStore from '../../../store/category'
 import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
+import RangePicker from 'react-range-picker'
+import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const CategoryTable = () => {
-  const { getList: getCategory, list, remove, deleteLoading } = categoryStore()
+  const { getList, list, remove, deleteLoading, listLoading } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
-    page: 1,
-    pageSize: 20,
+    id: null,
+    title: null,
+    from_to: null,
   })
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const handleChangeInput = (name, value) => {
+    setParams((prev) => ({
+      ...prev,
+      [name]: value || null,
+    }))
+  }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      getList(params)
+    }
+  }
   useEffect(() => {
-    getCategory(params)
+    getList(params)
   }, [])
   return (
     <>
@@ -47,15 +61,34 @@ const CategoryTable = () => {
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.id}
+                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.name}
+                  onChange={(e) => handleChangeInput('title', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="firstName" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
+                <RangePicker
+                  onDateSelected={(f, l) => {
+                    const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
+                    const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
+                    handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
+                  }}
+                  onClose={() => {
+                    getList(params)
+                  }}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -68,7 +101,7 @@ const CategoryTable = () => {
                 <CTableDataCell>
                   <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton
@@ -163,6 +196,7 @@ const CategoryTable = () => {
       </div>
       <CategoryShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
       <CategoryEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <PageLoading loading={listLoading} />
     </>
   )
 }
