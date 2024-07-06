@@ -11,29 +11,67 @@ import {
   CPagination,
   CPaginationItem,
   CPopover,
+  CBadge,
+  CCloseButton,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import CodeProductShowModal from './CodeProductShowModal'
-import CodeProductEditModal from './CodeProductEditModal'
-import CodeProductStore from '../../../store/codeProduct'
+import OrderStore from '../../../store/order'
 import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
+import { useLocation } from 'react-router-dom'
+import { setColorFromStatus, setTextFromStatus } from '../../../helpers/form'
+import { useNavigate } from 'react-router-dom'
+import RangePicker from 'react-range-picker'
+import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const CodeProductTable = () => {
-  const { getList: getCodeProduct, list, remove, deleteLoading } = CodeProductStore()
-  const [item, setItem] = useState({})
-  const [idItem, setIdItem] = useState(null)
+  const navigate = useNavigate()
+  const { search } = useLocation()
+  const searchParams = new URLSearchParams(search)
+  const id = searchParams.get('id')
+  const from_to = searchParams.get('from_to')
+  const code = searchParams.get('code')
+  const page = searchParams.get('page')
+  const pageSize = searchParams.get('pageSize')
+  const { getList, list, listLoading } = OrderStore()
   const [params, setParams] = useState({
-    page: 1,
-    pageSize: 20,
+    page: page,
+    pageSize: pageSize,
+    code: code,
+    id: id,
+    from_to: from_to,
   })
-  const [showModal, setShowModal] = useState(false)
-  const [editModal, setEditModal] = useState(false)
+  const handleChangeInput = (name, value) => {
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      [name]: value || null,
+    }))
+  }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(([key, value]) => value != null),
+      )
+
+      const queryString = new URLSearchParams(filteredParams).toString()
+      navigate(`?${queryString}`)
+    }
+  }
+
   useEffect(() => {
-    getCodeProduct(params)
-  }, [])
+    const newParams = {
+      page: page,
+      pageSize: pageSize,
+      code: code,
+      id: id,
+      from_to: from_to,
+    }
+    setParams(newParams)
+    getList(newParams)
+  }, [search])
   return (
     <>
       <div className="overflow-x-auto">
@@ -41,76 +79,86 @@ const CodeProductTable = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="firstName" />
+                <CFormInput
+                  type="text"
+                  value={params?.id}
+                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <CFormInput type="text" name="username" />
+                <CFormInput
+                  type="text"
+                  value={params?.user_name}
+                  onChange={(e) => handleChangeInput('user_name', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.user_number}
+                  onChange={(e) => handleChangeInput('user_number', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <div className={`${params?.from_to && 'date-active'}`}>
+                  <RangePicker
+                    onDateSelected={(f, l) => {
+                      const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
+                      const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
+                      handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
+                    }}
+                    onClose={() => {
+                      const filteredParams = Object.fromEntries(
+                        Object.entries(params).filter(([key, value]) => value != null),
+                      )
+                      const queryString = new URLSearchParams(filteredParams).toString()
+                      navigate(`?${queryString}`)
+                    }}
+                  />
+                  {params?.from_to && (
+                    <CCloseButton
+                      className="ms-2"
+                      onClick={() => {
+                        const newParams = { ...params }
+                        newParams['from_to'] = null
+                        setParams(newParams)
+                        const filteredParams = Object.fromEntries(
+                          Object.entries(newParams).filter(([key, value]) => value != null),
+                        )
+
+                        const queryString = new URLSearchParams(filteredParams).toString()
+                        navigate(`?${queryString}`)
+                      }}
+                    />
+                  )}
+                </div>
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.map((item, index) => (
+            {list?.orders?.map((item, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.name}</CTableDataCell>
-                <CTableDataCell>{item?.created_at}</CTableDataCell>
+                <CTableDataCell>{item?.user_name}</CTableDataCell>
+                <CTableDataCell>{item?.user_number}</CTableDataCell>
                 <CTableDataCell>
-                  <div className="d-flex">
-                    <CButton
-                      color="primary"
-                      onClick={() => {
-                        setItem(item)
-                        setShowModal(true)
-                      }}
-                    >
-                      <CIcon icon={cilZoom} />
-                    </CButton>
-                    <CPopover
-                      title={item?.dataValues?.id}
-                      trigger={'focus'}
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(item?.dataValues?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
-                    >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover>
-                    <CButton
-                      color="warning"
-                      onClick={() => {
-                        setIdItem(item?.dataValues?.id)
-                        setEditModal(true)
-                      }}
-                    >
-                      <CIcon icon={cilPen} />
-                    </CButton>
-                  </div>
+                  <CBadge size="lg" className="p-2" color={setColorFromStatus(item?.status)}>
+                    {setTextFromStatus(item?.status)}
+                  </CBadge>
                 </CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
               </CTableRow>
             ))}
             <CPagination>
@@ -154,8 +202,7 @@ const CodeProductTable = () => {
           </CTableBody>
         </CTable>
       </div>
-      <CodeProductShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
-      <CodeProductEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <PageLoading loading={listLoading} />
     </>
   )
 }

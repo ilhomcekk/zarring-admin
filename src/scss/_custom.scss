@@ -36,3 +36,14 @@ html[data-coreui-theme='dark'] {
   left: unset !important;
   right: 355px !important;
 }
+
+.date-picker-app-wrapper {
+  .text {
+    opacity: 0;
+  }
+}
+.date-active {
+  .text {
+    opacity: 1;
+  }
+}
