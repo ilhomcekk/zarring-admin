@@ -64,6 +64,8 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       ],
       gallery: [null],
     })
+    setCategory({})
+    setValidated(false)
   }
 
   const handleInputChange = (e) => {
@@ -112,7 +114,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     const newGallery = params.gallery.map((item, idx) => (idx === index ? null : item))
     setParams({ ...params, gallery: newGallery })
   }
-
+  console.log(category)
   useEffect(() => {
     if (visible) {
       getDetail(id)
@@ -156,7 +158,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
         <CFormSelect
           value={category?.id}
           onChange={(e) => {
-            const selectedCategory = categories?.find((item) => item?.id === e.target.value)
+            const selectedCategory = categories?.find((item) => item?.id == e.target.value)
             setCategory(selectedCategory || {})
             setParams({ ...params, category_id: '' })
           }}

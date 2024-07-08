@@ -2,11 +2,6 @@ import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CButton,
-  CDropdown,
-  CDropdownDivider,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CForm,
   CFormInput,
   CFormLabel,

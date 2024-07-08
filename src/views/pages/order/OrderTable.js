@@ -169,7 +169,7 @@ const OrderTable = () => {
                     {setTextFromStatus(item?.status)}
                   </CBadge>
                 </CTableDataCell>
-                <CTableDataCell>{item?.created_at}</CTableDataCell>
+                <CTableDataCell>{item?.createdAt}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     {/* <CButton

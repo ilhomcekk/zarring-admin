@@ -130,14 +130,7 @@ const CodeProductTable = () => {
             {list?.orders?.map((item, index) => (
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.user_name}</CTableDataCell>
-                <CTableDataCell>{item?.user_number}</CTableDataCell>
-                <CTableDataCell>
-                  <CBadge size="lg" className="p-2" color={setColorFromStatus(item?.status)}>
-                    {setTextFromStatus(item?.status)}
-                  </CBadge>
-                </CTableDataCell>
-                <CTableDataCell>{item?.created_at}</CTableDataCell>
+                <CTableDataCell>{item?.createdAt}</CTableDataCell>
               </CTableRow>
             ))}
             <CPagination>
