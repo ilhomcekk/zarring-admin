@@ -30,7 +30,6 @@ const CodeProductTable = () => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const searchParams = new URLSearchParams(search)
-  const id = searchParams.get('id')
   const from_to = searchParams.get('from_to')
   const code = searchParams.get('code')
   const page = searchParams.get('page')
@@ -40,7 +39,6 @@ const CodeProductTable = () => {
     page: page,
     pageSize: pageSize,
     code: code,
-    id: id,
     from_to: from_to,
   })
   const handleChangeInput = (name, value) => {
@@ -66,7 +64,6 @@ const CodeProductTable = () => {
       page: page,
       pageSize: pageSize,
       code: code,
-      id: id,
       from_to: from_to,
     }
     setParams(newParams)
@@ -78,39 +75,21 @@ const CodeProductTable = () => {
         <CTable striped>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Код товара</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
               <CTableHeaderCell scope="col">
                 <CFormInput
                   type="text"
-                  value={params?.id}
-                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  value={params?.code}
+                  onChange={(e) => handleChangeInput('code', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput
-                  type="text"
-                  value={params?.user_name}
-                  onChange={(e) => handleChangeInput('user_name', e.target.value)}
-                  onKeyPress={handleSearch}
-                />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <CFormInput
-                  type="text"
-                  value={params?.user_number}
-                  onChange={(e) => handleChangeInput('user_number', e.target.value)}
-                  onKeyPress={handleSearch}
-                />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <div className={`${params?.from_to && 'date-active'}`}>
                   <RangePicker

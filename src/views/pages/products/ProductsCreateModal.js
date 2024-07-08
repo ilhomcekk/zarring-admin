@@ -68,6 +68,8 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       ],
       gallery: [''],
     })
+    setCategory({})
+    setValidated(false)
   }
 
   const handleInputChange = (e) => {
