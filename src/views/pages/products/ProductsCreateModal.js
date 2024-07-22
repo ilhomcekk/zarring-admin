@@ -22,7 +22,7 @@ import { toast } from 'react-toastify'
 
 const ProductsCreateModal = ({ visible, onClose }) => {
   const { create, createLoading, getList } = productStore()
-  const { list: categories } = categoryStore()
+  const { categoryParents } = categoryStore()
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -144,7 +144,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           required
           options={[
             '',
-            ...categories?.map((item) => ({
+            ...categoryParents?.map((item) => ({
               label: item?.title,
               value: item?.id,
             })),

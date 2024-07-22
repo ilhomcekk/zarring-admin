@@ -24,7 +24,7 @@ import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const CategoryTable = () => {
-  const { getList, list, remove, deleteLoading, listLoading, getParents } = categoryStore()
+  const { getList, list, remove, deleteLoading, listLoading } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -47,7 +47,6 @@ const CategoryTable = () => {
   }
   useEffect(() => {
     getList(params)
-    getParents()
   }, [])
   return (
     <>

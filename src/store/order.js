@@ -4,6 +4,7 @@ import { requests } from '../helpers/requests'
 const initialState = {
   list: [],
   listLoading: false,
+  ordersByUser: [],
   detail: {},
   detailLoading: false,
   createLoading: false,
@@ -18,6 +19,18 @@ const orderStore = create((set) => ({
     try {
       const { data } = await requests.fetchOrder(params)
       set({ list: data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ listLoading: false })
+    }
+  },
+  getListByUser: async (params) => {
+    set({ listLoading: true })
+    try {
+      const { data } = await requests.fetchOrderByUser(params)
+      set({ ordersByUser: data })
       return data
     } catch (err) {
       return err

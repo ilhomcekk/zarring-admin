@@ -28,7 +28,7 @@ import PageLoading from '../../../components/PageLoading/PageLoading'
 
 const ProductsTable = () => {
   const { getList, list, deleteLoading, remove, listLoading } = productStore()
-  const { getList: getCategory, list: categories } = categoryStore()
+  const { getList: getCategory, list: categories, getParents } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -58,7 +58,7 @@ const ProductsTable = () => {
 
   useEffect(() => {
     getList(params)
-    getCategory()
+    getParents()
   }, [])
   return (
     <>
@@ -136,7 +136,7 @@ const ProductsTable = () => {
                     handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
                   }}
                   onClose={() => {
-                    getList({ ...params, page: 1 })
+                    if (params?.from_to) getList({ ...params, page: 1 })
                   }}
                 />
               </CTableHeaderCell>

@@ -95,6 +95,12 @@ const _nav = [
       },
     ],
   },
+  {
+    component: CNavItem,
+    name: 'Заказы пользователя',
+    to: '/order-by-user',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  },
   // {
   //   component: CNavItem,
   //   name: 'Login',

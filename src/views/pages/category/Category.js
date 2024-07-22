@@ -1,10 +1,15 @@
 import { CButton, CCard, CCardHeader, CRow, CCol, CCardTitle } from '@coreui/react'
 import CategoryTable from './CategoryTable'
 import CategoryCreateModal from './CategoryCreateModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import categoryStore from '../../../store/category'
 
 const Category = () => {
+  const { getParents } = categoryStore()
   const [modal, setModal] = useState(false)
+  useEffect(() => {
+    getParents()
+  }, [])
   return (
     <>
       <CCard>

@@ -89,7 +89,7 @@ const BannerTable = () => {
                     handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
                   }}
                   onClose={() => {
-                    getList({ ...params, page: 1 })
+                    if (params?.from_to) getList({ ...params, page: 1 })
                   }}
                 />
               </CTableHeaderCell>

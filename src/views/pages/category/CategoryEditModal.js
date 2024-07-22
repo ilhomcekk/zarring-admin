@@ -21,7 +21,7 @@ import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
 
 const CategoryEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, list, edit, editLoading } = categorystore()
+  const { detail, getDetail, getList, categoryParents, edit, editLoading } = categorystore()
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -81,7 +81,7 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
           onChange={handleInputChange}
           options={[
             '',
-            ...list?.map((item) => ({
+            ...categoryParents?.map((item) => ({
               label: item?.title,
               value: item?.id,
             })),

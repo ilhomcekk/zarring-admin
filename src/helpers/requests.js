@@ -33,6 +33,7 @@ export const requests = {
   deleteBrand: (id) => $api.delete(`${API_URL}/brand/delete/${id}`),
   // ORDER
   fetchOrder: (params) => $api.get(`${API_URL}/order`, { params }),
+  fetchOrderByUser: (params) => $api.get(`${API_URL}/order/get-by-user-name/`, { params }),
   fetchOrderDetail: (id) => $api.get(`${API_URL}/order/by/${id}`),
   editOrder: (id, params) => $api.put(`${API_URL}/order/update/${id}`, params),
   // STATS
