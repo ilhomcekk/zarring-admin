@@ -14,6 +14,7 @@ export const requests = {
   deleteProduct: (id) => $api.delete(`${API_URL}/product/delete/${id}`),
   // CATEGORY
   fetchCategory: (params) => $api.get(`${API_URL}/category`, { params }),
+  fetchCategoryParents: (params) => $api.get(`${API_URL}/category/parent`, { params }),
   fetchCategoryDetail: (id) => $api.get(`${API_URL}/category/byId/${id}`),
   createCategory: (params) => $api.post(`${API_URL}/category/add`, formData(params)),
   editCategory: (id, params) => $api.post(`${API_URL}/category/update/${id}`, formData(params)),
@@ -36,6 +37,8 @@ export const requests = {
   editOrder: (id, params) => $api.put(`${API_URL}/order/update/${id}`, params),
   // STATS
   fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
+  fetchClientsMaxCount: () => $api.get(`${API_URL}/report/clients-in-maxcount`),
+  fetchProductsMaxCount: () => $api.get(`${API_URL}/report/products-in-maxcount`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
   // REPORTS
   // fetchProducts: (params) => $api.get(`${API_URL}/product`, { params }),

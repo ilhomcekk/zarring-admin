@@ -4,6 +4,7 @@ import { requests } from '../helpers/requests'
 const initialState = {
   list: [],
   listLoading: false,
+  categoryParents: [],
   detail: {},
   detailLoading: false,
   createLoading: false,
@@ -18,6 +19,18 @@ const categoryStore = create((set) => ({
     try {
       const { data } = await requests.fetchCategory(params)
       set({ list: data?.data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ listLoading: false })
+    }
+  },
+  getParents: async (params) => {
+    set({ listLoading: true })
+    try {
+      const { data } = await requests.fetchCategoryParents(params)
+      set({ categoryParents: data?.data })
       return data
     } catch (err) {
       return err

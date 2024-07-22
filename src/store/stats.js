@@ -3,6 +3,8 @@ import { requests } from '../helpers/requests'
 
 const initialState = {
   list: [],
+  clientsMaxCount: [],
+  productsMaxCount: [],
   listLoading: false,
 }
 
@@ -13,6 +15,30 @@ const statsStore = create((set) => ({
     try {
       const { data } = await requests.fetchStats(params)
       set({ list: data?.data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ listLoading: false })
+    }
+  },
+  getClientsMaxCount: async () => {
+    set({ listLoading: true })
+    try {
+      const { data } = await requests.fetchClientsMaxCount()
+      set({ clientsMaxCount: data?.data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ listLoading: false })
+    }
+  },
+  getProductsMaxCount: async () => {
+    set({ listLoading: true })
+    try {
+      const { data } = await requests.fetchProductsMaxCount()
+      set({ productsMaxCount: data?.data })
       return data
     } catch (err) {
       return err

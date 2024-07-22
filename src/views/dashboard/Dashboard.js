@@ -54,13 +54,16 @@ import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
 import statsStore from '../../store/stats'
+import ClientsMaxCountTable from '../pages/stats/ClientsMaxCount'
+import ProductsMaxCountTable from '../pages/stats/ProductsMaxCount'
 
 const Dashboard = () => {
-  const { getList, list } = statsStore()
+  const { getList, getClientsMaxCount, getProductsMaxCount } = statsStore()
   useEffect(() => {
     getList()
+    getClientsMaxCount()
+    getProductsMaxCount()
   }, [])
-  console.log(list)
   const progressExample = [
     { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
     { title: 'Unique', value: '24.093 Users', percent: 20, color: 'info' },
@@ -185,6 +188,8 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown className="mb-4" />
+      <ClientsMaxCountTable />
+      <ProductsMaxCountTable />
       {/* <CCard className="mb-4">
         <CCardBody>
           <CRow>

@@ -17,7 +17,8 @@ import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
 import statsStore from '../../store/stats'
 
 const WidgetsDropdown = (props) => {
-  const { list } = statsStore()
+  const { list, clientsMaxCount, productsMaxCount } = statsStore()
+  console.log(clientsMaxCount);
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
 

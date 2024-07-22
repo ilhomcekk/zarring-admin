@@ -18,6 +18,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import authStore from '../../../store/auth'
 import { setToken } from '../../../helpers/api'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -30,6 +31,9 @@ const Login = () => {
         if (res?.token) {
           setToken(res?.token)
           navigate('/dashboard')
+        }
+        if (!res?.response?.data?.data) {
+          toast.error(res?.response?.data?.message)
         }
         console.log(res, 'res')
       })
