@@ -27,6 +27,7 @@ import { setColorFromStatus, setTextFromStatus } from '../../../helpers/form'
 import { useNavigate } from 'react-router-dom'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
+import productStore from '../../../store/products'
 
 const OrderTable = () => {
   const navigate = useNavigate()
@@ -40,6 +41,7 @@ const OrderTable = () => {
   const page = searchParams.get('page')
   const pageSize = searchParams.get('pageSize')
   const { getList, list, remove, deleteLoading, listLoading } = OrderStore()
+  const { getProductCodes } = productStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -82,6 +84,7 @@ const OrderTable = () => {
     }
     setParams(newParams)
     getList(newParams)
+    getProductCodes()
   }, [search])
   return (
     <>

@@ -16,20 +16,24 @@ import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { useNavigate } from 'react-router-dom'
+import Zoom from 'react-medium-image-zoom'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
 import productStore from '../../../store/products'
+import { BASE_URL } from '../../../config'
 
 const CodeProductTable = () => {
   const { getProductCodes, productCodes, productCodesLoading, getList, list, listLoading } =
     productStore()
   const [params, setParams] = useState({
     page: 1,
+    pageSize: 20,
   })
   const handleChangeInput = (name, value) => {
     setParams((prev) => ({
       ...prev,
       page: 1,
+      pageSize: 20,
       [name]: value || null,
     }))
   }
@@ -67,15 +71,23 @@ const CodeProductTable = () => {
                 />
               </CTableHeaderCell>
             </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell scope="col">Код товара</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Категория</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Цена</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Время</CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
+            </CTableRow>
           </CTableHead>
           <CTableBody>
             {list?.data?.map((product, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
+                <CTableDataCell>{product?.code}</CTableDataCell>
                 <CTableDataCell>{product?.title}</CTableDataCell>
                 <CTableDataCell>{product?.category_name}</CTableDataCell>
                 <CTableDataCell>{product?.price}</CTableDataCell>
-                <CTableDataCell>{product?.code}</CTableDataCell>
                 <CTableDataCell>
                   <Zoom>
                     <img
@@ -88,59 +100,6 @@ const CodeProductTable = () => {
                   </Zoom>
                 </CTableDataCell>
                 <CTableDataCell>{product?.created_at}</CTableDataCell>
-                <CTableDataCell>
-                  <div className="d-flex">
-                    <CButton
-                      color="primary"
-                      onClick={() => {
-                        setItem(product)
-                        setShowModal(true)
-                      }}
-                    >
-                      <CIcon icon={cilZoom} />
-                    </CButton>
-                    <CPopover
-                      title={product?.id}
-                      trigger={'focus'}
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(product?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                  getList({
-                                    page: 1,
-                                    pageSize: 20,
-                                  })
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
-                    >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover>
-                    <CButton
-                      color="warning"
-                      onClick={() => {
-                        setIdItem(product?.id)
-                        setEditModal(true)
-                      }}
-                    >
-                      <CIcon icon={cilPen} />
-                    </CButton>
-                  </div>
-                </CTableDataCell>
               </CTableRow>
             ))}
             <CPagination>

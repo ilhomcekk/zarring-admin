@@ -1,7 +1,10 @@
 import { CButton, CCard, CCardHeader, CRow, CCol, CCardTitle } from '@coreui/react'
 import OrderTable from './OrderTable'
+import { useState } from 'react'
+import OrderCreateModal from './OrderCreateModal'
 
 const Order = () => {
+  const [modal, setModal] = useState(false)
   return (
     <>
       <CCard>
@@ -19,6 +22,7 @@ const Order = () => {
         </CCardHeader>
         <OrderTable />
       </CCard>
+      <OrderCreateModal visible={modal} onClose={() => setModal(false)} />
     </>
   )
 }
