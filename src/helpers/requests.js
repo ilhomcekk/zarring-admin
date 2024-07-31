@@ -8,6 +8,7 @@ export const requests = {
   fetchMe: () => $api.get(`${API_URL}/user/profile`),
   // PRODUCTS
   fetchProduct: (params) => $api.get(`${API_URL}/product/`, { params }),
+  fetchProductCodes: () => $api.get(`${API_URL}/product/codes`),
   fetchProductDetail: (id) => $api.get(`${API_URL}/product/byId/${id}`),
   createProduct: (params) => $api.post(`${API_URL}/product/add`, params),
   editProduct: (id, params) => $api.post(`${API_URL}/product/update/${id}`, params),

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const $api = axios.create({
-  baseURL: 'https://hasandev.uz/api',
+  baseURL: 'https://api.zarring.uz/api',
 })
 
 $api.defaults.headers.common['Accept'] = 'application/json'

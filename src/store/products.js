@@ -4,6 +4,8 @@ import { requests } from '../helpers/requests'
 const initialState = {
   list: {},
   listLoading: false,
+  productCodes: [],
+  productCodesLoading: false,
   detail: {},
   detailLoading: false,
   createLoading: false,
@@ -23,6 +25,18 @@ const productStore = create((set) => ({
       return err
     } finally {
       set({ listLoading: false })
+    }
+  },
+  getProductCodes: async () => {
+    set({ productCodesLoading: true })
+    try {
+      const { data } = await requests.fetchProductCodes()
+      set({ productCodes: data?.data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ productCodesLoading: false })
     }
   },
   getDetail: async (id) => {

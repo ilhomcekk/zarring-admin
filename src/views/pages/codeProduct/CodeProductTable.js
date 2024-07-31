@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import {
-  CButton,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -10,36 +9,22 @@ import {
   CTableRow,
   CPagination,
   CPaginationItem,
-  CPopover,
-  CBadge,
   CCloseButton,
+  CFormSelect,
 } from '@coreui/react'
 import { useState } from 'react'
-import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
+import { cilArrowLeft, cilArrowRight } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import OrderStore from '../../../store/order'
-import { BASE_URL } from '../../../config'
-import { toast } from 'react-toastify'
-import { useLocation } from 'react-router-dom'
-import { setColorFromStatus, setTextFromStatus } from '../../../helpers/form'
 import { useNavigate } from 'react-router-dom'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
+import productStore from '../../../store/products'
 
 const CodeProductTable = () => {
   const navigate = useNavigate()
-  const { search } = useLocation()
-  const searchParams = new URLSearchParams(search)
-  const from_to = searchParams.get('from_to')
-  const code = searchParams.get('code')
-  const page = searchParams.get('page')
-  const pageSize = searchParams.get('pageSize')
-  const { getList, list, listLoading } = OrderStore()
+  const { getProductCodes, productCodes: list, productCodesLoading: listLoading } = productStore()
   const [params, setParams] = useState({
-    page: page,
-    pageSize: pageSize,
-    code: code,
-    from_to: from_to,
+    page: 1,
   })
   const handleChangeInput = (name, value) => {
     setParams((prev) => ({
@@ -48,27 +33,9 @@ const CodeProductTable = () => {
       [name]: value || null,
     }))
   }
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      const filteredParams = Object.fromEntries(
-        Object.entries(params).filter(([key, value]) => value != null),
-      )
-
-      const queryString = new URLSearchParams(filteredParams).toString()
-      navigate(`?${queryString}`)
-    }
-  }
-
   useEffect(() => {
-    const newParams = {
-      page: page,
-      pageSize: pageSize,
-      code: code,
-      from_to: from_to,
-    }
-    setParams(newParams)
-    getList(newParams)
-  }, [search])
+    getProductCodes()
+  }, [getProductCodes])
   return (
     <>
       <div className="overflow-x-auto">
@@ -83,46 +50,25 @@ const CodeProductTable = () => {
             </CTableRow>
             <CTableRow>
               <CTableHeaderCell scope="col">
-                <CFormInput
-                  type="text"
-                  value={params?.code}
-                  onChange={(e) => handleChangeInput('code', e.target.value)}
-                  onKeyPress={handleSearch}
+                <CFormSelect
+                  name="code"
+                  value={params?.category_id}
+                  onChange={(e) => {
+                    handleChangeInput('code', e.target.value)
+                    getList({
+                      ...params,
+                      page: 1,
+                      category_id: e.target.value || null,
+                    })
+                  }}
+                  options={[
+                    '',
+                    ...list?.map((item) => ({
+                      label: item?.title,
+                      value: item?.id,
+                    })),
+                  ]}
                 />
-              </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
-                <div className={`${params?.from_to && 'date-active'}`}>
-                  <RangePicker
-                    onDateSelected={(f, l) => {
-                      const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
-                      const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
-                      handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
-                    }}
-                    onClose={() => {
-                      const filteredParams = Object.fromEntries(
-                        Object.entries(params).filter(([key, value]) => value != null),
-                      )
-                      const queryString = new URLSearchParams(filteredParams).toString()
-                      navigate(`?${queryString}`)
-                    }}
-                  />
-                  {params?.from_to && (
-                    <CCloseButton
-                      className="ms-2"
-                      onClick={() => {
-                        const newParams = { ...params }
-                        newParams['from_to'] = null
-                        setParams(newParams)
-                        const filteredParams = Object.fromEntries(
-                          Object.entries(newParams).filter(([key, value]) => value != null),
-                        )
-
-                        const queryString = new URLSearchParams(filteredParams).toString()
-                        navigate(`?${queryString}`)
-                      }}
-                    />
-                  )}
-                </div>
               </CTableHeaderCell>
             </CTableRow>
           </CTableHead>

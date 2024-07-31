@@ -94,7 +94,7 @@ const ProductsTable = () => {
               </CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <CFormSelect
-                  name="status"
+                  name="category_id"
                   value={params?.category_id}
                   onChange={(e) => {
                     handleChangeInput('category_id', e.target.value)
