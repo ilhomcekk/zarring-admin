@@ -20,7 +20,7 @@ import categoryStore from '../../../store/category'
 import { toast } from 'react-toastify'
 
 const CategoryCreateModal = ({ visible, onClose }) => {
-  const { create, createLoading, getList, categoryParents } = categoryStore()
+  const { create, createLoading, getList, categoryParents, getParents } = categoryStore()
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -139,6 +139,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
       create(params)
         .then((res) => {
           if (res?.data?.id) {
+            console.log(res)
             toast.success('Успешно создано')
             getList({})
             getParents()

@@ -21,8 +21,8 @@ import PageLoading from '../../../components/PageLoading/PageLoading'
 import productStore from '../../../store/products'
 
 const CodeProductTable = () => {
-  const navigate = useNavigate()
-  const { getProductCodes, productCodes: list, productCodesLoading: listLoading } = productStore()
+  const { getProductCodes, productCodes, productCodesLoading, getList, list, listLoading } =
+    productStore()
   const [params, setParams] = useState({
     page: 1,
   })
@@ -43,29 +43,25 @@ const CodeProductTable = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Код товара</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Время</CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
               <CTableHeaderCell scope="col">
                 <CFormSelect
                   name="code"
-                  value={params?.category_id}
+                  value={params?.code}
                   onChange={(e) => {
                     handleChangeInput('code', e.target.value)
                     getList({
                       ...params,
                       page: 1,
-                      category_id: e.target.value || null,
+                      code: e.target.value || null,
                     })
                   }}
                   options={[
                     '',
-                    ...list?.map((item) => ({
-                      label: item?.title,
-                      value: item?.id,
+                    ...productCodes?.map((item) => ({
+                      label: item?.code,
+                      value: item?.code,
                     })),
                   ]}
                 />
@@ -73,10 +69,78 @@ const CodeProductTable = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {list?.orders?.map((item, index) => (
+            {list?.data?.map((product, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
+                <CTableDataCell>{product?.title}</CTableDataCell>
+                <CTableDataCell>{product?.category_name}</CTableDataCell>
+                <CTableDataCell>{product?.price}</CTableDataCell>
+                <CTableDataCell>{product?.code}</CTableDataCell>
+                <CTableDataCell>
+                  <Zoom>
+                    <img
+                      style={{ objectFit: 'contain' }}
+                      src={BASE_URL + product?.img}
+                      width={50}
+                      height={50}
+                      alt=""
+                    />
+                  </Zoom>
+                </CTableDataCell>
+                <CTableDataCell>{product?.created_at}</CTableDataCell>
+                <CTableDataCell>
+                  <div className="d-flex">
+                    <CButton
+                      color="primary"
+                      onClick={() => {
+                        setItem(product)
+                        setShowModal(true)
+                      }}
+                    >
+                      <CIcon icon={cilZoom} />
+                    </CButton>
+                    <CPopover
+                      title={product?.id}
+                      trigger={'focus'}
+                      content={
+                        <div>
+                          <div>Вы точно хотите удалить?</div>
+                          <CButton
+                            disabled={deleteLoading}
+                            onClick={() =>
+                              remove(product?.id).then((res) => {
+                                if (res?.data) {
+                                  toast.success('Успешно удалено')
+                                  getList({
+                                    page: 1,
+                                    pageSize: 20,
+                                  })
+                                }
+                              })
+                            }
+                            color="danger"
+                            className="mt-2"
+                          >
+                            Удалить
+                          </CButton>
+                        </div>
+                      }
+                    >
+                      <CButton className="mx-2" color="danger">
+                        <CIcon icon={cilTrash} />
+                      </CButton>
+                    </CPopover>
+                    <CButton
+                      color="warning"
+                      onClick={() => {
+                        setIdItem(product?.id)
+                        setEditModal(true)
+                      }}
+                    >
+                      <CIcon icon={cilPen} />
+                    </CButton>
+                  </div>
+                </CTableDataCell>
               </CTableRow>
             ))}
             <CPagination>

@@ -20,10 +20,12 @@ import productStore from '../../../store/products'
 import categoryStore from '../../../store/category'
 import { toast } from 'react-toastify'
 import { BASE_URL } from '../../../config'
+import { findCategory } from '../../../utils'
 
 const ProductsEditModal = ({ visible, onClose, id }) => {
   const { edit, editLoading, detail, getDetail } = productStore()
-  const { list: categories } = categoryStore()
+  const { list: categories, categoryParents } = categoryStore()
+  console.log('categories', categories)
   const [params, setParams] = useState({
     title_ru: '',
     title_uz: '',
@@ -135,7 +137,8 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       characteristic: detail?.characteristic || [],
       gallery: detail?.gallery || [],
     })
-    setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
+    findCategory(categoryParents, detail?.category_id, setCategory)
+    // setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
   }, [detail])
   const forms = [
     {
@@ -158,14 +161,14 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
         <CFormSelect
           value={category?.id}
           onChange={(e) => {
-            const selectedCategory = categories?.find((item) => item?.id == e.target.value)
+            const selectedCategory = categoryParents?.find((item) => item?.id == e.target.value)
             setCategory(selectedCategory || {})
             setParams({ ...params, category_id: '' })
           }}
           required
           options={[
             '',
-            ...categories?.map((item) => ({
+            ...categoryParents?.map((item) => ({
               label: item?.title,
               value: item?.id,
             })),
@@ -316,6 +319,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
       formData.append('price', params.price || 0)
+      formData.append('code', params.code || null)
       formData.append('money_type', params.money_type)
       formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
       params.characteristic.forEach((item, index) => {

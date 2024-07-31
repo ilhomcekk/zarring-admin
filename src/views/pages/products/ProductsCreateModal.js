@@ -135,7 +135,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
           value={category?.id}
           onChange={(e) => {
             if (e.target.value) {
-              setCategory(categories?.find((item) => item?.id == e.target.value))
+              setCategory(categoryParents?.find((item) => item?.id == e.target.value))
             } else {
               setCategory({})
               setParams({ ...params, category_id: '' })
@@ -282,6 +282,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
       formData.append('price', params.price || 0)
+      formData.append('code', params.code || null)
       formData.append('money_type', params.money_type)
       formData.append('category_id', !params?.category_id ? category?.id : params?.category_id)
       params.characteristic.forEach((item, index) => {
