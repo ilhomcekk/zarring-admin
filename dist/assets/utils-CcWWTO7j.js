@@ -1,0 +1,1 @@
+const s=(o,r,f)=>{o==null||o.find(n=>{var c;const l=(n==null?void 0:n.id)===r;if(l)f(n),console.log("current",l);else{const a=(c=n==null?void 0:n.subcategories)==null?void 0:c.find(d=>(d==null?void 0:d.id)===r);f(n),console.log("subCategory",a)}})},u=(o,r)=>!!(o!=null&&o.find(f=>(f==null?void 0:f.id)===r));export{s as f,u as i};

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { requests } from '../helpers/requests'
+import { toast } from 'react-toastify'
 
 const initialState = {
   list: [],
@@ -53,7 +54,7 @@ const orderStore = create((set) => ({
   create: async (params) => {
     set({ createLoading: true })
     try {
-      const { data } = await requests.createBanner(params)
+      const { data } = await requests.createOrder(params)
       return data
     } catch (err) {
       return err
@@ -66,7 +67,8 @@ const orderStore = create((set) => ({
     try {
       const { data } = await requests.editOrder(id, params)
       return data
-    } catch (err) {
+    } catch ({ response }) {
+      toast.error(response?.data?.message)
       return err
     } finally {
       set({ editLoading: false })

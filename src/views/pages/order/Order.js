@@ -2,8 +2,10 @@ import { CButton, CCard, CCardHeader, CRow, CCol, CCardTitle } from '@coreui/rea
 import OrderTable from './OrderTable'
 import { useState } from 'react'
 import OrderCreateModal from './OrderCreateModal'
+import handleProductsStore from '../../../store/handleProducts'
 
 const Order = () => {
+  const { clearProducts } = handleProductsStore()
   const [modal, setModal] = useState(false)
   return (
     <>
@@ -22,7 +24,13 @@ const Order = () => {
         </CCardHeader>
         <OrderTable />
       </CCard>
-      <OrderCreateModal visible={modal} onClose={() => setModal(false)} />
+      <OrderCreateModal
+        visible={modal}
+        onClose={() => {
+          setModal(false)
+          clearProducts()
+        }}
+      />
     </>
   )
 }

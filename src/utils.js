@@ -11,3 +11,7 @@ export const findCategory = (categories, id, setCategory) => {
     }
   })
 }
+
+export const isHas = (items, id) => {
+  return items?.find((item) => item?.id === id) ? true : false
+}

@@ -2,26 +2,35 @@ import { create } from 'zustand'
 import { requests } from '../helpers/requests'
 
 const initialState = {
-  products: [],
+  stateProducts: [],
 }
 
-const handleProductsStore = create((set) => ({
+const handleProductsStore = create((set, get) => ({
   ...initialState,
   setProducts: (products) => {
-    set({ products: products })
+    set({ stateProducts: products || [] })
   },
-  toggleProduct: async (product) => {
-    set((state) => {
-      const existingItem = state.products?.find((item) => item?.id === product?.id)
-      if (existingItem) {
-        const filteredItems = state.products?.filter((item) => item?.id !== product?.id)
-        state.setProducts(filteredItems)
-      } else {
-        existingItem['count'] = 1
-        const newItems = [...state.products, existingItem]
-        state.setProducts(newItems)
-      }
-    })
+  toggleProduct: (product) => {
+    const stateProducts = get()?.stateProducts || []
+    const existingItem = stateProducts?.find((item) => item?.id === product?.id)
+    if (existingItem) {
+      const filteredItems = stateProducts?.filter((item) => item?.id !== product?.id)
+      get().setProducts(filteredItems)
+    } else {
+      product['count'] = 1
+      const newItems = [...stateProducts, product]
+      get().setProducts(newItems)
+    }
+  },
+  setCount: (product, count) => {
+    const stateProducts = get()?.stateProducts || []
+    const existingItem = stateProducts?.find((item) => item?.id === product?.id)
+    existingItem['count'] = count
+    const newItems = [...stateProducts]
+    get().setProducts(newItems)
+  },
+  clearProducts: () => {
+    set({ stateProducts: [] })
   },
 }))
 

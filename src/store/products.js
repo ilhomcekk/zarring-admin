@@ -27,6 +27,9 @@ const productStore = create((set) => ({
       set({ listLoading: false })
     }
   },
+  clearList: () => {
+    set({ list: [] })
+  },
   getProductCodes: async () => {
     set({ productCodesLoading: true })
     try {

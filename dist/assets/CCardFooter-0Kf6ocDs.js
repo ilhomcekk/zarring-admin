@@ -1,1 +1,0 @@
-import{r as l,_ as d,R as n,b as i,c as m,P as s}from"./index-Cn1RgVaf.js";var a=l.forwardRef(function(r,e){var c=r.children,o=r.className,t=d(r,["children","className"]);return n.createElement("div",i({className:m("card-footer",o)},t,{ref:e}),c)});a.propTypes={children:s.node,className:s.string};a.displayName="CCardFooter";export{a as C};

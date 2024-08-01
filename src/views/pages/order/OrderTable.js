@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
 import productStore from '../../../store/products'
+import handleProductsStore from '../../../store/handleProducts'
 
 const OrderTable = () => {
   const navigate = useNavigate()
@@ -41,6 +42,7 @@ const OrderTable = () => {
   const page = searchParams.get('page')
   const pageSize = searchParams.get('pageSize')
   const { getList, list, remove, deleteLoading, listLoading } = OrderStore()
+  const { clearProducts } = handleProductsStore()
   const { getProductCodes } = productStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
@@ -266,7 +268,14 @@ const OrderTable = () => {
         </CTable>
       </div>
       <OrderShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
-      <OrderEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <OrderEditModal
+        visible={editModal}
+        onClose={() => {
+          setEditModal(false)
+          clearProducts()
+        }}
+        id={idItem}
+      />
       <PageLoading loading={listLoading} />
     </>
   )

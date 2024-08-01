@@ -37,6 +37,7 @@ export const requests = {
   fetchOrderByUser: (params) => $api.get(`${API_URL}/order/get-by-user-name/`, { params }),
   fetchOrderDetail: (id) => $api.get(`${API_URL}/order/by/${id}`),
   editOrder: (id, params) => $api.put(`${API_URL}/order/update/${id}`, params),
+  createOrder: (params) => $api.post(`${API_URL}/order/add`, params),
   // STATS
   fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
   fetchClientsMaxCount: () => $api.get(`${API_URL}/report/clients-in-maxcount`),
