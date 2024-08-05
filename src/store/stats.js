@@ -46,6 +46,18 @@ const statsStore = create((set) => ({
       set({ listLoading: false })
     }
   },
+  getUsersProducts: async (params) => {
+    set({ listLoading: true })
+    try {
+      const { data } = await requests.fetchUsersProducts(params)
+      set({ usersProducts: data?.data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ listLoading: false })
+    }
+  },
 }))
 
 export default statsStore

@@ -42,6 +42,8 @@ export const requests = {
   fetchStats: () => $api.get(`${API_URL}/report/?from=&to=`),
   fetchClientsMaxCount: () => $api.get(`${API_URL}/report/clients-in-maxcount`),
   fetchProductsMaxCount: () => $api.get(`${API_URL}/report/products-in-maxcount`),
+  fetchUsersProducts: (params) =>
+    $api.get(`${API_URL}/order/get-users-products-info-by-order`, { params }),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
   // REPORTS
   // fetchProducts: (params) => $api.get(`${API_URL}/product`, { params }),

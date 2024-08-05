@@ -41,6 +41,12 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: 'Клиэнты',
+    to: '/users-products',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: 'Код товара',
     to: '/code-product?page=1&pageSize=20',
     icon: <CIcon icon={cilList} customClassName="nav-icon" />,
