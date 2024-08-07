@@ -108,12 +108,11 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
   }
 
   const addGalleryImage = () => {
-    setParams({ ...params, gallery: [...params.gallery, null] })
+    setParams({ ...params, gallery: [...params.gallery, ''] })
   }
 
   const removeGalleryImage = (index) => {
-    // const newGallery = params.gallery.filter((_, idx) => idx !== index)
-    const newGallery = params.gallery.map((item, idx) => (idx === index ? null : item))
+    const newGallery = params.gallery.filter((_, idx) => idx !== index)
     setParams({ ...params, gallery: newGallery })
   }
   console.log(category)
@@ -302,7 +301,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       ),
     },
   ]
-
+  console.log(params.gallery)
   const handleSubmit = (event) => {
     event.preventDefault()
     const form = event.currentTarget
@@ -312,9 +311,18 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     } else {
       const formData = new FormData()
       formData.append('img', params.img)
-      const galleryArray = params.gallery?.filter((file) => file && typeof file !== 'string')
-      galleryArray.forEach((file, index) => {
-        formData.append('gallery', file)
+      const galleryArray = params.gallery.length > 0 ? params.gallery : []
+      const finalGallery = galleryArray.map((item) => {
+        return typeof item === 'string' ? item : item.name // You can change this based on your server requirements
+      })
+
+      formData.append('gallery', JSON.stringify(finalGallery))
+
+      // Add files to FormData separately
+      galleryArray.forEach((item, index) => {
+        if (typeof item !== 'string') {
+          formData.append(`gallery${index}`, item)
+        }
       })
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
