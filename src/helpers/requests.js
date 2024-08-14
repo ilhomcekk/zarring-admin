@@ -44,6 +44,12 @@ export const requests = {
   fetchProductsMaxCount: () => $api.get(`${API_URL}/report/products-in-maxcount`),
   fetchUsersProducts: (params) =>
     $api.get(`${API_URL}/order/get-users-products-info-by-order`, { params }),
+  // ADMINS
+  fetchAdmins: (params) => $api.get(`${API_URL}/admins`, { params }),
+  fetchAdminsDetail: (id) => $api.get(`${API_URL}/admins/byId/${id}`),
+  createAdmins: (params) => $api.post(`${API_URL}/admins/add`, formData(params)),
+  editAdmins: (id, params) => $api.post(`${API_URL}/admins/update/${id}`, formData(params)),
+  deleteAdmins: (id) => $api.delete(`${API_URL}/admins/delete/${id}`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
   // REPORTS
   // fetchProducts: (params) => $api.get(`${API_URL}/product`, { params }),

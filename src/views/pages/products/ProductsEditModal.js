@@ -312,16 +312,13 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       const formData = new FormData()
       formData.append('img', params.img)
       const galleryArray = params.gallery.length > 0 ? params.gallery : []
-      const finalGallery = galleryArray.map((item) => {
-        return typeof item === 'string' ? item : item.name // You can change this based on your server requirements
-      })
+      const finalGallery = galleryArray.filter((item) => typeof item === 'string')
 
       formData.append('gallery', JSON.stringify(finalGallery))
 
-      // Add files to FormData separately
-      galleryArray.forEach((item, index) => {
+      galleryArray.forEach((item) => {
         if (typeof item !== 'string') {
-          formData.append(`gallery${index}`, item)
+          formData.append('gallery', item)
         }
       })
       formData.append('title_ru', params.title_ru)

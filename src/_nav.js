@@ -107,6 +107,12 @@ const _nav = [
     to: '/order-by-user',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Админы',
+    to: '/admins',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  },
   // {
   //   component: CNavItem,
   //   name: 'Login',
