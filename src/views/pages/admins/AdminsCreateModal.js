@@ -16,23 +16,30 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import React, { useState } from 'react'
-import BannerStore from '../../../store/banner'
 import { toast } from 'react-toastify'
+import adminsStore from '../../../store/admins'
+import { roleList, statusList } from '../../../utils'
 
 const AdminsCreateModal = ({ visible, onClose }) => {
-  const { create, createLoading, getList, list } = BannerStore()
+  const { create, createLoading, getList } = adminsStore()
   const [params, setParams] = useState({
-    name_ru: '',
-    name_uz: '',
-    img: null,
+    login: '',
+    name: '',
+    phone: '',
+    password: '',
+    role: '',
+    status: '',
   })
   const [validated, setValidated] = useState(false)
 
   const clearParams = () => {
     setParams({
-      name_ru: '',
-      name_uz: '',
-      img: null,
+      login: '',
+      name: '',
+      phone: '',
+      password: '',
+      role: '',
+      status: '',
     })
   }
 
@@ -41,48 +48,65 @@ const AdminsCreateModal = ({ visible, onClose }) => {
     setParams({ ...params, [name]: value })
   }
 
-  const handleFileChange = (e, name) => {
-    const file = e.target.files[0]
-    setParams({ ...params, [name]: file })
-  }
-
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Логин',
       children: (
-        <CFormInput name="name_ru" value={params.name_ru} onChange={handleInputChange} required />
+        <CFormInput name="login" value={params.login} onChange={handleInputChange} required />
       ),
     },
     {
-      label: 'Имя ( UZ )',
-      children: <CFormInput name="name_uz" value={params.name_uz} onChange={handleInputChange} />,
+      label: 'Имя',
+      children: (
+        <CFormInput name="name" value={params.name} onChange={handleInputChange} required />
+      ),
     },
     {
-      label: 'Основное изображение',
+      label: 'Номер телефона',
       children: (
-        <>
-          <CFormInput type="file" onChange={(e) => handleFileChange(e, 'img')} />
-          <CButton
-            color="danger"
-            onClick={() =>
-              setParams((prev) => ({
-                ...prev,
-                img: null,
-              }))
-            }
-          >
-            Удалить
-          </CButton>
-          {params.img && (
-            <div className="w-100">
-              <img
-                src={URL.createObjectURL(params.img)}
-                alt="Uploaded"
-                style={{ maxWidth: '300px' }}
-              />
-            </div>
-          )}
-        </>
+        <CFormInput name="phone" value={params.phone} onChange={handleInputChange} required />
+      ),
+    },
+    {
+      label: 'Пароль',
+      children: (
+        <CFormInput name="password" value={params.password} onChange={handleInputChange} required />
+      ),
+    },
+    {
+      label: 'Роль',
+      children: (
+        <CFormSelect
+          name="role"
+          value={params?.role}
+          onChange={handleInputChange}
+          required
+          options={[
+            '',
+            ...roleList?.map((item) => ({
+              label: item?.name,
+              value: item?.value,
+            })),
+          ]}
+        />
+      ),
+    },
+    {
+      label: 'Статус',
+      children: (
+        <CFormSelect
+          name="status"
+          value={params?.status}
+          onChange={handleInputChange}
+          required
+          options={[
+            '',
+            ...statusList?.map((item) => ({
+              label: item?.name,
+              value: item?.value,
+            })),
+          ]}
+        />
       ),
     },
   ]
@@ -112,7 +136,7 @@ const AdminsCreateModal = ({ visible, onClose }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Создать категории</CModalTitle>
+        <CModalTitle>Создать админ</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>

@@ -45,11 +45,11 @@ export const requests = {
   fetchUsersProducts: (params) =>
     $api.get(`${API_URL}/order/get-users-products-info-by-order`, { params }),
   // ADMINS
-  fetchAdmins: (params) => $api.get(`${API_URL}/admins`, { params }),
-  fetchAdminsDetail: (id) => $api.get(`${API_URL}/admins/byId/${id}`),
-  createAdmins: (params) => $api.post(`${API_URL}/admins/add`, formData(params)),
-  editAdmins: (id, params) => $api.post(`${API_URL}/admins/update/${id}`, formData(params)),
-  deleteAdmins: (id) => $api.delete(`${API_URL}/admins/delete/${id}`),
+  fetchAdmins: (params) => $api.get(`${API_URL}/user/`, { params }),
+  fetchAdminsDetail: (id) => $api.get(`${API_URL}/user/me/${id}`),
+  createAdmins: (params) => $api.post(`${API_URL}/user/add`, params),
+  editAdmins: (id, params) => $api.put(`${API_URL}/user/update/${id}`, params),
+  deleteAdmins: (id) => $api.delete(`${API_URL}/user/delete/${id}`),
   // createProduct: (params) => $api.post(`${API_URL}/product/add`, formData(params)),
   // REPORTS
   // fetchProducts: (params) => $api.get(`${API_URL}/product`, { params }),

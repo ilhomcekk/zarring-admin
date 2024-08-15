@@ -11,26 +11,36 @@ import {
   CPagination,
   CPaginationItem,
   CPopover,
+  CBadge,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import AdminsShowModal from './AdminsShowModal'
 import AdminsEditModal from './AdminsEditModal'
-import BannerStore from '../../../store/banner'
-import { BASE_URL } from '../../../config'
-import { toast } from 'react-toastify'
-import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
-import statsStore from '../../../store/stats'
+import adminsStore from '../../../store/admins'
+import {
+  findRoleColorFromNumber,
+  findRoleFromNumber,
+  findStatusColorFromNumber,
+  findStatusFromNumber,
+} from '../../../utils'
 
 const AdminsProductsTable = () => {
-  const { getUsersProducts, usersProducts, remove, deleteLoading, listLoading } = statsStore()
+  const { getList, list, remove, deleteLoading, listLoading } = adminsStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
     page: 1,
     pageSize: 20,
+    id: null,
+    login: null,
+    name: null,
+    phone: null,
+    role: null,
+    status: null,
+    created_at: null,
   })
   const [showModal, setShowModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -43,11 +53,11 @@ const AdminsProductsTable = () => {
   }
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      getUsersProducts(params)
+      getList(params)
     }
   }
   useEffect(() => {
-    getUsersProducts(params)
+    getList(params)
   }, [])
   return (
     <>
@@ -55,18 +65,29 @@ const AdminsProductsTable = () => {
         <CTable striped>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell scope="col">Заказ ИД</CTableHeaderCell>
+              <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Логин</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
               <CTableHeaderCell scope="col">Номер телефона</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Количество товаров</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Роль</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Статус</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Дата создания</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
               <CTableHeaderCell scope="col">
                 <CFormInput
                   type="text"
-                  value={params?.order_id}
-                  onChange={(e) => handleChangeInput('order_id', e.target.value)}
+                  value={params?.id}
+                  onChange={(e) => handleChangeInput('id', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.login}
+                  onChange={(e) => handleChangeInput('login', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
@@ -81,16 +102,24 @@ const AdminsProductsTable = () => {
               <CTableHeaderCell scope="col">
                 <CFormInput
                   type="text"
-                  value={params?.number}
-                  onChange={(e) => handleChangeInput('number', e.target.value)}
+                  value={params?.phone}
+                  onChange={(e) => handleChangeInput('phone', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <CFormInput
                   type="text"
-                  value={params?.product_count}
-                  onChange={(e) => handleChangeInput('product_count', e.target.value)}
+                  value={params?.role}
+                  onChange={(e) => handleChangeInput('role', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.status}
+                  onChange={(e) => handleChangeInput('status', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
@@ -98,12 +127,23 @@ const AdminsProductsTable = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {usersProducts?.rows?.map((item, index) => (
+            {list?.map((item, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{item?.order_id}</CTableHeaderCell>
+                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                <CTableDataCell>{item?.login}</CTableDataCell>
                 <CTableDataCell>{item?.name}</CTableDataCell>
-                <CTableDataCell>{item?.number}</CTableDataCell>
-                <CTableDataCell>{item?.product_count}</CTableDataCell>
+                <CTableDataCell>{item?.phone}</CTableDataCell>
+                <CTableDataCell>
+                  <CBadge color={findRoleColorFromNumber(item?.role)}>
+                    {findRoleFromNumber(item?.role)}
+                  </CBadge>
+                </CTableDataCell>
+                <CTableDataCell>
+                  <CBadge color={findStatusColorFromNumber(item?.status)}>
+                    {findStatusFromNumber(item?.status)}
+                  </CBadge>
+                </CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
                     <CButton
@@ -115,8 +155,8 @@ const AdminsProductsTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    {/* <CPopover
-                      title={item?.dataValues?.id}
+                    <CPopover
+                      title={item?.id}
                       trigger={'focus'}
                       content={
                         <div>
@@ -124,7 +164,7 @@ const AdminsProductsTable = () => {
                           <CButton
                             disabled={deleteLoading}
                             onClick={() =>
-                              remove(item?.dataValues?.id).then((res) => {
+                              remove(item?.id).then((res) => {
                                 if (res?.data) {
                                   toast.success('Успешно удалено')
                                 }
@@ -145,54 +185,16 @@ const AdminsProductsTable = () => {
                     <CButton
                       color="warning"
                       onClick={() => {
-                        setIdItem(item?.dataValues?.id)
+                        setIdItem(item?.id)
                         setEditModal(true)
                       }}
                     >
                       <CIcon icon={cilPen} />
-                    </CButton> */}
+                    </CButton>
                   </div>
                 </CTableDataCell>
               </CTableRow>
             ))}
-            <CPagination>
-              <CPaginationItem
-                onClick={() => {
-                  const newParams = { ...params }
-                  newParams['page'] -= 1
-                  setParams(newParams)
-                  getUsersProducts(newParams)
-                }}
-                disabled={params.page === 1}
-              >
-                <CIcon icon={cilArrowLeft} />
-              </CPaginationItem>
-              {[...Array(usersProducts?.totalPages)]?.map((_, idx) => (
-                <CPaginationItem
-                  onClick={() => {
-                    const newParams = { ...params }
-                    newParams['page'] = idx + 1
-                    setParams(newParams)
-                    getUsersProducts(newParams)
-                  }}
-                  active={params.page === idx + 1}
-                  key={idx}
-                >
-                  {idx + 1}
-                </CPaginationItem>
-              ))}
-              <CPaginationItem
-                onClick={() => {
-                  const newParams = { ...params }
-                  newParams['page'] += 1
-                  setParams(newParams)
-                  getUsersProducts(newParams)
-                }}
-                disabled={params.page === usersProducts?.totalPages}
-              >
-                <CIcon icon={cilArrowRight} />
-              </CPaginationItem>
-            </CPagination>
           </CTableBody>
         </CTable>
       </div>

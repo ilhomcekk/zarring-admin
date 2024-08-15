@@ -43,6 +43,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       { label: 'Razmer', value: '' },
     ],
     gallery: [''],
+    new_gallery: [''],
   })
   const [category, setCategory] = useState({})
   const [validated, setValidated] = useState(false)
@@ -65,6 +66,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
         { label: 'Razmer', value: '' },
       ],
       gallery: [null],
+      new_gallery: [null],
     })
     setCategory({})
     setValidated(false)
@@ -102,20 +104,23 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
   }
 
   const handleGalleryChange = (index, newImage) => {
-    const newGallery = [...params.gallery]
+    const newGallery = [...params.new_gallery]
     newGallery[index] = newImage
-    setParams({ ...params, gallery: newGallery })
+    setParams({ ...params, new_gallery: newGallery })
   }
 
   const addGalleryImage = () => {
-    setParams({ ...params, gallery: [...params.gallery, ''] })
+    setParams({ ...params, new_gallery: [...params.new_gallery, ''] })
   }
 
-  const removeGalleryImage = (index) => {
-    const newGallery = params.gallery.filter((_, idx) => idx !== index)
-    setParams({ ...params, gallery: newGallery })
+  const removeGalleryImage = (item, index) => {
+    const isHas = params.gallery.includes(item)
+    if (isHas) {
+      setParams({ ...params, gallery: params.gallery.filter((item1) => item1 !== item) })
+    } else {
+      setParams({ ...params, new_gallery: params.new_gallery.filter((_, idx) => idx !== index) })
+    }
   }
-  console.log(category)
   useEffect(() => {
     if (visible) {
       getDetail(id)
@@ -135,6 +140,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       description_uz: detail?.description_uz,
       characteristic: detail?.characteristic || [],
       gallery: detail?.gallery || [],
+      new_gallery: [''],
     })
     findCategory(categoryParents, detail?.category_id, setCategory)
     // setCategory(categories?.find((cat) => cat.id === detail?.category_id) || {})
@@ -232,7 +238,30 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
                     type="file"
                     onChange={(e) => handleGalleryChange(idx, e.target.files[0])}
                   />
-                  <CButton color="danger" className="ms-2" onClick={() => removeGalleryImage(idx)}>
+                  <CButton
+                    color="danger"
+                    className="ms-2"
+                    onClick={() => removeGalleryImage(item, idx)}
+                  >
+                    <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
+                  </CButton>
+                </CInputGroup>
+                <img src={BASE_URL + item} width={200} className="mt-2" alt="" />
+              </div>
+            ))}
+          {Array.isArray(params?.new_gallery) &&
+            params?.new_gallery.map((item, idx) => (
+              <div key={idx} className="mt-2">
+                <CInputGroup>
+                  <CFormInput
+                    type="file"
+                    onChange={(e) => handleGalleryChange(idx, e.target.files[0])}
+                  />
+                  <CButton
+                    color="danger"
+                    className="ms-2"
+                    onClick={() => removeGalleryImage(item, idx)}
+                  >
                     <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
                   </CButton>
                 </CInputGroup>
@@ -311,16 +340,8 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     } else {
       const formData = new FormData()
       formData.append('img', params.img)
-      const galleryArray = params.gallery.length > 0 ? params.gallery : []
-      const finalGallery = galleryArray.filter((item) => typeof item === 'string')
-
-      formData.append('gallery', JSON.stringify(finalGallery))
-
-      galleryArray.forEach((item) => {
-        if (typeof item !== 'string') {
-          formData.append('gallery', item)
-        }
-      })
+      formData.append('old_gallery', JSON.stringify(params.gallery))
+      params.new_gallery.forEach((item) => formData.append('gallery', item))
       formData.append('title_ru', params.title_ru)
       formData.append('title_uz', params.title_uz)
       formData.append('price', params.price || 0)

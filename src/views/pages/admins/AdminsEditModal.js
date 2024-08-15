@@ -16,25 +16,25 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
-import Bannerstore from '../../../store/banner'
 import { BASE_URL } from '../../../config'
+import adminsStore from '../../../store/admins'
+import { roleList, statusList } from '../../../utils'
+import { toast } from 'react-toastify'
 
 const AdminsEditModal = ({ visible, onClose, id }) => {
-  const { detail, getDetail, getList, edit, editLoading } = Bannerstore()
+  const { detail, getDetail, getList, edit, editLoading } = adminsStore()
   const [params, setParams] = useState({
-    name_ru: '',
-    name_uz: '',
-    img: null,
+    login: '',
+    name: '',
+    phone: '',
+    password: '',
+    role: '',
+    status: '',
   })
   const [validated, setValidated] = useState(false)
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setParams({ ...params, [name]: value })
-  }
-
-  const handleFileChange = (e, name) => {
-    const file = e.target.files[0]
-    setParams({ ...params, [name]: file })
   }
 
   useEffect(() => {
@@ -44,70 +44,75 @@ const AdminsEditModal = ({ visible, onClose, id }) => {
   }, [visible])
   useEffect(() => {
     setParams(() => ({
-      name_ru: detail?.dataValues?.name_ru,
-      name_uz: detail?.dataValues?.name_uz,
-      img: detail?.dataValues?.img,
+      login: detail?.login,
+      name: detail?.name,
+      phone: detail?.phone,
+      role: detail?.role,
+      status: detail?.status,
     }))
   }, [detail])
 
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Имя',
       children: (
-        <CFormInput name="name_ru" onChange={handleInputChange} value={params?.name_ru} required />
+        <CFormInput name="name" onChange={handleInputChange} value={params?.name} required />
       ),
     },
     {
-      label: 'Имя ( UZ )',
-      children: <CFormInput name="name_uz" onChange={handleInputChange} value={params?.name_uz} />,
-    },
-    {
-      label: 'Основное изображение',
+      label: 'Логин',
       children: (
-        <>
-          <CFormInput
-            type="file"
-            onChange={(e) => handleFileChange(e, 'img')}
-            disabled={params?.img}
-          />
-          <CButton
-            color="danger"
-            onClick={() =>
-              setParams((prev) => ({
-                ...prev,
-                img: '',
-              }))
-            }
-          >
-            Удалить изображение
-          </CButton>
-          {typeof params.img === 'string' && (
-            <div className="w-100">
-              <img src={BASE_URL + params?.img} alt="Uploaded" style={{ maxWidth: '300px' }} />
-            </div>
-          )}
-          {params.img?.name && (
-            <div className="w-100">
-              <img
-                src={URL.createObjectURL(params.img)}
-                alt="Uploaded"
-                style={{ maxWidth: '300px' }}
-              />
-            </div>
-          )}
-        </>
+        <CFormInput name="login" onChange={handleInputChange} value={params?.login} required />
       ),
     },
-    // {
-    //   label: 'Описание',
-    //   children: (
-    //     <CFormTextarea
-    //       name="description"
-    //       onChange={handleInputChange}
-    //       value={params?.description}
-    //     />
-    //   ),
-    // },
+    {
+      label: 'Номер телефона',
+      children: (
+        <CFormInput name="phone" onChange={handleInputChange} value={params?.phone} required />
+      ),
+    },
+    {
+      label: 'Пароль',
+      children: (
+        <CFormInput name="password" onChange={handleInputChange} value={params?.password} />
+      ),
+    },
+    {
+      label: 'Роль',
+      children: (
+        <CFormSelect
+          name="role"
+          value={params?.role}
+          onChange={handleInputChange}
+          required
+          options={[
+            '',
+            ...roleList?.map((item) => ({
+              label: item?.name,
+              value: item?.value,
+            })),
+          ]}
+        />
+      ),
+    },
+    {
+      label: 'Статус',
+      children: (
+        <CFormSelect
+          name="status"
+          value={params?.status}
+          onChange={handleInputChange}
+          required
+          options={[
+            '',
+            ...statusList?.map((item) => ({
+              label: item?.name,
+              value: item?.value,
+            })),
+          ]}
+        />
+      ),
+    },
   ]
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -117,16 +122,13 @@ const AdminsEditModal = ({ visible, onClose, id }) => {
       event.stopPropagation()
     } else {
       edit(id, params)
-        .then((res) => {
-          console.log(res, 'asdasdas')
-          if (res?.data?.id) {
-            toast.success('Успешно создано')
-            getList({
-              page: 1,
-              pageSize: 20,
-            })
-            onClose()
-          }
+        .then(() => {
+          toast.success('Успешно создано')
+          getList({
+            page: 1,
+            pageSize: 20,
+          })
+          onClose()
         })
         .catch((err) => console.log('err', err))
     }

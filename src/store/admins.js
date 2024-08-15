@@ -11,12 +11,12 @@ const initialState = {
   deleteLoading: false,
 }
 
-const bannerStore = create((set) => ({
+const adminsStore = create((set) => ({
   ...initialState,
   getList: async (params) => {
     set({ listLoading: true })
     try {
-      const { data } = await requests.fetchBanner(params)
+      const { data } = await requests.fetchAdmins(params)
       set({ list: data?.data })
       return data
     } catch (err) {
@@ -28,7 +28,7 @@ const bannerStore = create((set) => ({
   getDetail: async (id) => {
     set({ detailLoading: true })
     try {
-      const { data } = await requests.fetchBannerDetail(id)
+      const { data } = await requests.fetchAdminsDetail(id)
       set({ detail: data?.data })
       return data
     } catch (err) {
@@ -40,7 +40,7 @@ const bannerStore = create((set) => ({
   create: async (params) => {
     set({ createLoading: true })
     try {
-      const { data } = await requests.createBanner(params)
+      const { data } = await requests.createAdmins(params)
       return data
     } catch (err) {
       return err
@@ -48,10 +48,10 @@ const bannerStore = create((set) => ({
       set({ createLoading: false })
     }
   },
-  edit: async (id,params) => {
+  edit: async (id, params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editBanner(id,params)
+      const { data } = await requests.editAdmins(id, params)
       return data
     } catch (err) {
       return err
@@ -62,7 +62,7 @@ const bannerStore = create((set) => ({
   remove: async (id) => {
     set({ deleteLoading: true })
     try {
-      const { data } = await requests.deleteBanner(id)
+      const { data } = await requests.deleteAdmins(id)
       if (data?.data) {
         set((state) => ({
           ...state,
@@ -78,4 +78,4 @@ const bannerStore = create((set) => ({
   },
 }))
 
-export default bannerStore
+export default adminsStore
