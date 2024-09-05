@@ -97,6 +97,7 @@ const OrderTable = () => {
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
               <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Количество товара</CTableHeaderCell>
               <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
@@ -127,8 +128,9 @@ const OrderTable = () => {
                 />
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <div className={`${params?.from_to && 'date-active'}`}>
+                <div className={`d-flex align-items-center ${params?.from_to && 'date-active'}`}>
                   <RangePicker
                     onDateSelected={(f, l) => {
                       const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
@@ -161,6 +163,7 @@ const OrderTable = () => {
                   )}
                 </div>
               </CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -169,6 +172,7 @@ const OrderTable = () => {
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.user_name}</CTableDataCell>
                 <CTableDataCell>{item?.user_number}</CTableDataCell>
+                <CTableDataCell>{item?.products?.length}</CTableDataCell>
                 <CTableDataCell>
                   <CBadge size="lg" className="p-2" color={setColorFromStatus(item?.status)}>
                     {setTextFromStatus(item?.status)}
@@ -186,9 +190,10 @@ const OrderTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton> */}
-                    <CPopover
+                    {/* <CPopover
                       title={item?.id}
                       trigger={'focus'}
+                      visible
                       content={
                         <div>
                           <div>Вы точно хотите удалить?</div>
@@ -202,7 +207,7 @@ const OrderTable = () => {
                               })
                             }
                             color="danger"
-                            className="mt-2"
+                            className="mt-2 mx-auto d-flex"
                           >
                             Удалить
                           </CButton>
@@ -212,7 +217,7 @@ const OrderTable = () => {
                       <CButton className="mx-2" color="danger">
                         <CIcon icon={cilTrash} />
                       </CButton>
-                    </CPopover>
+                    </CPopover> */}
                     <CButton
                       color="warning"
                       onClick={() => {

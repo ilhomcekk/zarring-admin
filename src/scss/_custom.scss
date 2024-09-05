@@ -31,11 +31,11 @@ html[data-coreui-theme='dark'] {
   }
 }
 
-// .calendar {
-//   top: 280px !important;
-//   left: unset !important;
-//   right: 355px !important;
-// }
+.calendar.visible {
+  // top: 0 !important;
+  // left: 0 !important;
+  // transform: translate(-50%, -50%) !important;
+}
 
 .date-picker-app-wrapper {
   .text {

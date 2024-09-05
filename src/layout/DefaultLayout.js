@@ -15,16 +15,17 @@ const DefaultLayout = () => {
     } else {
       getMe()
         .then((res) => {
+          console.log('asdasdasdas', res)
           if (res?.response?.status === 401) {
             navigate('/login')
             removeToken()
           }
         })
         .catch((err) => {
-          if (err?.response?.status === 401) {
-            navigate('/login')
-            removeToken()
-          }
+          // if (err?.response?.status === 401) {
+          navigate('/login')
+          removeToken()
+          // }
         })
     }
   }, [])

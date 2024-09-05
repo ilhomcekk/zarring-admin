@@ -171,7 +171,7 @@ const AdminsProductsTable = () => {
                               })
                             }
                             color="danger"
-                            className="mt-2"
+                            className="mt-2 mx-auto d-flex"
                           >
                             Удалить
                           </CButton>

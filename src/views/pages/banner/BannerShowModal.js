@@ -16,7 +16,7 @@ const BannerShowModal = ({ visible, onClose, item }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Баннер ( {item?.id} )</CModalTitle>
+        <CModalTitle>Баннер ( {item?.dataValues?.id} )</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CRow xs={{ gutter: 2 }}>
@@ -27,7 +27,7 @@ const BannerShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.title_ru}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.name}</CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>
@@ -38,7 +38,7 @@ const BannerShowModal = ({ visible, onClose, item }) => {
           <CCol xs={{ span: 6 }}>
             <CListGroup>
               <CListGroupItem className="p-2">
-                <img src={BASE_URL + item?.img} height={200} alt="" />
+                <img src={BASE_URL + item?.dataValues?.img} height={200} alt="" />
               </CListGroupItem>
             </CListGroup>
           </CCol>
@@ -49,7 +49,7 @@ const BannerShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.created_at}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.dataValues?.created_at}</CListGroupItem>
             </CListGroup>
           </CCol>
         </CRow>

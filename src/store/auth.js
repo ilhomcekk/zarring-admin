@@ -23,8 +23,8 @@ const authStore = create((set) => ({
   getMe: async (params) => {
     set({ meLoading: true })
     try {
-      const { data } = await requests.fetchMe(params)
-      set({ me: data?.data })
+      const data = await requests.fetchMe(params)
+      set({ me: data?.data?.data })
       return data
     } catch (err) {
       return err

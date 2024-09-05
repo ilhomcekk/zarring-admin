@@ -5,7 +5,7 @@ import { formData } from './form'
 export const requests = {
   // AUTH
   login: (params) => $api.post(`${API_URL}/auth/login`, params),
-  fetchMe: () => $api.get(`${API_URL}/user/profile`),
+  fetchMe: () => $api.get(`${API_URL}/user/me`),
   // PRODUCTS
   fetchProduct: (params) => $api.get(`${API_URL}/product/`, { params }),
   fetchProductCodes: () => $api.get(`${API_URL}/product/codes`),

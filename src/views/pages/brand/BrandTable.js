@@ -11,6 +11,7 @@ import {
   CPagination,
   CPaginationItem,
   CPopover,
+  CCloseButton,
 } from '@coreui/react'
 import { useState } from 'react'
 import { cilArrowLeft, cilArrowRight, cilPen, cilTrash, cilZoom } from '@coreui/icons'
@@ -82,16 +83,33 @@ const BrandTable = () => {
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
-                <RangePicker
-                  onDateSelected={(f, l) => {
-                    const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
-                    const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
-                    handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
-                  }}
-                  onClose={() => {
-                    if (params?.from_to) getList({ ...params, page: 1 })
-                  }}
-                />
+                <div className={`d-flex align-items-center ${params?.from_to && 'date-active'}`}>
+                  <RangePicker
+                    onDateSelected={(f, l) => {
+                      const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
+                      const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
+                      handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
+                    }}
+                    onClose={() => {
+                      const filteredParams = Object.fromEntries(
+                        Object.entries(params).filter(([key, value]) => value != null),
+                      )
+                      const queryString = new URLSearchParams(filteredParams).toString()
+                      getList(params)
+                    }}
+                  />
+                  {params?.from_to && (
+                    <CCloseButton
+                      className="ms-2"
+                      onClick={() => {
+                        const newParams = { ...params }
+                        newParams['from_to'] = null
+                        setParams(newParams)
+                        getList(newParams)
+                      }}
+                    />
+                  )}
+                </div>
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -132,7 +150,7 @@ const BrandTable = () => {
                               })
                             }
                             color="danger"
-                            className="mt-2"
+                            className="mt-2 mx-auto d-flex"
                           >
                             Удалить
                           </CButton>

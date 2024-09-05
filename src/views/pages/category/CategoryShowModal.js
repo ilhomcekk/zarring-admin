@@ -27,7 +27,7 @@ const CategoryShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              <CListGroupItem className="p-2">{item?.title_ru}</CListGroupItem>
+              <CListGroupItem className="p-2">{item?.title}</CListGroupItem>
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>
