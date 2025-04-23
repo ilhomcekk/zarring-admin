@@ -1,4 +1,4 @@
-import { cilTrash } from '@coreui/icons'
+import { cilPen, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CBadge,
@@ -153,6 +153,7 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                   }))}
                   style={{
                     background: setStaticColorFromStatus(Number(params?.status)),
+                    color: '#fff',
                   }}
                 />
                 {/* <CListGroupItem className="p-2">
@@ -174,9 +175,9 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                 <CListGroupItem className="p-2">{item?.created_at}</CListGroupItem>
               </CListGroup>
             </CCol>
-            <CCol xs={{ span: 12 }} onClick={() => setModal(true)}>
+            <CCol xs={{ span: 12 }} onClick={() => setModal(true)} style={{ cursor: 'pointer' }}>
               <CCallout className="p-2 m-0" color="primary">
-                Товары ( {stateProducts?.length} )
+                Товары ( {stateProducts?.length} ) <CIcon icon={cilPen} />
               </CCallout>
             </CCol>
             <CCol xs={{ span: 12 }}>
@@ -185,14 +186,18 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Количество</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Код</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Сумма</CTableHeaderCell>
                       <CTableHeaderCell scope="col"></CTableHeaderCell>
                     </CTableRow>
                     <CTableRow>
+                      <CTableHeaderCell scope="col"></CTableHeaderCell>
+                      <CTableHeaderCell scope="col"></CTableHeaderCell>
+                      <CTableHeaderCell scope="col"></CTableHeaderCell>
+                      <CTableHeaderCell scope="col"></CTableHeaderCell>
                       <CTableHeaderCell scope="col">
                         <CFormSelect
                           name="code"
@@ -243,7 +248,9 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                   <CTableBody>
                     {stateProducts?.map((item, index) => (
                       <CTableRow key={index}>
-                        <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
+                        <CTableHeaderCell scope="row" style={{ width: '80px' }}>
+                          {item?.id}
+                        </CTableHeaderCell>
                         <CTableDataCell>{item?.title}</CTableDataCell>
                         <CTableDataCell>
                           <img src={BASE_URL + item?.img} width={50} height={50} alt="" />

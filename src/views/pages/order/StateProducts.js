@@ -80,8 +80,8 @@ const StateProductsModal = ({ visible, onClose }) => {
                         <CFormInput
                           placeholder="Количество"
                           value={item?.count}
-                          onChange={(e) => setCount(item, +e.target.value)}
-                          type="number"
+                          onChange={(e) => setCount(item, e.target.value)}
+                          type="text"
                         />
                       </CTableDataCell>
                       <CTableDataCell>

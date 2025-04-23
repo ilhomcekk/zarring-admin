@@ -99,3 +99,5 @@ export const statusList = [
     value: 2,
   },
 ]
+
+export const userStatusMap = { 1: 'success', '-1': 'danger', 0: 'light' }

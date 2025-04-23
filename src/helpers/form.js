@@ -40,7 +40,7 @@ export const statusList = [
     value: 1,
   },
   {
-    name: 'Обратывается',
+    name: 'Обраватывается',
     value: 2,
   },
   {

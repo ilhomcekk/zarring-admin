@@ -1,4 +1,17 @@
 // Here you can add other styles
+body {
+  background: #fff !important;
+}
+[data-coreui-theme='dark'] body {
+  background-color: rgb(29, 34, 42.5) !important;
+}
+
+.header {
+  z-index: 1000 !important;
+}
+.sidebar {
+  z-index: 10000 !important;
+}
 
 .mr-2 {
   margin-right: 0.5rem;
@@ -46,4 +59,61 @@ html[data-coreui-theme='dark'] {
   .text {
     opacity: 1;
   }
+}
+
+.sidebar-dark {
+  background: #121621;
+}
+
+html[data-coreui-theme='dark'] {
+  .default-placeholder {
+    background-color: #212631;
+    border: solid 1px #323a49;
+  }
+  .sidebar-dark {
+    .nav-link {
+      color: #b3b9c6;
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+  .header {
+    background: #121621;
+  }
+  table {
+    thead {
+      tr {
+        th {
+          background: #212631 !important;
+        }
+      }
+    }
+  }
+}
+.sidebar-nav .nav-link.active {
+  background: #635bff !important;
+}
+
+.logo {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(25deg)
+    brightness(105%) contrast(101%);
+}
+
+table {
+  thead {
+    tr {
+      th {
+        background: #f9fafb !important;
+        color: #667085 !important;
+        font-size: 14px !important;
+        text-transform: uppercase !important;
+        font-weight: 400 !important;
+      }
+    }
+  }
+}
+table > :not(caption) > * > * {
+  white-space: nowrap;
+  vertical-align: middle !important;
 }

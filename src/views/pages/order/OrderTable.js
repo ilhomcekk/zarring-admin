@@ -172,7 +172,9 @@ const OrderTable = () => {
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.user_name}</CTableDataCell>
                 <CTableDataCell>{item?.user_number}</CTableDataCell>
-                <CTableDataCell>{item?.products?.length}</CTableDataCell>
+                <CTableDataCell>
+                  {item?.products?.reduce((acc, product) => acc + (Number(product?.count) || 0), 0)}
+                </CTableDataCell>
                 <CTableDataCell>
                   <CBadge size="lg" className="p-2" color={setColorFromStatus(item?.status)}>
                     {setTextFromStatus(item?.status)}
