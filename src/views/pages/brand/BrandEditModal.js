@@ -118,6 +118,17 @@ const BrandEditModal = ({ visible, onClose, id }) => {
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
+      const requiredFilters = forms.filter((item) => item.children.props.required)
+      requiredFilters.map((msg) => {
+        const value = msg.children.props.value
+        if (msg.children.props.options?.length > 0) {
+          if (value?.value === undefined || value?.value === null || value?.value === '') {
+            toast.error(`${msg.label} - Заполните`)
+          }
+        } else if (value === undefined || value === null || value === '') {
+          toast.error(`${msg.label} - Заполните`)
+        }
+      })
     } else {
       edit(id, params)
         .then((res) => {

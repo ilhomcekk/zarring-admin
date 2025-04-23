@@ -21,6 +21,7 @@ import categoryStore from '../../../store/category'
 import { toast } from 'react-toastify'
 import { BASE_URL } from '../../../config'
 import { findCategory } from '../../../utils'
+import Zoom from 'react-medium-image-zoom'
 
 const ProductsEditModal = ({ visible, onClose, id }) => {
   const { edit, editLoading, detail, getDetail } = productStore()
@@ -337,6 +338,17 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
+      const requiredFilters = forms.filter((item) => item.children.props.required)
+      requiredFilters.map((msg) => {
+        const value = msg.children.props.value
+        if (msg.children.props.options?.length > 0) {
+          if (value?.value === undefined || value?.value === null || value?.value === '') {
+            toast.error(`${msg.label} - Заполните`)
+          }
+        } else if (value === undefined || value === null || value === '') {
+          toast.error(`${msg.label} - Заполните`)
+        }
+      })
     } else {
       const formData = new FormData()
       formData.append('img', params.img)

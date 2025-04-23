@@ -24,6 +24,7 @@ import { BASE_URL } from '../../../config'
 import productStore from '../../../store/products'
 import handleProductsStore from '../../../store/handleProducts'
 import { isHas } from '../../../utils'
+import Zoom from 'react-medium-image-zoom'
 
 const StateProductsModal = ({ visible, onClose }) => {
   const { getList } = OrderEditstore()
@@ -85,7 +86,9 @@ const StateProductsModal = ({ visible, onClose }) => {
                         />
                       </CTableDataCell>
                       <CTableDataCell>
-                        <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                        <Zoom>
+                          <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                        </Zoom>
                       </CTableDataCell>
                       <CTableDataCell>{item?.code}</CTableDataCell>
                       <CTableDataCell>{item?.price}</CTableDataCell>

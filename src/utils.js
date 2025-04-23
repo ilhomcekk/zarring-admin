@@ -12,6 +12,20 @@ export const findCategory = (categories, id, setCategory) => {
   })
 }
 
+export const addFilter = (setParams, column, value) => {
+  setParams((prev) => {
+    if (value) {
+      return { ...prev, [column]: value }
+    }
+  })
+}
+
+export const removeFilter = (setParams, params, column) => {
+  const data = { ...params }
+  delete data[column]
+  setParams(data)
+}
+
 export const isHas = (items, id) => {
   return items?.find((item) => item?.id === id) ? true : false
 }

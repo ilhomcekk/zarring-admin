@@ -41,6 +41,7 @@ import handleProductsStore from '../../../store/handleProducts'
 import StateProductsModal from './StateProducts'
 import productStore from '../../../store/products'
 import { isHas } from '../../../utils'
+import Zoom from 'react-medium-image-zoom'
 
 const OrderEditModal = ({ visible, onClose, id }) => {
   const [modal, setModal] = useState(false)
@@ -228,7 +229,9 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                         <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                         <CTableDataCell>{item?.title}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                          <Zoom>
+                            <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                          </Zoom>
                         </CTableDataCell>
                         <CTableDataCell>{item?.count}</CTableDataCell>
                         <CTableDataCell>{item?.code}</CTableDataCell>
@@ -253,7 +256,9 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                         </CTableHeaderCell>
                         <CTableDataCell>{item?.title}</CTableDataCell>
                         <CTableDataCell>
-                          <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                          <Zoom>
+                            <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
+                          </Zoom>
                         </CTableDataCell>
                         <CTableDataCell>{item?.count}</CTableDataCell>
                         <CTableDataCell>{item?.code}</CTableDataCell>

@@ -23,6 +23,7 @@ import { BASE_URL } from '../../../config'
 import { toast } from 'react-toastify'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
+import DatePicker from '../../forms/datePicker/DatePicker'
 
 const BrandTable = () => {
   const { getList, list, remove, deleteLoading, listLoading } = BrandStore()
@@ -84,31 +85,20 @@ const BrandTable = () => {
               <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <div className={`d-flex align-items-center ${params?.from_to && 'date-active'}`}>
-                  <RangePicker
-                    onDateSelected={(f, l) => {
-                      const fromDateUnix = Math.floor(new Date(f).getTime() / 1000)
-                      const toDateUnix = Math.floor(new Date(l).getTime() / 1000)
-                      handleChangeInput('from_to', `${fromDateUnix}-${toDateUnix}`)
-                    }}
-                    onClose={() => {
-                      const filteredParams = Object.fromEntries(
-                        Object.entries(params).filter(([key, value]) => value != null),
-                      )
-                      const queryString = new URLSearchParams(filteredParams).toString()
+                  <DatePicker
+                    params={params}
+                    setParams={setParams}
+                    handleSearch={() => {
                       getList(params)
                     }}
+                    column={'from_to'}
+                    onClear={() => {
+                      const data = { ...params }
+                      delete data['from_to']
+                      getList(data)
+                      removeFilter(setParams, params, 'from_to')
+                    }}
                   />
-                  {params?.from_to && (
-                    <CCloseButton
-                      className="ms-2"
-                      onClick={() => {
-                        const newParams = { ...params }
-                        newParams['from_to'] = null
-                        setParams(newParams)
-                        getList(newParams)
-                      }}
-                    />
-                  )}
                 </div>
               </CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>

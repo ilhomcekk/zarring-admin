@@ -26,6 +26,7 @@ import {
   findStatusColorFromNumber,
   findStatusFromNumber,
 } from '../../../utils'
+import DatePicker from '../../forms/datePicker/DatePicker'
 
 const AdminsProductsTable = () => {
   const { getList, list, remove, deleteLoading, listLoading } = adminsStore()
@@ -123,7 +124,22 @@ const AdminsProductsTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <DatePicker
+                  params={params}
+                  setParams={setParams}
+                  handleSearch={() => {
+                    getList(params)
+                  }}
+                  column={'from_to'}
+                  onClear={() => {
+                    const data = { ...params }
+                    delete data['from_to']
+                    getList(data)
+                    removeFilter(setParams, params, 'from_to')
+                  }}
+                />
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>

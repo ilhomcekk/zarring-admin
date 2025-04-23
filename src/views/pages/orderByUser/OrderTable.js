@@ -53,7 +53,7 @@ const OrderTable = () => {
                     {setTextFromStatus(item?.status)}
                   </CBadge>
                 </CTableDataCell>
-                <CTableDataCell>{item?.createdAt}</CTableDataCell>
+                <CTableDataCell>{item?.created_at}</CTableDataCell>
               </CTableRow>
             ))}
             <CPagination>

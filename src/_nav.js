@@ -86,6 +86,7 @@ const _nav = [
         component: CNavItem,
         name: 'Заказы',
         to: '/order?page=1&pageSize=20',
+        badge: '21',
       },
       {
         component: CNavItem,
