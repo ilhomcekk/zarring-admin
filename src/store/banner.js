@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { requests } from '../helpers/requests'
+import { toast } from 'react-toastify'
 
 const initialState = {
   list: [],
@@ -43,15 +44,16 @@ const bannerStore = create((set) => ({
       const { data } = await requests.createBanner(params)
       return data
     } catch (err) {
+      toast.error(err?.response?.data?.error?.message)
       return err
     } finally {
       set({ createLoading: false })
     }
   },
-  edit: async (id,params) => {
+  edit: async (id, params) => {
     set({ editLoading: true })
     try {
-      const { data } = await requests.editBanner(id,params)
+      const { data } = await requests.editBanner(id, params)
       return data
     } catch (err) {
       return err

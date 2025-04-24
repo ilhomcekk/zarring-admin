@@ -1,12 +1,22 @@
 import React, { useEffect } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import authStore from '../store/auth'
-import { getToken, removeToken } from '../helpers/api'
+import { $api, getToken, removeToken } from '../helpers/api'
 import { useNavigate } from 'react-router-dom'
 
 const DefaultLayout = () => {
   const navigate = useNavigate()
   const { getMe } = authStore()
+  $api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        removeToken()
+        navigate('/login')
+      }
+      return Promise.reject(error)
+    },
+  )
 
   useEffect(() => {
     const token = getToken()

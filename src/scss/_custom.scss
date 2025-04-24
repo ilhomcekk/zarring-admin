@@ -1137,3 +1137,12 @@ table > :not(caption) > * > * {
   --cui-date-picker-separator-width: 1.55rem;
   --cui-date-picker-separator-icon-size: 1.25rem;
 }
+
+@media (min-width: 992px) {
+  .sidebar:not(.hide):not(.sidebar-narrow):not(.sidebar-narrow-unfoldable:not(:hover)):not(
+      .sidebar-narrow-unfoldable
+    ):not(.sidebar-overlaid):not(.sidebar-end)
+    ~ * {
+    --cui-sidebar-occupy-start: 20rem;
+  }
+}

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { requests } from '../helpers/requests'
+import { toast } from 'react-toastify'
 
 const initialState = {
   list: [],
@@ -43,6 +44,7 @@ const codeProductStore = create((set) => ({
       const { data } = await requests.createBanner(params)
       return data
     } catch (err) {
+      toast.error(err?.response?.data?.error?.message)
       return err
     } finally {
       set({ createLoading: false })

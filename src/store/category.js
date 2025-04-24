@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { requests } from '../helpers/requests'
+import { toast } from 'react-toastify'
 
 const initialState = {
   list: [],
@@ -56,6 +57,7 @@ const categoryStore = create((set) => ({
       const { data } = await requests.createCategory(params)
       return data
     } catch (err) {
+      toast.error(err?.response?.data?.error?.message)
       return err
     } finally {
       set({ createLoading: false })

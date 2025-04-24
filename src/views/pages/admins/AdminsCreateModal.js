@@ -22,25 +22,11 @@ import { roleList, statusList } from '../../../utils'
 
 const AdminsCreateModal = ({ visible, onClose }) => {
   const { create, createLoading, getList } = adminsStore()
-  const [params, setParams] = useState({
-    login: '',
-    name: '',
-    phone: '',
-    password: '',
-    role: '',
-    status: '',
-  })
+  const [params, setParams] = useState({})
   const [validated, setValidated] = useState(false)
 
   const clearParams = () => {
-    setParams({
-      login: '',
-      name: '',
-      phone: '',
-      password: '',
-      role: '',
-      status: '',
-    })
+    setParams({})
   }
 
   const handleInputChange = (e) => {
