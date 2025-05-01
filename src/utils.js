@@ -105,10 +105,6 @@ export const statusList = [
     value: 0,
   },
   {
-    name: 'Создано',
-    value: 1,
-  },
-  {
     name: 'Актив',
     value: 2,
   },

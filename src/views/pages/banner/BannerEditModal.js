@@ -146,7 +146,7 @@ const BannerEditModal = ({ visible, onClose, id }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Создать товар</CModalTitle>
+        <CModalTitle>Изменить баннер</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>

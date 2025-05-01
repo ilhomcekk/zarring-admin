@@ -49,8 +49,8 @@ const OrderTable = () => {
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
-    page: page,
-    pageSize: pageSize,
+    page: +page,
+    pageSize: +pageSize,
     status: status,
     id: id,
     user_name: user_name,
@@ -78,8 +78,8 @@ const OrderTable = () => {
 
   useEffect(() => {
     const newParams = {
-      page: page,
-      pageSize: pageSize,
+      page: +page,
+      pageSize: +pageSize,
       status: status,
       id: id,
       user_name: user_name,

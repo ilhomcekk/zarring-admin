@@ -123,7 +123,7 @@ const BannerCreateModal = ({ visible, onClose }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Создать категории</CModalTitle>
+        <CModalTitle>Создать баннер</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>
@@ -134,7 +134,9 @@ const BannerCreateModal = ({ visible, onClose }) => {
             </div>
           ))}
           <CModalFooter>
-            <CButton color="secondary">Закрыть</CButton>
+            <CButton color="secondary" onClick={onClose}>
+              Закрыть
+            </CButton>
             <CButton color="primary" type="submit" disabled={createLoading}>
               Сохранить
             </CButton>

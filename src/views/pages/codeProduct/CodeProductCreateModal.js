@@ -88,7 +88,9 @@ const CodeProductCreateModal = ({ visible, onClose }) => {
             </div>
           ))}
           <CModalFooter>
-            <CButton color="secondary">Закрыть</CButton>
+            <CButton color="secondary" onClick={onClose}>
+              Закрыть
+            </CButton>
             <CButton color="primary" type="submit" disabled={createLoading}>
               Сохранить
             </CButton>

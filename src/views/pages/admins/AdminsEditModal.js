@@ -148,7 +148,7 @@ const AdminsEditModal = ({ visible, onClose, id }) => {
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
-        <CModalTitle>Создать товар</CModalTitle>
+        <CModalTitle>Изменить админ</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CForm noValidate validated={validated} onSubmit={handleSubmit}>

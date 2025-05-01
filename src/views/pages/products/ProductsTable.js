@@ -52,7 +52,6 @@ const ProductsTable = () => {
       [name]: value || null,
     }))
   }
-  console.log(params, 'param,ss')
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       getList(params)
@@ -69,17 +68,17 @@ const ProductsTable = () => {
         <CTable striped>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Категория</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Цена</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Код товара</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Время</CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '40px' }}>ИД</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '250px' }}>Имя</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '250px' }}>Категория</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '250px' }}>Цена</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '100px' }}>Код товара</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '150px' }}>Картинка</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '250px' }}>Время</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '50px' }}></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormInput
                   type="text"
                   value={params?.id}
@@ -87,7 +86,7 @@ const ProductsTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormInput
                   type="text"
                   value={params?.title}
@@ -95,7 +94,7 @@ const ProductsTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormSelect
                   name="category_id"
                   value={params?.category_id}
@@ -116,22 +115,22 @@ const ProductsTable = () => {
                   ]}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormInput
                   type="text"
                   onChange={(e) => handleChangeInput('price', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormInput
                   type="text"
                   onChange={(e) => handleChangeInput('code', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
-              <CTableHeaderCell scope="col">
+              <CTableHeaderCell style={{ width: '40px' }}></CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '40px' }}>
                 <div className={`d-flex align-items-center ${params?.from_to && 'date-active'}`}>
                   <DatePicker
                     params={params}
@@ -149,13 +148,13 @@ const ProductsTable = () => {
                   />
                 </div>
               </CTableHeaderCell>
-              <CTableHeaderCell scope="col"></CTableHeaderCell>
+              <CTableHeaderCell></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
             {list?.data?.map((product, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{product?.id}</CTableHeaderCell>
+                <CTableHeaderCell>{product?.id}</CTableHeaderCell>
                 <CTableDataCell>{product?.title}</CTableDataCell>
                 <CTableDataCell>{product?.category_name}</CTableDataCell>
                 <CTableDataCell>{product?.price}</CTableDataCell>

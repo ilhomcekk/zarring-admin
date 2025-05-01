@@ -1146,3 +1146,10 @@ table > :not(caption) > * > * {
     --cui-sidebar-occupy-start: 20rem;
   }
 }
+
+.overflow-x-auto {
+  .table {
+    min-width: 100%;
+    width: max-content;
+  }
+}

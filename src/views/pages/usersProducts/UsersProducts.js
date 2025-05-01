@@ -11,7 +11,7 @@ const UsersProducts = () => {
         <CCardHeader>
           <CRow>
             <CCol className="d-flex align-items-center">
-              <CCardTitle className="mb-0">Категории</CCardTitle>
+              <CCardTitle className="mb-0">Клиэнты</CCardTitle>
             </CCol>
             {/* <CCol className="d-flex justify-content-end">
               <CButton color="primary" onClick={() => setModal(true)}>

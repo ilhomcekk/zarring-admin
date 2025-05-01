@@ -44,6 +44,7 @@ const adminsStore = create((set) => ({
       const { data } = await requests.createAdmins(params)
       return data
     } catch (err) {
+      toast.error(err?.response?.data?.error?.message)
       return err
     } finally {
       set({ createLoading: false })
