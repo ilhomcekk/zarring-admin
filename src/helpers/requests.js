@@ -46,7 +46,7 @@ export const requests = {
     $api.get(`${API_URL}/order/get-users-products-info-by-order`, { params }),
   // ADMINS
   fetchAdmins: (params) => $api.get(`${API_URL}/user/`, { params }),
-  fetchAdminsDetail: (id) => $api.get(`${API_URL}/user/me/${id}`),
+  fetchAdminsDetail: (id) => $api.get(`${API_URL}/user/${id}`),
   createAdmins: (params) => $api.post(`${API_URL}/user/add`, params),
   editAdmins: (id, params) => $api.put(`${API_URL}/user/update/${id}`, params),
   deleteAdmins: (id) => $api.delete(`${API_URL}/user/delete/${id}`),
