@@ -56,7 +56,7 @@ const CategoryEditModal = ({ visible, onClose, id }) => {
 
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Имя ( EN )',
       children: (
         <CFormInput
           name="title_ru"

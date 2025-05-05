@@ -45,7 +45,7 @@ const CodeProductEditModal = ({ visible, onClose, id }) => {
 
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Имя ( EN )',
       children: (
         <CFormInput name="name_ru" onChange={handleInputChange} value={params?.name_ru} required />
       ),

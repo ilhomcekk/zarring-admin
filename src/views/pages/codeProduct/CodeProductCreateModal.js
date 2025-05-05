@@ -41,7 +41,7 @@ const CodeProductCreateModal = ({ visible, onClose }) => {
 
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Имя ( EN )',
       children: (
         <CFormInput name="name_ru" value={params.name_ru} onChange={handleInputChange} required />
       ),

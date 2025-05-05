@@ -54,7 +54,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
 
   const forms = [
     {
-      label: 'Имя ( RU )',
+      label: 'Имя ( EN )',
       children: (
         <CFormInput name="title_ru" value={params.title_ru} onChange={handleInputChange} required />
       ),
@@ -109,7 +109,7 @@ const CategoryCreateModal = ({ visible, onClose }) => {
       ),
     },
     // {
-    //   label: 'Описание ( RU )',
+    //   label: 'Описание ( EN )',
     //   children: (
     //     <CFormTextarea
     //       name="description_ru"
