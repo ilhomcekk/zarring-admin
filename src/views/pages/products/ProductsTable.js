@@ -27,9 +27,12 @@ import { toast } from 'react-toastify'
 import PageLoading from '../../../components/PageLoading/PageLoading'
 import DatePicker from '../../forms/datePicker/DatePicker'
 import { removeFilter } from '../../../utils'
+import { modalsStore } from '../../../store/index'
+import ConfirmModal from '../../notifications/modals/ConfirmModal'
 
 const ProductsTable = () => {
   const { getList, list, deleteLoading, remove, listLoading } = productStore()
+  const { closeModal, openModal } = modalsStore()
   const { getList: getCategory, list: categories, getParents } = categoryStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
@@ -182,37 +185,16 @@ const ProductsTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    <CPopover
-                      title={product?.id}
-                      trigger={'focus'}
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(product?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                  getList({
-                                    page: 1,
-                                    pageSize: 20,
-                                  })
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
+                    <CButton
+                      className="mx-2"
+                      color="danger"
+                      onClick={() => {
+                        setIdItem(product.id)
+                        openModal('confirm')
+                      }}
                     >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover>
+                      <CIcon icon={cilTrash} />
+                    </CButton>
                     <CButton
                       color="warning"
                       onClick={() => {
@@ -269,6 +251,18 @@ const ProductsTable = () => {
       </div>
       <ProductsShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
       <ProductsEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <ConfirmModal
+        onConfirm={() =>
+          remove(idItem).then((res) => {
+            if (res?.data) {
+              closeModal('confirm')
+            }
+          })
+        }
+        onClose={() => setIdItem(null)}
+        id={idItem}
+        loading={deleteLoading}
+      />
       <PageLoading loading={listLoading} />
     </>
   )

@@ -24,9 +24,12 @@ import { toast } from 'react-toastify'
 import RangePicker from 'react-range-picker'
 import PageLoading from '../../../components/PageLoading/PageLoading'
 import DatePicker from '../../forms/datePicker/DatePicker'
+import { modalsStore } from '../../../store/index'
+import ConfirmModal from '../../notifications/modals/ConfirmModal'
 
 const BrandTable = () => {
   const { getList, list, remove, deleteLoading, listLoading } = BrandStore()
+  const { closeModal, openModal } = modalsStore()
   const [item, setItem] = useState({})
   const [idItem, setIdItem] = useState(null)
   const [params, setParams] = useState({
@@ -124,33 +127,16 @@ const BrandTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    <CPopover
-                      title={item?.id}
-                      trigger={'focus'}
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(item?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2 mx-auto d-flex"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
+                    <CButton
+                      className="mx-2"
+                      color="danger"
+                      onClick={() => {
+                        setIdItem(item.id)
+                        openModal('confirm')
+                      }}
                     >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover>
+                      <CIcon icon={cilTrash} />
+                    </CButton>
                     <CButton
                       color="warning"
                       onClick={() => {
@@ -207,6 +193,18 @@ const BrandTable = () => {
       </div>
       <BrandShowModal visible={showModal} onClose={() => setShowModal(false)} item={item} />
       <BrandEditModal visible={editModal} onClose={() => setEditModal(false)} id={idItem} />
+      <ConfirmModal
+        onConfirm={() =>
+          remove(idItem).then((res) => {
+            if (res?.data) {
+              closeModal('confirm')
+            }
+          })
+        }
+        onClose={() => setIdItem(null)}
+        id={idItem}
+        loading={deleteLoading}
+      />
       <PageLoading loading={listLoading} />
     </>
   )

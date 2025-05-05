@@ -9,6 +9,7 @@ const initialState = {
     delivery: false,
     search: false,
     menu: false,
+    confirm: false,
   },
 }
 

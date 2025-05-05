@@ -116,7 +116,7 @@ const AdminsCreateModal = ({ visible, onClose }) => {
     } else {
       create(params)
         .then((res) => {
-          if (res?.data?.id) {
+          if (res?.data) {
             toast.success('Успешно создано')
             getList({
               page: 1,
@@ -144,7 +144,9 @@ const AdminsCreateModal = ({ visible, onClose }) => {
             </div>
           ))}
           <CModalFooter>
-            <CButton color="secondary" onClick={onClose}>Закрыть</CButton>
+            <CButton color="secondary" onClick={onClose}>
+              Закрыть
+            </CButton>
             <CButton color="primary" type="submit" disabled={createLoading}>
               Сохранить
             </CButton>

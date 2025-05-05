@@ -119,33 +119,16 @@ const UsersProductsTable = () => {
                     >
                       <CIcon icon={cilZoom} />
                     </CButton>
-                    {/* <CPopover
-                      title={item?.dataValues?.id}
-                      trigger={'focus'}
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(item?.dataValues?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
+                    {/* <CButton
+                      className="mx-2"
+                      color="danger"
+                      onClick={() => {
+                        setIdItem(item.id)
+                        openModal('confirm')
+                      }}
                     >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover>
+                      <CIcon icon={cilTrash} />
+                    </CButton>
                     <CButton
                       color="warning"
                       onClick={() => {

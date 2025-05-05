@@ -169,43 +169,6 @@ const OrderTable = () => {
                 <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex">
-                    {/* <CButton
-                      color="primary"
-                      onClick={() => {
-                        setItem(item)
-                        setShowModal(true)
-                      }}
-                    >
-                      <CIcon icon={cilZoom} />
-                    </CButton> */}
-                    {/* <CPopover
-                      title={item?.id}
-                      trigger={'focus'}
-                      visible
-                      content={
-                        <div>
-                          <div>Вы точно хотите удалить?</div>
-                          <CButton
-                            disabled={deleteLoading}
-                            onClick={() =>
-                              remove(item?.id).then((res) => {
-                                if (res?.data) {
-                                  toast.success('Успешно удалено')
-                                }
-                              })
-                            }
-                            color="danger"
-                            className="mt-2 mx-auto d-flex"
-                          >
-                            Удалить
-                          </CButton>
-                        </div>
-                      }
-                    >
-                      <CButton className="mx-2" color="danger">
-                        <CIcon icon={cilTrash} />
-                      </CButton>
-                    </CPopover> */}
                     <CButton
                       color="warning"
                       onClick={() => {
