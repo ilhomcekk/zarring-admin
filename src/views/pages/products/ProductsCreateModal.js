@@ -33,12 +33,13 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     img: null,
     description_ru: '',
     description_uz: '',
-    characteristic: [
-      { label: 'Rang', value: '' },
-      { label: 'Proba', value: '' },
-      { label: 'Narxi', value: '' },
-      { label: 'Razmer', value: '' },
-    ],
+    characteristic: [],
+    // characteristic: [
+    //   { label: 'Rang', value: '' },
+    //   { label: 'Proba', value: '' },
+    //   { label: 'Narxi', value: '' },
+    //   { label: 'Razmer', value: '' },
+    // ],
     gallery: [''],
   })
   const [category, setCategory] = useState({})
@@ -55,12 +56,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       img: null,
       description_ru: '',
       description_uz: '',
-      characteristic: [
-        { label: 'Rang', value: '' },
-        { label: 'Proba', value: '' },
-        { label: 'Narxi', value: '' },
-        { label: 'Razmer', value: '' },
-      ],
+      characteristic: [],
       gallery: [''],
     })
     setCategory({})
@@ -180,6 +176,14 @@ const ProductsCreateModal = ({ visible, onClose }) => {
               <option value="uzs">UZS</option>
             </CFormSelect>
           </CInputGroupText>
+        </>
+      ),
+    },
+    {
+      label: 'Размер',
+      children: (
+        <>
+          <CFormInput name="size" value={params.size} onChange={handleInputChange} />
         </>
       ),
     },

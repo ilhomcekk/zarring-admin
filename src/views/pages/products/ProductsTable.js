@@ -71,17 +71,18 @@ const ProductsTable = () => {
         <CTable striped>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell style={{ width: '40px' }}>ИД</CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '250px' }}>Имя</CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '250px' }}>Категория</CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '250px' }}>Цена</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '30px' }}>ИД</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '200px' }}>Имя</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '200px' }}>Категория</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '150px' }}>Цена</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '40px' }}>Размер</CTableHeaderCell>
               <CTableHeaderCell style={{ width: '100px' }}>Код товара</CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '150px' }}>Картинка</CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '100px' }}>Картинка</CTableHeaderCell>
               <CTableHeaderCell style={{ width: '250px' }}>Время</CTableHeaderCell>
               <CTableHeaderCell style={{ width: '50px' }}></CTableHeaderCell>
             </CTableRow>
             <CTableRow>
-              <CTableHeaderCell style={{ width: '40px' }}>
+              <CTableHeaderCell style={{ width: '30px' }}>
                 <CFormInput
                   type="text"
                   value={params?.id}
@@ -89,7 +90,7 @@ const ProductsTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '40px' }}>
+              <CTableHeaderCell style={{ width: '200px' }}>
                 <CFormInput
                   type="text"
                   value={params?.title}
@@ -97,7 +98,7 @@ const ProductsTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '40px' }}>
+              <CTableHeaderCell style={{ width: '200px' }}>
                 <CFormSelect
                   name="category_id"
                   value={params?.category_id}
@@ -118,7 +119,7 @@ const ProductsTable = () => {
                   ]}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '40px' }}>
+              <CTableHeaderCell style={{ width: '150px' }}>
                 <CFormInput
                   type="text"
                   onChange={(e) => handleChangeInput('price', e.target.value)}
@@ -128,12 +129,19 @@ const ProductsTable = () => {
               <CTableHeaderCell style={{ width: '40px' }}>
                 <CFormInput
                   type="text"
+                  onChange={(e) => handleChangeInput('size', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '100px' }}>
+                <CFormInput
+                  type="text"
                   onChange={(e) => handleChangeInput('code', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '40px' }}></CTableHeaderCell>
-              <CTableHeaderCell style={{ width: '40px' }}>
+              <CTableHeaderCell style={{ width: '100px' }}></CTableHeaderCell>
+              <CTableHeaderCell style={{ width: '250px' }}>
                 <div className={`d-flex align-items-center ${params?.from_to && 'date-active'}`}>
                   <DatePicker
                     params={params}
@@ -161,6 +169,7 @@ const ProductsTable = () => {
                 <CTableDataCell>{product?.title}</CTableDataCell>
                 <CTableDataCell>{product?.category_name}</CTableDataCell>
                 <CTableDataCell>{product?.price}</CTableDataCell>
+                <CTableDataCell>{product?.size}</CTableDataCell>
                 <CTableDataCell>{product?.code}</CTableDataCell>
                 <CTableDataCell>
                   <Zoom>

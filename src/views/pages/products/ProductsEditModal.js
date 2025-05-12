@@ -37,12 +37,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
     img: null,
     description_ru: '',
     description_uz: '',
-    characteristic: [
-      { label: 'Rang', value: '' },
-      { label: 'Proba', value: '' },
-      { label: 'Narxi', value: '' },
-      { label: 'Razmer', value: '' },
-    ],
+    characteristic: [],
     gallery: [''],
     new_gallery: [''],
   })
@@ -60,12 +55,7 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       money_type: '',
       description_ru: '',
       description_uz: '',
-      characteristic: [
-        { label: 'Rang', value: '' },
-        { label: 'Proba', value: '' },
-        { label: 'Narxi', value: '' },
-        { label: 'Razmer', value: '' },
-      ],
+      characteristic: [],
       gallery: [null],
       new_gallery: [null],
     })
@@ -217,6 +207,10 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
           </CInputGroupText>
         </>
       ),
+    },
+    {
+      label: 'Размер',
+      children: <CFormInput name="size" value={params.size} onChange={handleInputChange} />,
     },
     {
       label: 'Основное изображение',

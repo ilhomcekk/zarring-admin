@@ -1153,3 +1153,10 @@ table > :not(caption) > * > * {
     width: max-content;
   }
 }
+
+.modal.show {
+  z-index: 10000 !important;
+}
+.modal-backdrop.show {
+  z-index: 10000 !important;
+}
