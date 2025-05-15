@@ -1160,3 +1160,9 @@ table > :not(caption) > * > * {
 .modal-backdrop.show {
   z-index: 10000 !important;
 }
+
+.login-box {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
