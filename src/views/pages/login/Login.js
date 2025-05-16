@@ -40,6 +40,7 @@ const Login = () => {
       .catch((err) => {
         console.log(err, 'err')
       })
+      
   }
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">

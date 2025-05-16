@@ -15,7 +15,10 @@ const Order = () => {
             <CCol className="d-flex align-items-center">
               <CCardTitle className="mb-0">Заказы</CCardTitle>
             </CCol>
-            <CCol className="d-flex justify-content-end">
+            <CCol className="d-flex justify-content-end gap-2">
+              <CButton color="primary" onClick={() => setModal(true)}>
+                Скачать в Excel
+              </CButton>
               <CButton color="primary" onClick={() => setModal(true)}>
                 Создать
               </CButton>
