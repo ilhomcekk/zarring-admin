@@ -34,6 +34,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
     description_ru: '',
     description_uz: '',
     characteristic: [],
+    size: [],
     // characteristic: [
     //   { label: 'Rang', value: '' },
     //   { label: 'Proba', value: '' },
@@ -57,6 +58,7 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       description_ru: '',
       description_uz: '',
       characteristic: [],
+      size: [],
       gallery: [''],
     })
     setCategory({})
@@ -82,16 +84,28 @@ const ProductsCreateModal = ({ visible, onClose }) => {
   const addAttribute = () => {
     setParams({ ...params, characteristic: [...params.characteristic, { label: '', value: '' }] })
   }
+  const addSize = () => {
+    setParams({ ...params, size: [...params.size, ''] })
+  }
 
   const removeAttribute = (index) => {
     const newAttributes = params.characteristic.filter((_, idx) => idx !== index)
     setParams({ ...params, characteristic: newAttributes })
+  }
+  const removeSize = (index) => {
+    const newSize = params.size.filter((_, idx) => idx !== index)
+    setParams({ ...params, size: newSize })
   }
 
   const handleLabelChange = (index, newLabel) => {
     const newAttributes = [...params.characteristic]
     newAttributes[index].label = newLabel
     setParams({ ...params, characteristic: newAttributes })
+  }
+  const handleSizeChange = (index, newLabel) => {
+    const newSize = [...params.size]
+    newSize[index] = newLabel
+    setParams({ ...params, size: newSize })
   }
   const handleGalleryChange = (index, newImage) => {
     const newGallery = [...params.gallery]
@@ -180,10 +194,26 @@ const ProductsCreateModal = ({ visible, onClose }) => {
       ),
     },
     {
-      label: 'Размер',
+      label: 'Размеры',
       children: (
         <>
-          <CFormInput name="size" value={params.size} onChange={handleInputChange} />
+          {params.size?.map((size, idx) => (
+            <div key={idx} className="mt-2 w-100">
+              <CInputGroup>
+                <CFormInput
+                  placeholder="Значение"
+                  value={size}
+                  onChange={(e) => handleSizeChange(idx, e.target.value)}
+                />
+                <CButton color="danger" className="ms-2" onClick={() => removeSize(idx)}>
+                  <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
+                </CButton>
+              </CInputGroup>
+            </div>
+          ))}
+          <CButton color="success" className="mt-2 text-white" shape="rounded" onClick={addSize}>
+            Добавить размер
+          </CButton>
         </>
       ),
     },
@@ -304,6 +334,11 @@ const ProductsCreateModal = ({ visible, onClose }) => {
         if (item?.value) {
           formData.append(`characteristic[${index}][label]`, item.label)
           formData.append(`characteristic[${index}][value]`, item.value)
+        }
+      })
+      params.size.forEach((size, index) => {
+        if (size) {
+          formData.append(`size[${index}]`, size)
         }
       })
       formData.append('description_ru', params.description_ru)

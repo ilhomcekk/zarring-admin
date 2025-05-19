@@ -1172,3 +1172,7 @@ table > :not(caption) > * > * {
     --cui-sidebar-occupy-start: 0rem !important;
   }
 }
+
+.Toastify__toast-container {
+  z-index: 10001 !important;
+}
