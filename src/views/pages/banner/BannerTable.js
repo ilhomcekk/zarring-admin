@@ -64,6 +64,7 @@ const BannerTable = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Ссылка</CTableHeaderCell>
               <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
               <CTableHeaderCell scope="col">Время</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
@@ -82,6 +83,14 @@ const BannerTable = () => {
                   type="text"
                   value={params?.name}
                   onChange={(e) => handleChangeInput('name', e.target.value)}
+                  onKeyPress={handleSearch}
+                />
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col">
+                <CFormInput
+                  type="text"
+                  value={params?.link}
+                  onChange={(e) => handleChangeInput('link', e.target.value)}
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
@@ -110,10 +119,11 @@ const BannerTable = () => {
           <CTableBody>
             {list?.map((item, index) => (
               <CTableRow key={index}>
-                <CTableHeaderCell scope="row">{item?.dataValues?.id}</CTableHeaderCell>
+                <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.name}</CTableDataCell>
+                <CTableDataCell>{item?.link}</CTableDataCell>
                 <CTableDataCell>
-                  <img src={BASE_URL + item?.dataValues?.img} width={50} height={50} alt="" />
+                  <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                 </CTableDataCell>
                 <CTableDataCell>{item?.created_at}</CTableDataCell>
                 <CTableDataCell>
@@ -140,7 +150,7 @@ const BannerTable = () => {
                     <CButton
                       color="warning"
                       onClick={() => {
-                        setIdItem(item?.dataValues?.id)
+                        setIdItem(item?.id)
                         setEditModal(true)
                       }}
                     >

@@ -46,6 +46,7 @@ const BannerEditModal = ({ visible, onClose, id }) => {
     setParams(() => ({
       name_ru: detail?.dataValues?.name_ru,
       name_uz: detail?.dataValues?.name_uz,
+      link: detail?.dataValues?.link,
       img: detail?.dataValues?.img,
     }))
   }, [detail])
@@ -60,6 +61,10 @@ const BannerEditModal = ({ visible, onClose, id }) => {
     {
       label: 'Имя ( UZ )',
       children: <CFormInput name="name_uz" onChange={handleInputChange} value={params?.name_uz} />,
+    },
+    {
+      label: 'Ссылка',
+      children: <CFormInput name="link" onChange={handleInputChange} value={params?.link} />,
     },
     {
       label: 'Основное изображение',

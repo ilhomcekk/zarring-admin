@@ -32,6 +32,16 @@ const BannerShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CCallout className="p-2 m-0" color="primary">
+              Ссылка
+            </CCallout>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CListGroup>
+              <CListGroupItem className="p-2">{item?.link}</CListGroupItem>
+            </CListGroup>
+          </CCol>
+          <CCol xs={{ span: 6 }}>
+            <CCallout className="p-2 m-0" color="primary">
               Картинка
             </CCallout>
           </CCol>

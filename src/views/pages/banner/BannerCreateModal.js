@@ -58,6 +58,10 @@ const BannerCreateModal = ({ visible, onClose }) => {
       children: <CFormInput name="name_uz" value={params.name_uz} onChange={handleInputChange} />,
     },
     {
+      label: 'Ссылка',
+      children: <CFormInput name="link" value={params.link} onChange={handleInputChange} />,
+    },
+    {
       label: 'Основное изображение',
       children: (
         <>
