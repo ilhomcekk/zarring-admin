@@ -3,8 +3,10 @@ import { requests } from '../helpers/requests'
 import { toast } from 'react-toastify'
 
 const initialState = {
-  list: [],
+  list: {},
   listLoading: false,
+  excelList: {},
+  excelListLoading: false,
   ordersByUser: [],
   detail: {},
   detailLoading: false,
@@ -25,6 +27,42 @@ const orderStore = create((set) => ({
       return err
     } finally {
       set({ listLoading: false })
+    }
+  },
+  getExcelList: async (params) => {
+    set({ excelListLoading: true })
+    try {
+      const { data } = await requests.fetchOrder(params)
+      set({ excelList: data })
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ excelListLoading: false })
+    }
+  },
+  downloadExcel: async (params) => {
+    set({ downloadExcelLoading: true })
+    try {
+      const { data } = await requests.downloadExcel(params)
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+      console.log(blob)
+
+      const url = window.URL.createObjectURL(blob)
+
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'Заказы.xlsx' // Fayl nomi
+      a.click()
+
+      window.URL.revokeObjectURL(url) // Resursni tozalash
+      return data
+    } catch (err) {
+      return err
+    } finally {
+      set({ downloadExcelLoading: false })
     }
   },
   getListByUser: async (params) => {

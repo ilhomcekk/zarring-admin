@@ -57,11 +57,13 @@ const ProductsShowModal = ({ visible, onClose, item }) => {
           </CCol>
           <CCol xs={{ span: 6 }}>
             <CListGroup>
-              {item?.size?.map((item, idx) => (
-                <CListGroupItem className="p-2" key={idx}>
-                  {item}
-                </CListGroupItem>
-              ))}
+              {Array.isArray(item?.size)
+                ? item?.size?.map((item, idx) => (
+                    <CListGroupItem className="p-2" key={idx}>
+                      {item}
+                    </CListGroupItem>
+                  ))
+                : item?.size}
             </CListGroup>
           </CCol>
           <CCol xs={{ span: 6 }}>

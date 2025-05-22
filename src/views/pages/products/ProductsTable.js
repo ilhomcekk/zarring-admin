@@ -169,7 +169,13 @@ const ProductsTable = () => {
                 <CTableDataCell>{product?.title}</CTableDataCell>
                 <CTableDataCell>{product?.category_name}</CTableDataCell>
                 <CTableDataCell>{product?.price}</CTableDataCell>
-                <CTableDataCell>{product?.size}</CTableDataCell>
+                <CTableDataCell>
+                  <div className="d-flex gap-1">
+                    {Array.isArray(product?.size)
+                      ? product?.size?.map((item, idx) => <div key={idx}>| {item} |</div>)
+                      : product?.size}
+                  </div>
+                </CTableDataCell>
                 <CTableDataCell>{product?.code}</CTableDataCell>
                 <CTableDataCell>
                   <Zoom>

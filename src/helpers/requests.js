@@ -34,6 +34,8 @@ export const requests = {
   deleteBrand: (id) => $api.delete(`${API_URL}/brand/delete/${id}`),
   // ORDER
   fetchOrder: (params) => $api.get(`${API_URL}/order`, { params }),
+  downloadExcel: (params) =>
+    $api.get(`${API_URL}/order/generate-excel`, { params, responseType: 'blob' }),
   fetchOrderByUser: (params) => $api.get(`${API_URL}/order/get-by-user-name/`, { params }),
   fetchOrderDetail: (id) => $api.get(`${API_URL}/order/by/${id}`),
   editOrder: (id, params) => $api.put(`${API_URL}/order/update/${id}`, params),

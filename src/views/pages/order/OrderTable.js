@@ -32,7 +32,7 @@ import handleProductsStore from '../../../store/handleProducts'
 import Zoom from 'react-medium-image-zoom'
 import DatePicker from '../../forms/datePicker/DatePicker'
 
-const OrderTable = () => {
+const OrderTable = ({ setFilter }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const searchParams = new URLSearchParams(search)
@@ -89,6 +89,7 @@ const OrderTable = () => {
     setParams(newParams)
     getList(newParams)
     getProductCodes()
+    setFilter(newParams)
   }, [search])
   return (
     <>
@@ -98,6 +99,7 @@ const OrderTable = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
               <CTableHeaderCell scope="col">Имя заказчика</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Размер</CTableHeaderCell>
               <CTableHeaderCell scope="col">Номер заказчика</CTableHeaderCell>
               <CTableHeaderCell scope="col">Количество товара</CTableHeaderCell>
               <CTableHeaderCell scope="col">Статус заказа</CTableHeaderCell>
@@ -121,6 +123,7 @@ const OrderTable = () => {
                   onKeyPress={handleSearch}
                 />
               </CTableHeaderCell>
+              <CTableHeaderCell scope="col"></CTableHeaderCell>
               <CTableHeaderCell scope="col">
                 <CFormInput
                   type="text"
@@ -157,6 +160,9 @@ const OrderTable = () => {
               <CTableRow key={index}>
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.user_name}</CTableDataCell>
+                <CTableDataCell>
+                  {item?.products?.map((item) => item?.selected_size)}
+                </CTableDataCell>
                 <CTableDataCell>{item?.user_number}</CTableDataCell>
                 <CTableDataCell>
                   {item?.products?.reduce((acc, product) => acc + (Number(product?.count) || 0), 0)}

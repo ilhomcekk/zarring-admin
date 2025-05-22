@@ -1176,3 +1176,8 @@ table > :not(caption) > * > * {
 .Toastify__toast-container {
   z-index: 10001 !important;
 }
+
+.date-picker-dropdown.show,
+.date-picker.show .date-picker-dropdown {
+  z-index: 10000 !important;
+}

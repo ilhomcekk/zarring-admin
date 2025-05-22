@@ -36,6 +36,10 @@ export const formatPhone = (value) => {
 
 export const statusList = [
   {
+    name: 'Hammasi',
+    value: null,
+  },
+  {
     name: 'Новый',
     value: 1,
   },
@@ -105,6 +109,9 @@ export const setStaticColorFromStatus = (status) => {
       break
     case -1:
       value = '#e55353'
+      break
+    default:
+      value = ''
       break
   }
   return value
