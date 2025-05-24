@@ -3,7 +3,9 @@ import {
   CButton,
   CCallout,
   CCol,
+  CFormLabel,
   CFormSelect,
+  CInputGroup,
   CListGroup,
   CListGroupItem,
   CModal,
@@ -50,13 +52,13 @@ const OrderExcelModal = ({ visible, onClose }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target
     const data = { ...params }
-    if (value === 'Hammasi') {
+    if (value === 'Все') {
       delete data[name]
     } else {
       data[name] = value
     }
     setParams(data)
-    getList(data)
+    // getList(data)
   }
   useEffect(() => {
     if (visible) {
@@ -87,8 +89,54 @@ const OrderExcelModal = ({ visible, onClose }) => {
         </CButton>
       </CModalHeader>
       <CModalBody>
-        <CCol xs={{ span: 12 }}>
-          <div className="overflow-x-auto">
+        <CCol xs={{ span: 8 }} className="mx-auto">
+          <CRow className="mb-3">
+            <CFormLabel className="col-sm-6 col-form-label">Выберите статус</CFormLabel>
+            <CCol sm={6}>
+              <CInputGroup>
+                <CFormSelect
+                  name="status"
+                  value={params?.status}
+                  onChange={handleInputChange}
+                  options={statusList?.map((item) => ({
+                    label: item?.name,
+                    value: item?.value,
+                  }))}
+                  style={{
+                    background: setStaticColorFromStatus(Number(params?.status)),
+                    color: '#fff',
+                  }}
+                />
+              </CInputGroup>
+            </CCol>
+          </CRow>
+          <CRow className="mb-3">
+            <CFormLabel className="col-sm-6 col-form-label">Выберите период</CFormLabel>
+            <CCol sm={6}>
+              <CInputGroup>
+                <div
+                  className={`d-flex align-items-center w-100 ${params?.from_to && 'date-active'}`}
+                >
+                  <DatePicker
+                    params={params}
+                    setParams={setParams}
+                    handleSearch={() => {
+                      // getList(params)
+                    }}
+                    column={'from_to'}
+                    className="w-100"
+                    onClear={() => {
+                      const data = { ...params }
+                      delete data['from_to']
+                      // getList(data)
+                      setParams((prev) => ({ ...prev, from_to: null }))
+                    }}
+                  />
+                </div>
+              </CInputGroup>
+            </CCol>
+          </CRow>
+          {/* <div className="overflow-x-auto">
             <CTable striped>
               <CTableHead>
                 <CTableRow>
@@ -208,7 +256,7 @@ const OrderExcelModal = ({ visible, onClose }) => {
                 </CPagination>
               </CTableBody>
             </CTable>
-          </div>
+          </div> */}
         </CCol>
       </CModalBody>
     </CModal>

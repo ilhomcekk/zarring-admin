@@ -36,7 +36,7 @@ export const formatPhone = (value) => {
 
 export const statusList = [
   {
-    name: 'Hammasi',
+    name: 'Все',
     value: null,
   },
   {
@@ -44,7 +44,7 @@ export const statusList = [
     value: 1,
   },
   {
-    name: 'Обраватывается',
+    name: 'Обрабатывается',
     value: 2,
   },
   {

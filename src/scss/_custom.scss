@@ -1181,3 +1181,9 @@ table > :not(caption) > * > * {
 .date-picker.show .date-picker-dropdown {
   z-index: 10000 !important;
 }
+
+.date-picker-input-group:hover
+  .date-picker-input:not(:placeholder-shown)
+  ~ .date-picker-indicator:not(:last-child) {
+  display: block !important;
+}
