@@ -70,26 +70,9 @@ const OrderExcelModal = ({ visible, onClose }) => {
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
         <CModalTitle>Excel</CModalTitle>
-        <CButton
-          onClick={() => {
-            if (!params.from_to) {
-              toast.error('Выберите время')
-            } else {
-              downloadExcel({
-                status: params.status,
-                date: params?.from_to,
-              })
-            }
-          }}
-          disabled={downloadExcelLoading}
-          color="primary"
-          className="ms-4"
-        >
-          {downloadExcelLoading ? 'Загрузка...' : 'Скачать в Excel'}
-        </CButton>
       </CModalHeader>
       <CModalBody>
-        <CCol xs={{ span: 8 }} className="mx-auto">
+        <CCol xs={{ span: 8 }} className="mx-auto my-4">
           <CRow className="mb-3">
             <CFormLabel className="col-sm-6 col-form-label">Выберите статус</CFormLabel>
             <CCol sm={6}>
@@ -257,6 +240,25 @@ const OrderExcelModal = ({ visible, onClose }) => {
               </CTableBody>
             </CTable>
           </div> */}
+        </CCol>
+        <CCol className='d-flex justify-content-center mt-5 mb-3'>
+          <CButton
+            onClick={() => {
+              if (!params.from_to) {
+                toast.error('Выберите время')
+              } else {
+                downloadExcel({
+                  status: params.status,
+                  date: params?.from_to,
+                })
+              }
+            }}
+            disabled={downloadExcelLoading}
+            color="primary"
+            className="ms-4"
+          >
+            {downloadExcelLoading ? 'Загрузка...' : 'Скачать в Excel'}
+          </CButton>
         </CCol>
       </CModalBody>
     </CModal>
