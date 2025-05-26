@@ -48,7 +48,21 @@ const OrderCreateModal = ({ visible, onClose }) => {
   const { create, createLoading } = orderStore()
   const { getList } = OrderEditstore()
   const { stateProducts, toggleProduct, clearProducts } = handleProductsStore()
-  console.log(stateProducts)
+  const [selectedSizes, setSelectedSizes] = useState({})
+  const handleSelectSize = (productId, size) => {
+    setSelectedSizes((prev) => {
+      if (prev[productId] === size) {
+        const updated = { ...prev }
+        delete updated[productId]
+        return updated
+      }
+      return {
+        ...prev,
+        [productId]: size,
+      }
+    })
+  }
+  console.log(selectedSizes)
   const { productCodes, getList: getProducts, list: products, clearList } = productStore()
   const [params, setParams] = useState({
     user_name: '',
@@ -149,6 +163,7 @@ const OrderCreateModal = ({ visible, onClose }) => {
                       <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Код</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Размеры</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Сумма</CTableHeaderCell>
                       <CTableHeaderCell scope="col"></CTableHeaderCell>
                     </CTableRow>
@@ -185,11 +200,39 @@ const OrderCreateModal = ({ visible, onClose }) => {
                           <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                         </CTableDataCell>
                         <CTableDataCell>{item?.code}</CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex flex-wrap gap-1">
+                            {Array.isArray(item?.size)
+                              ? item?.size?.map((sizeItem, idx) => (
+                                  <div
+                                    style={{
+                                      border: '1px solid #dadada',
+                                      padding: '0.3rem',
+                                      borderRadius: '4px',
+                                      cursor: 'pointer',
+                                      minWidth: '32px',
+                                      textAlign: 'center',
+                                      backgroundColor:
+                                        selectedSizes[item?.id] === sizeItem
+                                          ? '#6261CC'
+                                          : 'transparent',
+                                      color:
+                                        selectedSizes[item?.id] === sizeItem ? '#fff' : 'inherit',
+                                    }}
+                                    key={idx}
+                                    onClick={() => handleSelectSize(item?.id, sizeItem)}
+                                  >
+                                    {sizeItem}
+                                  </div>
+                                ))
+                              : item?.size}
+                          </div>
+                        </CTableDataCell>
                         <CTableDataCell>{item?.price}</CTableDataCell>
                         <CTableDataCell>
                           <CButton
                             color={`${isHas(stateProducts, item?.id) ? 'danger' : 'primary'}`}
-                            onClick={() => toggleProduct(item)}
+                            onClick={() => toggleProduct(item, selectedSizes)}
                           >
                             {isHas(stateProducts, item?.id) ? 'Удалить' : 'Добавить'}
                           </CButton>

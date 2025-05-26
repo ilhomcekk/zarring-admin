@@ -28,7 +28,7 @@ import Zoom from 'react-medium-image-zoom'
 
 const StateProductsModal = ({ visible, onClose }) => {
   const { getList } = OrderEditstore()
-  const { stateProducts, toggleProduct, setCount } = handleProductsStore()
+  const { stateProducts, toggleProduct, setCount, handleSelectSize } = handleProductsStore()
   console.log(stateProducts)
   const { productCodes, getList: getProducts, list: products } = productStore()
   const [params, setParams] = useState({
@@ -37,20 +37,7 @@ const StateProductsModal = ({ visible, onClose }) => {
     status: 0,
     products: [],
   })
-  const [productParams, setProductParams] = useState({
-    page: 1,
-    pageSize: 20,
-    code: null,
-  })
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setParams({ ...params, [name]: value })
-  }
-  const handleChangeInput = (name, value) => {
-    setProductParams({ ...params, [name]: value })
-  }
 
-  const handleSubmit = () => {}
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
       <CModalHeader>
@@ -68,6 +55,7 @@ const StateProductsModal = ({ visible, onClose }) => {
                     <CTableHeaderCell scope="col">Количество</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Код</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Размеры</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Сумма</CTableHeaderCell>
                     <CTableHeaderCell scope="col"></CTableHeaderCell>
                   </CTableRow>
@@ -91,6 +79,31 @@ const StateProductsModal = ({ visible, onClose }) => {
                         </Zoom>
                       </CTableDataCell>
                       <CTableDataCell>{item?.code}</CTableDataCell>
+                      <CTableDataCell>
+                        <div className="d-flex flex-wrap gap-1">
+                          {Array.isArray(item?.size)
+                            ? item?.size?.map((sizeItem, idx) => (
+                                <div
+                                  style={{
+                                    border: '1px solid #dadada',
+                                    padding: '0.3rem',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    minWidth: '32px',
+                                    textAlign: 'center',
+                                    backgroundColor:
+                                      item?.selected_size === sizeItem ? '#6261CC' : 'transparent',
+                                    color: item?.selected_size === sizeItem ? '#fff' : 'inherit',
+                                  }}
+                                  key={idx}
+                                  onClick={() => handleSelectSize(item?.id, sizeItem)}
+                                >
+                                  {sizeItem}
+                                </div>
+                              ))
+                            : item?.size}
+                        </div>
+                      </CTableDataCell>
                       <CTableDataCell>{item?.price}</CTableDataCell>
                       <CTableDataCell>
                         <CButton

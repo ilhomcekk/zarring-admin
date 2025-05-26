@@ -227,20 +227,22 @@ const ProductsEditModal = ({ visible, onClose, id }) => {
       label: 'Размеры',
       children: (
         <>
-          {params.size?.map((size, idx) => (
-            <div key={idx} className="mt-2 w-100">
-              <CInputGroup>
-                <CFormInput
-                  placeholder="Значение"
-                  value={size}
-                  onChange={(e) => handleSizeChange(idx, e.target.value)}
-                />
-                <CButton color="danger" className="ms-2" onClick={() => removeSize(idx)}>
-                  <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
-                </CButton>
-              </CInputGroup>
-            </div>
-          ))}
+          {Array.isArray(params?.size)
+            ? params.size?.map((size, idx) => (
+                <div key={idx} className="mt-2 w-100">
+                  <CInputGroup>
+                    <CFormInput
+                      placeholder="Значение"
+                      value={size}
+                      onChange={(e) => handleSizeChange(idx, e.target.value)}
+                    />
+                    <CButton color="danger" className="ms-2" onClick={() => removeSize(idx)}>
+                      <CIcon icon={cilTrash} style={{ '--ci-primary-color': 'white' }} />
+                    </CButton>
+                  </CInputGroup>
+                </div>
+              ))
+            : []}
           <CButton color="success" className="mt-2 text-white" shape="rounded" onClick={addSize}>
             Добавить размер
           </CButton>

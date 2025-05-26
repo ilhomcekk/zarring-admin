@@ -172,7 +172,21 @@ const ProductsTable = () => {
                 <CTableDataCell>
                   <div className="d-flex gap-1">
                     {Array.isArray(product?.size)
-                      ? product?.size?.map((item, idx) => <div key={idx}>| {item} |</div>)
+                      ? product?.size?.map((item, idx) => (
+                          <div
+                            style={{
+                              border: '1px solid #dadada',
+                              padding: '0.3rem',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              minWidth: '32px',
+                              textAlign: 'center',
+                            }}
+                            key={idx}
+                          >
+                            {item}
+                          </div>
+                        ))
                       : product?.size}
                   </div>
                 </CTableDataCell>
