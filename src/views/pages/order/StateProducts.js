@@ -29,7 +29,7 @@ import Zoom from 'react-medium-image-zoom'
 const StateProductsModal = ({ visible, onClose }) => {
   const { getList } = OrderEditstore()
   const { stateProducts, toggleProduct, setCount, handleSelectSize } = handleProductsStore()
-  console.log(stateProducts)
+  console.log('stateProducts', stateProducts)
   const { productCodes, getList: getProducts, list: products } = productStore()
   const [params, setParams] = useState({
     user_name: '',
