@@ -3,6 +3,7 @@ import { requests } from '../helpers/requests'
 
 const initialState = {
   stateProducts: [],
+  selectedSizes: {},
 }
 
 const handleProductsStore = create((set, get) => ({
@@ -15,10 +16,17 @@ const handleProductsStore = create((set, get) => ({
     const existingItem = stateProducts?.find((item) => item?.id === product?.id)
     if (existingItem) {
       const filteredItems = stateProducts?.filter((item) => item?.id !== product?.id)
+      const updatedSizes = { ...get().selectedSizes }
+      delete updatedSizes[product.id]
+      get().setSelectedSizes(updatedSizes)
       get().setProducts(filteredItems)
     } else {
       const selected_size = sizes[product.id]
-      const productWithSize = { ...product, selected_size, count: 1 }
+      const productWithSize = {
+        ...product,
+        selected_size,
+        count: 1,
+      }
       const newItems = [...stateProducts, productWithSize]
       get().setProducts(newItems)
     }
@@ -30,21 +38,26 @@ const handleProductsStore = create((set, get) => ({
     const newItems = [...stateProducts]
     get().setProducts(newItems)
   },
-  handleSelectSize: (productId, size) => {
-    const updated = get().stateProducts?.map((item) => {
-      if (item.id === productId) {
-        if (item.selected_size === size) {
-          const { selected_size, ...rest } = item
-          return rest
-        }
-        return {
-          ...item,
-          selected_size: size,
-        }
-      }
-      return item
-    })
-    get().setProducts(updated)
+  // handleSelectSize: (productId, size) => {
+  //   const updated = get().stateProducts?.map((item) => {
+  //     if (item.id === productId) {
+  //       if (item.selected_size === size) {
+  //         const { selected_size, ...rest } = item
+  //         return rest
+  //       }
+  //       return {
+  //         ...item,
+  //         selected_size: size,
+  //       }
+  //     }
+  //     return item
+  //   })
+  //   get().setProducts(updated)
+  // },
+  setSelectedSizes: (updater) => {
+    set((state) => ({
+      selectedSizes: typeof updater === 'function' ? updater(state.selectedSizes) : updater,
+    }))
   },
   clearProducts: () => {
     set({ stateProducts: [] })

@@ -161,7 +161,26 @@ const OrderTable = ({ setFilter }) => {
                 <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                 <CTableDataCell>{item?.user_name}</CTableDataCell>
                 <CTableDataCell>
-                  {item?.products?.map((item) => item?.selected_size)}
+                  <div className="d-flex gap-1">
+                    {item?.products?.map((item) =>
+                      item?.selected_size ? (
+                        <div
+                          style={{
+                            border: '1px solid #dadada',
+                            padding: '0.3rem',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            minWidth: '32px',
+                            textAlign: 'center',
+                            backgroundColor: 'transparent',
+                            color: 'inherit',
+                          }}
+                        >
+                          {item?.selected_size}
+                        </div>
+                      ) : null,
+                    )}
+                  </div>
                 </CTableDataCell>
                 <CTableDataCell>{item?.user_number}</CTableDataCell>
                 <CTableDataCell>

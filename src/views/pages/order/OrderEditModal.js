@@ -45,7 +45,22 @@ import Zoom from 'react-medium-image-zoom'
 
 const OrderEditModal = ({ visible, onClose, id }) => {
   const [modal, setModal] = useState(false)
-  const { setProducts, stateProducts, toggleProduct } = handleProductsStore()
+  const { setProducts, stateProducts, toggleProduct, selectedSizes, setSelectedSizes } =
+    handleProductsStore()
+  const handleSelectSize = (productId, size) => {
+    const prevSizes = selectedSizes
+    if (prevSizes[productId] === size) {
+      const updated = { ...prevSizes }
+      delete updated[productId]
+      setSelectedSizes(updated)
+    } else {
+      setSelectedSizes({
+        ...prevSizes,
+        [productId]: size,
+      })
+    }
+  }
+  console.log(stateProducts)
   const { productCodes, getList: getProducts, list: products, clearList } = productStore()
   const { detail: item, getDetail, getList, edit, editLoading } = OrderEditstore()
   const [params, setParams] = useState({
@@ -86,19 +101,41 @@ const OrderEditModal = ({ visible, onClose, id }) => {
   }, [item])
 
   const handleSubmit = () => {
-    edit(id, params)
-      .then((res) => {
-        console.log(res, 'asdasdas')
-        if (res?.data) {
-          toast.success('Успешно')
-          getList({
-            page: 1,
-            pageSize: 20,
-          })
-          onClose()
-        }
-      })
-      .catch((err) => console.log('err', err))
+    if (!params.user_name) {
+      toast.error('Заполните имя')
+    } else if (!params.user_number) {
+      toast.error('Заполните номер телефона')
+    } else if (params.products?.length < 1) {
+      toast.error('Добавьте товар')
+    } else {
+      const updatedProducts = params.products?.map((product) => ({
+        ...product,
+        selected_size: selectedSizes?.[product.id] || product?.selected_size || null,
+      }))
+      const updatedParams = {
+        ...params,
+        products: updatedProducts,
+      }
+      edit(id, updatedParams)
+        .then((res) => {
+          console.log(res, 'asdasdas')
+          if (res?.data) {
+            toast.success('Успешно')
+            getList({
+              page: 1,
+              pageSize: 20,
+            })
+            onClose()
+            setProductParams({
+              page: 1,
+              pageSize: 20,
+              code: null,
+            })
+            setSelectedSizes({})
+          }
+        })
+        .catch((err) => console.log('err', err))
+    }
   }
   return (
     <>
@@ -188,6 +225,7 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                     <CTableRow>
                       <CTableHeaderCell scope="col">ИД</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Имя</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Размеры</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Картинка</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Количество</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Код</CTableHeaderCell>
@@ -229,6 +267,34 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                         <CTableHeaderCell scope="row">{item?.id}</CTableHeaderCell>
                         <CTableDataCell>{item?.title}</CTableDataCell>
                         <CTableDataCell>
+                          <div className="d-flex flex-wrap gap-1">
+                            {Array.isArray(item?.size)
+                              ? item?.size?.map((sizeItem, idx) => (
+                                  <div
+                                    style={{
+                                      border: '1px solid #dadada',
+                                      padding: '0.3rem',
+                                      borderRadius: '4px',
+                                      cursor: 'pointer',
+                                      minWidth: '32px',
+                                      textAlign: 'center',
+                                      backgroundColor:
+                                        selectedSizes[item?.id] === sizeItem
+                                          ? '#6261CC'
+                                          : 'transparent',
+                                      color:
+                                        selectedSizes[item?.id] === sizeItem ? '#fff' : 'inherit',
+                                    }}
+                                    key={idx}
+                                    onClick={() => handleSelectSize(item?.id, sizeItem)}
+                                  >
+                                    {sizeItem}
+                                  </div>
+                                ))
+                              : item?.size}
+                          </div>
+                        </CTableDataCell>
+                        <CTableDataCell>
                           <Zoom>
                             <img src={BASE_URL + item?.img} width={50} height={50} alt="" />
                           </Zoom>
@@ -239,7 +305,7 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                         <CTableDataCell>
                           <CButton
                             color={`${isHas(stateProducts, item?.id) ? 'danger' : 'primary'}`}
-                            onClick={() => toggleProduct(item)}
+                            onClick={() => toggleProduct(item, selectedSizes)}
                           >
                             {isHas(stateProducts, item?.id) ? 'Удалить' : 'Добавить'}
                           </CButton>
@@ -255,6 +321,26 @@ const OrderEditModal = ({ visible, onClose, id }) => {
                           {item?.id}
                         </CTableHeaderCell>
                         <CTableDataCell>{item?.title}</CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex gap-1">
+                            <div
+                              style={{
+                                border: '1px solid #dadada',
+                                padding: '0.3rem',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                minWidth: '32px',
+                                textAlign: 'center',
+                                backgroundColor: 'transparent',
+                                color: 'inherit',
+                              }}
+                            >
+                              {selectedSizes?.[item?.id]
+                                ? selectedSizes?.[item?.id]
+                                : item?.selected_size}
+                            </div>
+                          </div>
+                        </CTableDataCell>
                         <CTableDataCell>
                           <Zoom>
                             <img src={BASE_URL + item?.img} width={50} height={50} alt="" />

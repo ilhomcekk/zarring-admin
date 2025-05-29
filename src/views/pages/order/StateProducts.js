@@ -27,16 +27,21 @@ import { isHas } from '../../../utils'
 import Zoom from 'react-medium-image-zoom'
 
 const StateProductsModal = ({ visible, onClose }) => {
-  const { getList } = OrderEditstore()
-  const { stateProducts, toggleProduct, setCount, handleSelectSize } = handleProductsStore()
-  console.log('stateProducts', stateProducts)
-  const { productCodes, getList: getProducts, list: products } = productStore()
-  const [params, setParams] = useState({
-    user_name: '',
-    user_number: '',
-    status: 0,
-    products: [],
-  })
+  const { stateProducts, toggleProduct, setCount, selectedSizes, setSelectedSizes } =
+    handleProductsStore()
+  const handleSelectSize = (productId, size) => {
+    const prevSizes = selectedSizes
+    if (prevSizes[productId] === size) {
+      const updated = { ...prevSizes }
+      delete updated[productId]
+      setSelectedSizes(updated)
+    } else {
+      setSelectedSizes({
+        ...prevSizes,
+        [productId]: size,
+      })
+    }
+  }
 
   return (
     <CModal size="xl" visible={visible} onClose={onClose} backdrop="static">
@@ -92,8 +97,11 @@ const StateProductsModal = ({ visible, onClose }) => {
                                     minWidth: '32px',
                                     textAlign: 'center',
                                     backgroundColor:
-                                      item?.selected_size === sizeItem ? '#6261CC' : 'transparent',
-                                    color: item?.selected_size === sizeItem ? '#fff' : 'inherit',
+                                      selectedSizes?.[item?.id] === sizeItem
+                                        ? '#6261CC'
+                                        : 'transparent',
+                                    color:
+                                      selectedSizes?.[item?.id] === sizeItem ? '#fff' : 'inherit',
                                   }}
                                   key={idx}
                                   onClick={() => handleSelectSize(item?.id, sizeItem)}

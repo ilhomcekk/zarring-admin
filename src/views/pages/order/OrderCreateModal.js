@@ -47,22 +47,21 @@ const OrderCreateModal = ({ visible, onClose }) => {
   const [modal, setModal] = useState(false)
   const { create, createLoading } = orderStore()
   const { getList } = OrderEditstore()
-  const { stateProducts, toggleProduct, clearProducts } = handleProductsStore()
-  const [selectedSizes, setSelectedSizes] = useState({})
+  const { stateProducts, toggleProduct, clearProducts, selectedSizes, setSelectedSizes } =
+    handleProductsStore()
   const handleSelectSize = (productId, size) => {
-    setSelectedSizes((prev) => {
-      if (prev[productId] === size) {
-        const updated = { ...prev }
-        delete updated[productId]
-        return updated
-      }
-      return {
-        ...prev,
+    const prevSizes = selectedSizes
+    if (prevSizes[productId] === size) {
+      const updated = { ...prevSizes }
+      delete updated[productId]
+      setSelectedSizes(updated)
+    } else {
+      setSelectedSizes({
+        ...prevSizes,
         [productId]: size,
-      }
-    })
+      })
+    }
   }
-  console.log(selectedSizes)
   const { productCodes, getList: getProducts, list: products, clearList } = productStore()
   const [params, setParams] = useState({
     user_name: '',
@@ -97,13 +96,27 @@ const OrderCreateModal = ({ visible, onClose }) => {
     } else if (params.products?.length < 1) {
       toast.error('Добавьте товар')
     } else {
-      create(params).then((res) => {
+      const updatedProducts = params.products?.map((product) => ({
+        ...product,
+        selected_size: selectedSizes?.[product.id] || null,
+      }))
+      const updatedParams = {
+        ...params,
+        products: updatedProducts,
+      }
+      create(updatedParams).then((res) => {
         if (res?.data?.id) {
           toast.success('Заказ успешно добавлено')
           onClose()
           clearProducts()
           getList()
           clearParams()
+          setProductParams({
+            page: 1,
+            pageSize: 20,
+            code: null,
+          })
+          setSelectedSizes({})
         }
       })
     }
